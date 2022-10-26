@@ -17,6 +17,9 @@ import software.amazon.awscdk.services.lambda.Runtime;
 import software.amazon.awscdk.services.route53.*;
 import software.amazon.awscdk.services.route53.targets.CloudFrontTarget;
 import software.amazon.awscdk.services.s3.Bucket;
+import software.amazon.awscdk.services.s3.deployment.BucketDeployment;
+import software.amazon.awscdk.services.s3.deployment.ISource;
+import software.amazon.awscdk.services.s3.deployment.Source;
 import software.constructs.Construct;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
@@ -97,6 +100,16 @@ public class CdkStack extends Stack {
                 .recordName("shopleech.com")
                 .target(RecordTarget.fromAlias(new CloudFrontTarget(distribution)))
                 .zone(zone)
+                .build();
+
+        // Deploy site contents to S3 bucket
+        List<ISource> sources = new ArrayList<>(1);
+        sources.add(Source.asset("./site-contents"));
+
+        BucketDeployment.Builder.create(this, "DeployWithInvalidation")
+                .sources(sources)
+                .destinationBucket(siteBucket)
+                .distribution(distribution)
                 .build();
 
         // defines dynamodb
