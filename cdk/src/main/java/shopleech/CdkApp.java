@@ -15,6 +15,8 @@ public final class CdkApp {
                                         .region("eu-west-1")
                                         .account(System.getenv("CDK_DEFAULT_ACCOUNT"))
                                         .build())
+                        .stackName("ShopleechStack")
+                        .description("AWS CDK stack for shopleech")
                         .build();
 
         new CdkStack(app, "CdkStack", pr);

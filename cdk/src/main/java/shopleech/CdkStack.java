@@ -1,7 +1,10 @@
 package shopleech;
 
+import software.amazon.awscdk.CfnOutput;
 import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.RemovalPolicy;
+import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.apigateway.*;
 import software.amazon.awscdk.services.certificatemanager.DnsValidatedCertificate;
 import software.amazon.awscdk.services.certificatemanager.ICertificate;
@@ -15,14 +18,13 @@ import software.amazon.awscdk.services.lambda.Function;
 import software.amazon.awscdk.services.lambda.FunctionProps;
 import software.amazon.awscdk.services.lambda.Runtime;
 import software.amazon.awscdk.services.route53.*;
+import software.amazon.awscdk.services.route53.targets.ApiGateway;
 import software.amazon.awscdk.services.route53.targets.CloudFrontTarget;
 import software.amazon.awscdk.services.s3.Bucket;
 import software.amazon.awscdk.services.s3.deployment.BucketDeployment;
 import software.amazon.awscdk.services.s3.deployment.ISource;
 import software.amazon.awscdk.services.s3.deployment.Source;
 import software.constructs.Construct;
-import software.amazon.awscdk.Stack;
-import software.amazon.awscdk.StackProps;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +47,73 @@ public class CdkStack extends Stack {
                         HostedZoneProviderProps.builder()
                                 .domainName("shopleech.com")
                                 .build());
+
+        // defines dynamodb
+        Attribute partitionKey = Attribute.builder()
+                .name("productId")
+                .type(AttributeType.STRING)
+                .build();
+        TableProps tableProps = TableProps.builder()
+                .tableName("sl-products")
+                .partitionKey(partitionKey)
+                .removalPolicy(RemovalPolicy.RETAIN)
+                .build();
+        Table dynamodbTable = new Table(this, "sl-products", tableProps);
+
+        Map<String, String> lambdaEnvMap = new HashMap<>();
+        lambdaEnvMap.put("TABLE_NAME", dynamodbTable.getTableName());
+        lambdaEnvMap.put("PRIMARY_KEY", "productId");
+
+        // Defines a new lambda resource
+        Function productApiFunction = new Function(this, "productApiFunction",
+                FunctionProps.builder()
+                        .functionName("sl-product-api")
+                        .code(Code.fromAsset("./assets/product-api-0.1.0.jar"))
+                        .handler("hello.handler")
+                        .runtime(Runtime.JAVA_11)
+                        .environment(lambdaEnvMap)
+                        .timeout(Duration.seconds(30))
+                        .memorySize(512)
+                        .build()
+        );
+
+        dynamodbTable.grantReadWriteData(productApiFunction);
+
+        // api gateway cert
+        final ICertificate cert =
+                DnsValidatedCertificate.Builder.create(this, "ApiCertificate")
+                        .domainName("gateway.shopleech.com")
+                        .hostedZone(zone)
+                        .build();
+
+        // defines a new api gateway for product-api
+        RestApi api = new RestApi(this, "productApi",
+                RestApiProps.builder().restApiName("Shopleech Product API")
+                        .domainName(DomainNameOptions.builder()
+                                .domainName("gateway.shopleech.com")
+                                .certificate(cert)
+                                .securityPolicy(SecurityPolicy.TLS_1_2)
+                                .build())
+                        .build());
+
+        // set endpoint
+        IResource items = api.getRoot().addResource("products");
+        Integration getAllIntegration = new LambdaIntegration(productApiFunction);
+        items.addMethod("GET", getAllIntegration);
+
+        // set endpoint
+        IResource singleItem = items.addResource("{id}");
+        Integration getOneIntegration = new LambdaIntegration(productApiFunction);
+        singleItem.addMethod("GET", getOneIntegration);
+
+        // api alias record
+        ARecord.Builder.create(this, "ApiAliasRecord")
+                .recordName("gateway.shopleech.com")
+                .target(RecordTarget.fromAlias(new ApiGateway(api)))
+                .zone(zone)
+                .build();
+
+        // website
         List<String> siteDomainList = new ArrayList<>(1);
         siteDomainList.add("shopleech.com");
 
@@ -63,12 +132,6 @@ public class CdkStack extends Stack {
                         .websiteIndexDocument("index.html")
                         .websiteErrorDocument("error.html")
                         .publicReadAccess(false)
-                        // The default removal policy is RETAIN, which means that cdk destroy will not attempt
-                        // to delete
-                        // the new bucket, and it will remain in your account until manually deleted. By
-                        // setting the policy to
-                        // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the
-                        // bucket is not empty.
                         .removalPolicy(RemovalPolicy.RETAIN)
                         .build();
 
@@ -80,10 +143,38 @@ public class CdkStack extends Stack {
 
         siteBucket.grantRead(originAccessIdentity);
 
-        List<Behavior> behavioursList = new ArrayList<>(1);
-        behavioursList.add(Behavior.builder().isDefaultBehavior(true).build());
+        // cloudfront behaviours
+        List<String> forwardedHeaders = new ArrayList<>(1);
+        forwardedHeaders.add("Accept-Encoding");
+        forwardedHeaders.add("Authorization");
+        forwardedHeaders.add("Accept");
+        forwardedHeaders.add("X-Origin-Verify");
+        forwardedHeaders.add("Host");
 
+        List<Behavior> behavioursList = new ArrayList<>(1);
+        behavioursList.add(Behavior.builder().isDefaultBehavior(true).compress(true).build());
+
+        List<Behavior> apiBehavioursList = new ArrayList<>(1);
+        apiBehavioursList.add(
+                Behavior.builder()
+                        .pathPattern("/api/*")
+                        .allowedMethods(CloudFrontAllowedMethods.ALL)
+                        .forwardedValues(CfnDistribution.ForwardedValuesProperty.builder()
+                                .queryString(true)
+                                .headers(forwardedHeaders).build())
+                        .compress(true)
+                        .build());
+
+        // source
         List<SourceConfiguration> sourceConfigurationsList = new ArrayList<>(1);
+        sourceConfigurationsList.add(
+                SourceConfiguration.builder()
+                        .customOriginSource(
+                                CustomOriginConfig.builder().domainName("gateway.shopleech.com")
+                                        .originPath("/prod")
+                                        .build())
+                        .behaviors(apiBehavioursList)
+                        .build());
         sourceConfigurationsList.add(
                 SourceConfiguration.builder()
                         .s3OriginSource(
@@ -122,90 +213,9 @@ public class CdkStack extends Stack {
                 .distribution(distribution)
                 .build();
 
-        // defines dynamodb
-        Attribute partitionKey = Attribute.builder()
-                .name("productId")
-                .type(AttributeType.STRING)
+        CfnOutput.Builder.create(this, "DistributionId")
+                .description("CloudFront Distribution Id")
+                .value(distribution.getDistributionId())
                 .build();
-        TableProps tableProps = TableProps.builder()
-                .tableName("sl-products")
-                .partitionKey(partitionKey)
-                .removalPolicy(RemovalPolicy.RETAIN)
-                .build();
-        Table dynamodbTable = new Table(this, "sl-products", tableProps);
-
-        Map<String, String> lambdaEnvMap = new HashMap<>();
-        lambdaEnvMap.put("TABLE_NAME", dynamodbTable.getTableName());
-        lambdaEnvMap.put("PRIMARY_KEY", "productId");
-
-        // Defines a new lambda resource
-        Function productApiFunction = new Function(this, "productApiFunction",
-                FunctionProps.builder()
-                        .functionName("sl-product-api")
-                        .code(Code.fromAsset("./assets/product-api-0.1.0.jar"))
-                        .handler("hello.handler")
-                        .runtime(Runtime.JAVA_11)
-                        .environment(lambdaEnvMap)
-                        .timeout(Duration.seconds(30))
-                        .memorySize(512)
-                        .build()
-        );
-
-        dynamodbTable.grantReadWriteData(productApiFunction);
-
-        // defines a new api gateway
-        RestApi api = new RestApi(this, "productApi",
-                RestApiProps.builder().restApiName("Product Service").build());
-
-        // set endpoint
-        IResource items = api.getRoot().addResource("products");
-        Integration getAllIntegration = new LambdaIntegration(productApiFunction);
-        items.addMethod("GET", getAllIntegration);
-
-        // set endpoint
-        IResource singleItem = items.addResource("{id}");
-        Integration getOneIntegration = new LambdaIntegration(productApiFunction);
-        singleItem.addMethod("GET", getOneIntegration);
-
     }
-
-    // Source: https://github.com/aws-samples/aws-cdk-examples/blob/master/java/api-cors-lambda-crud-dynamodb/cdk/src/main/java/software/amazon/awscdk/examples/CorsLambdaCrudDynamodbStack.java
-    private void addCorsOptions(IResource item) {
-        List<MethodResponse> methoedResponses = new ArrayList<>();
-
-        Map<String, Boolean> responseParameters = new HashMap<>();
-        responseParameters.put("method.response.header.Access-Control-Allow-Headers", Boolean.TRUE);
-        responseParameters.put("method.response.header.Access-Control-Allow-Methods", Boolean.TRUE);
-        responseParameters.put("method.response.header.Access-Control-Allow-Credentials", Boolean.TRUE);
-        responseParameters.put("method.response.header.Access-Control-Allow-Origin", Boolean.TRUE);
-        methoedResponses.add(MethodResponse.builder()
-                .responseParameters(responseParameters)
-                .statusCode("200")
-                .build());
-        MethodOptions methodOptions = MethodOptions.builder()
-                .methodResponses(methoedResponses)
-                .build();
-
-        Map<String, String> requestTemplate = new HashMap<>();
-        requestTemplate.put("application/json", "{\"statusCode\": 200}");
-        List<IntegrationResponse> integrationResponses = new ArrayList<>();
-
-        Map<String, String> integrationResponseParameters = new HashMap<>();
-        integrationResponseParameters.put("method.response.header.Access-Control-Allow-Headers", "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'");
-        integrationResponseParameters.put("method.response.header.Access-Control-Allow-Origin", "'*'");
-        integrationResponseParameters.put("method.response.header.Access-Control-Allow-Credentials", "'false'");
-        integrationResponseParameters.put("method.response.header.Access-Control-Allow-Methods", "'OPTIONS,GET,PUT,POST,DELETE'");
-        integrationResponses.add(IntegrationResponse.builder()
-                .responseParameters(integrationResponseParameters)
-                .statusCode("200")
-                .build());
-        Integration methodIntegration = MockIntegration.Builder.create()
-                .integrationResponses(integrationResponses)
-                .passthroughBehavior(PassthroughBehavior.NEVER)
-                .requestTemplates(requestTemplate)
-                .build();
-
-        item.addMethod("OPTIONS", methodIntegration, methodOptions);
-    }
-
 }
