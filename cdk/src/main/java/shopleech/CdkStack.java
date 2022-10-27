@@ -38,8 +38,6 @@ public class CdkStack extends Stack {
         super(parent, id, props);
 
         // defines route53
-
-        // defines certificate
         final IHostedZone zone =
                 HostedZone.fromLookup(
                         this,
@@ -50,6 +48,7 @@ public class CdkStack extends Stack {
         List<String> siteDomainList = new ArrayList<>(1);
         siteDomainList.add("shopleech.com");
 
+        // defines certificate
         final ICertificate certificate =
                 DnsValidatedCertificate.Builder.create(this, "SiteCertificate")
                         .domainName("shopleech.com")
@@ -74,13 +73,24 @@ public class CdkStack extends Stack {
                         .build();
 
         // Defines a cloudfront
+        OriginAccessIdentity originAccessIdentity = OriginAccessIdentity.Builder
+                .create(this, "OriginAccessIdentity")
+                .comment("Allows Read-Access from CloudFront")
+                .build();
+
+        siteBucket.grantRead(originAccessIdentity);
+
         List<Behavior> behavioursList = new ArrayList<>(1);
         behavioursList.add(Behavior.builder().isDefaultBehavior(true).build());
 
         List<SourceConfiguration> sourceConfigurationsList = new ArrayList<>(1);
         sourceConfigurationsList.add(
                 SourceConfiguration.builder()
-                        .s3OriginSource(S3OriginConfig.builder().s3BucketSource(siteBucket).build())
+                        .s3OriginSource(
+                                S3OriginConfig.builder()
+                                        .s3BucketSource(siteBucket)
+                                        .originAccessIdentity(originAccessIdentity)
+                                        .build())
                         .behaviors(behavioursList)
                         .build());
 
@@ -131,6 +141,7 @@ public class CdkStack extends Stack {
         // Defines a new lambda resource
         Function productApiFunction = new Function(this, "productApiFunction",
                 FunctionProps.builder()
+                        .functionName("sl-product-api")
                         .code(Code.fromAsset("./assets/product-api-0.1.0.jar"))
                         .handler("hello.handler")
                         .runtime(Runtime.JAVA_11)
