@@ -5,18 +5,14 @@ import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.RemovalPolicy;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
-import software.amazon.awscdk.services.apigateway.*;
 import software.amazon.awscdk.services.certificatemanager.DnsValidatedCertificate;
 import software.amazon.awscdk.services.certificatemanager.ICertificate;
 import software.amazon.awscdk.services.cloudfront.*;
-import software.amazon.awscdk.services.dynamodb.Attribute;
-import software.amazon.awscdk.services.dynamodb.AttributeType;
-import software.amazon.awscdk.services.dynamodb.Table;
-import software.amazon.awscdk.services.dynamodb.TableProps;
-import software.amazon.awscdk.services.lambda.Code;
+import software.amazon.awscdk.services.dynamodb.*;
+import software.amazon.awscdk.services.ecr.IRepository;
+import software.amazon.awscdk.services.ecr.Repository;
+import software.amazon.awscdk.services.lambda.*;
 import software.amazon.awscdk.services.lambda.Function;
-import software.amazon.awscdk.services.lambda.FunctionProps;
-import software.amazon.awscdk.services.lambda.Runtime;
 import software.amazon.awscdk.services.route53.*;
 import software.amazon.awscdk.services.route53.targets.CloudFrontTarget;
 import software.amazon.awscdk.services.s3.Bucket;
@@ -44,53 +40,44 @@ public class CdkStack extends Stack {
                                 .domainName("shopleech.com")
                                 .build());
 
-        // defines dynamodb
-        Attribute partitionKey = Attribute.builder()
-                .name("productId")
-                .type(AttributeType.STRING)
-                .build();
-        TableProps tableProps = TableProps.builder()
-                .tableName("sl-products")
-                .partitionKey(partitionKey)
-                .removalPolicy(RemovalPolicy.RETAIN)
-                .build();
-        Table dynamodbTable = new Table(this, "sl-products", tableProps);
+        ITable dynamodbTable2 = (ITable) Table.fromTableName(this, "sl-user-ddyn", "sl-user");
 
         Map<String, String> lambdaEnvMap = new HashMap<>();
-        lambdaEnvMap.put("TABLE_NAME", dynamodbTable.getTableName());
-        lambdaEnvMap.put("PRIMARY_KEY", "productId");
+        lambdaEnvMap.put("TABLE_NAME", dynamodbTable2.getTableName());
+        lambdaEnvMap.put("PRIMARY_KEY", "id");
+
+        IRepository repository = (IRepository) Repository.fromRepositoryName(this, "sl-iser-dynn-rep", "sl-user-api-1");
 
         // Defines a new lambda resource
-        Function productApiFunction = new Function(this, "productApiFunction",
-                FunctionProps.builder()
-                        .functionName("sl-product-api")
-                        .code(Code.fromAsset("../product-api/build/libs/product-api-0.1.0.jar"))
-                        .handler("hello.handler")
-                        .runtime(Runtime.JAVA_11)
+        Function userApiFunction = new DockerImageFunction(this, "userApiFunction",
+                DockerImageFunctionProps.builder()
+                        .functionName("sl-user-api-1")
+                        .description("")
+                        .code(DockerImageCode.fromEcr(repository))
                         .environment(lambdaEnvMap)
-                        .timeout(Duration.seconds(30))
+                        .timeout(Duration.minutes(2))
                         .memorySize(512)
                         .build()
         );
 
-        dynamodbTable.grantReadWriteData(productApiFunction);
+        dynamodbTable2.grantReadWriteData(userApiFunction);
 
-        // defines a new api gateway for product-api
-        RestApi api = new RestApi(this, "ProductApi",
-                RestApiProps.builder()
-                        .restApiName("Shopleech Product API")
-                        .deploy(true)
-                        .build());
-
-        // set endpoint
-        IResource items = api.getRoot().addResource("api").addResource("products");;
-        Integration getAllIntegration = new LambdaIntegration(productApiFunction);
-        items.addMethod("GET", getAllIntegration);
-
-        // set endpoint
-        IResource singleItem = items.addResource("test").addResource("{id}");
-        Integration getOneIntegration = new LambdaIntegration(productApiFunction);
-        singleItem.addMethod("GET", getOneIntegration);
+//        // defines a new api gateway for product-api
+//        RestApi api = new RestApi(this, "ProductApi",
+//                RestApiProps.builder()
+//                        .restApiName("Shopleech Product API")
+//                        .deploy(true)
+//                        .build());
+//
+//        // set endpoint
+//        IResource items = api.getRoot().addResource("api").addResource("products");;
+//        Integration getAllIntegration = new LambdaIntegration(userApiFunction);
+//        items.addMethod("GET", getAllIntegration);
+//
+//        // set endpoint
+//        IResource singleItem = items.addResource("test").addResource("{id}");
+//        Integration getOneIntegration = new LambdaIntegration(userApiFunction);
+//        singleItem.addMethod("GET", getOneIntegration);
 
         // website
         List<String> siteDomainList = new ArrayList<>(1);
@@ -151,16 +138,16 @@ public class CdkStack extends Stack {
                                         .build())
                         .behaviors(s3BehavioursList)
                         .build());
-        sourceConfigurationsList.add(
-                SourceConfiguration.builder()
-                        .customOriginSource(
-                                CustomOriginConfig.builder()
-                                        .domainName(String.format("%s.execute-api.eu-west-1.amazonaws.com",
-                                                api.getRestApiId()))
-                                        .originPath(String.format("/%s", api.getDeploymentStage().getStageName()))
-                                        .build())
-                        .behaviors(apiBehavioursList)
-                        .build());
+//        sourceConfigurationsList.add(
+//                SourceConfiguration.builder()
+//                        .customOriginSource(
+//                                CustomOriginConfig.builder()
+//                                        .domainName(String.format("%s.execute-api.eu-west-1.amazonaws.com",
+//                                                api.getRestApiId()))
+//                                        .originPath(String.format("/%s", api.getDeploymentStage().getStageName()))
+//                                        .build())
+//                        .behaviors(apiBehavioursList)
+//                        .build());
 
         CloudFrontWebDistribution distribution =
                 CloudFrontWebDistribution.Builder.create(this, "SiteDistribution")
