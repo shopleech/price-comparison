@@ -7,12 +7,24 @@ version '0.1.0'
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://repo.spring.io/release"
+    }
+    maven {
+        url "https://repository.jboss.org/maven2"
+    }
 }
 
 dependencies {
-    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
+    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+    implementation 'com.github.derjust:spring-data-dynamodb:5.1.0'
+    implementation 'org.springframework.cloud:spring-cloud-function-adapter-aws:3.2.8'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.2'
     implementation 'com.amazonaws:aws-lambda-java-runtime-interface-client:2.1.1'
     implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.353'
+    implementation 'org.modelmapper:modelmapper:3.1.0'
 
     testImplementation 'junit:junit:4.13.2'
 }

@@ -1,47 +1,55 @@
 package com.shopleech;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.shopleech.contract.AppUser;
+import com.shopleech.dto.UserConverter;
+import com.shopleech.service.IUserService;
 import com.shopleech.contract.Request;
+import com.shopleech.service.dto.UserBllDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class App implements RequestHandler<Request, Object> {
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    UserConverter userConverter;
 
     @Override
     public Object handleRequest(Request request, Context context) {
 
-        AmazonDynamoDB db = AmazonDynamoDBClientBuilder.defaultClient();
-        DynamoDBMapper mapper = new DynamoDBMapper(db);
-        AppUser user = null;
-
         switch (request.getHttpMethod()) {
             case "GET":
-                if (request.getId() == 0) {
-                    List<AppUser> users = new ArrayList<>();
-                    users = mapper.scan(AppUser.class, new DynamoDBScanExpression());
-                    return users;
+                if (request.getId() == null) {
+                    List<UserBllDto> users = userService.getUsers();
+
+                    return users.stream()
+                            .map(userConverter::convertEntityToDto)
+                            .collect(Collectors.toList());
                 } else {
-                    user = mapper.load(AppUser.class, request.getId());
-                    return user;
+                    return userConverter.convertEntityToDto(
+                            userService.getUserById(request.getId()));
                 }
             case "POST":
-                user = request.getUser();
-                mapper.save(user);
-                return user;
+                return userConverter.convertEntityToDto(userService.addUser(
+                                userConverter.convertDtoToEntity(request.getUser())));
+
             case "DELETE":
-                user = mapper.load(AppUser.class, request.getId());
-                if (user != null)
-                    mapper.delete(user);
-                return user;
+                userService.deleteUser(request.getId());
         }
 
         return null;
+    }
+
+    @Bean
+    public Supplier<String> randomString() {
+        return () -> UUID.randomUUID().toString();
     }
 }
