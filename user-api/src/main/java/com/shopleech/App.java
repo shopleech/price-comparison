@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.shopleech.dto.UserConverter;
 import com.shopleech.service.IUserService;
-import com.shopleech.contract.Request;
+import com.shopleech.domain.Request;
 import com.shopleech.service.dto.UserBllDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -35,14 +35,14 @@ public class App implements RequestHandler<Request, Object> {
                             .collect(Collectors.toList());
                 } else {
                     return userConverter.convertEntityToDto(
-                            userService.getUserById(request.getId()));
+                            userService.getUserById(request.getUser().getId()));
                 }
             case "POST":
                 return userConverter.convertEntityToDto(userService.addUser(
                                 userConverter.convertDtoToEntity(request.getUser())));
 
             case "DELETE":
-                userService.deleteUser(request.getId());
+                userService.deleteUser(request.getUser().getId());
         }
 
         return null;

@@ -2,7 +2,7 @@ package com.shopleech.service.dto;
 
 import java.util.UUID;
 
-public class UserBllDto {
+public class ContactBllDto {
 
     UUID id;
 
