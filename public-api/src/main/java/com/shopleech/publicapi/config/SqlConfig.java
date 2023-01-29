@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -20,22 +22,28 @@ import java.util.Properties;
  */
 @Configuration
 @EnableTransactionManagement
-@ComponentScan({"com.shopleech.publicapi"})
+@ComponentScan({"com.shopleech.publicapi.*"})
+@PropertySource("classpath:application.properties")
 public class SqlConfig {
 
    @Autowired
    private DataSource dataSource;
    @Autowired
    private LocalContainerEntityManagerFactoryBean entityManagerFactory;
+   private Environment env;
+
+   public SqlConfig(Environment env) {
+      this.env = env;
+   }
 
    @Bean
    public DataSource dataSource() {
       DriverManagerDataSource dataSource = new DriverManagerDataSource();
       dataSource.setDriverClassName("org.postgresql.Driver");
-      dataSource.setUrl("jdbc:postgresql://localhost/jpa_demo");
-      dataSource.setSchema("");
-      dataSource.setUsername("");
-      dataSource.setPassword("");
+      dataSource.setUrl(env.getProperty("spring.datasource.url"));
+      dataSource.setSchema(env.getProperty("spring.datasource.schema"));
+      dataSource.setUsername(env.getProperty("spring.datasource.username"));
+      dataSource.setPassword(env.getProperty("spring.datasource.password"));
       return dataSource;
    }
 
