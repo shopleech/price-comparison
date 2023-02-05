@@ -2,54 +2,52 @@ package com.shopleech.publicapi.domain;
 
 import com.shopleech.base.domain.BaseDomainEntityMetaId;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 /**
  * @author Ahto Jalak
  * @since 24.01.2023
  */
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "account")
+@Table(name = "_account")
 public class Account extends BaseDomainEntityMetaId {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "id", nullable = false)
-   private int id;
+   @GeneratedValue
+   private Integer id;
 
-   @Column
    private String name;
 
-   @Column
    private String description;
 
-   public Account(int id, String name, String description) {
-      this.id = id;
-      this.name = name;
-      this.description = description;
-   }
+   @OneToMany
+   private Set<AccountUser> accountUsers;
 
-   public Account() {
-
-   }
-
-   public int getId() {
+   public Integer getId() {
       return id;
-   }
-
-   public void setId(int id) {
-      this.id = id;
    }
 
    public String getName() {
       return name;
    }
 
-   public void setName(String name) {
-      this.name = name;
-   }
-
    public String getDescription() {
       return description;
+   }
+
+   public void setId(Integer id) {
+      this.id = id;
+   }
+
+   public void setName(String name) {
+      this.name = name;
    }
 
    public void setDescription(String description) {

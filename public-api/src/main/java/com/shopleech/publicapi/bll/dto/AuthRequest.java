@@ -1,4 +1,4 @@
-package com.shopleech.publicapi.dal.dto;
+package com.shopleech.publicapi.bll.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author Ahto Jalak
- * @since 24.01.2023
+ * @since 04.02.2023
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account {
-   Integer id;
-   String name;
-   String description;
+public class AuthRequest {
+
+   private String email;
+   private String password;
 }

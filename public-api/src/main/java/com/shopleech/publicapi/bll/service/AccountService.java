@@ -3,7 +3,7 @@ package com.shopleech.publicapi.bll.service;
 import com.shopleech.publicapi.bll.dto.Account;
 import com.shopleech.publicapi.bll.mapper.AccountBLLMapper;
 import com.shopleech.publicapi.dal.repository.CustomAccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,16 +13,12 @@ import java.util.List;
  * @since 24.01.2023
  */
 @Service
+@RequiredArgsConstructor
 public class AccountService {
 
-   @Autowired
    protected CustomAccountRepository accountRepository;
 
-   @Autowired
    protected AccountBLLMapper accountMapper;
-
-   public AccountService() {
-   }
 
    public void createAccount(Account data) {
       accountRepository.add(accountMapper.mapToEntity(data));

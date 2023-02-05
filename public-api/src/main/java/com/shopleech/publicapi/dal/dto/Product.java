@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author Ahto Jalak
- * @since 24.01.2023
+ * @since 05.02.2023
  */
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class Account {
-   Integer id;
-   String name;
-   String description;
+@AllArgsConstructor
+public class Product {
+
+   private Integer id;
+
 }

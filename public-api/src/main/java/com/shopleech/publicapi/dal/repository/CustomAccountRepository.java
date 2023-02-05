@@ -8,8 +8,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -18,8 +16,6 @@ import java.util.List;
  * @author Ahto Jalak
  * @since 24.01.2023
  */
-@Configuration
-@Repository
 public class CustomAccountRepository implements IAccountRepository {
 
    private static final Logger LOGGER = LoggerFactory.getLogger(CustomAccountRepository.class);
