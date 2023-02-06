@@ -1,5 +1,6 @@
 package com.shopleech.publicapi.dal.dto;
 
+import com.shopleech.base.config.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Account {
-   Integer id;
-   String name;
-   String description;
+
+   private Integer id;
+   private Status status;
 }

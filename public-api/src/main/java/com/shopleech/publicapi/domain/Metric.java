@@ -1,6 +1,7 @@
 package com.shopleech.publicapi.domain;
 
-import com.shopleech.base.config.AlarmTypeCode;
+import com.shopleech.base.config.MetricTypeCode;
+import com.shopleech.base.domain.BaseDomainEntityMetaId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,29 +11,31 @@ import java.sql.Timestamp;
 
 /**
  * @author Ahto Jalak
- * @since 05.02.2023
+ * @since 06.02.2023
  */
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "_alarm")
-public class Alarm {
+@Table(name = "_metric")
+public class Metric extends BaseDomainEntityMetaId {
 
    @Id
    @GeneratedValue
    private Integer id;
 
    @ManyToOne
-   private Customer customer;
-
-   @ManyToOne
    private Product product;
 
-   private AlarmTypeCode alarmTypeCode;
-   private Double minValue;
-   private Double maxValue;
-   private String name;
+   @ManyToOne
+   private AccountProduct accountProduct;
+
+   @ManyToOne
+   private Category category;
+
+   private MetricTypeCode metricTypeCode;
+   private Double quantity;
 
    private Timestamp validFrom;
    private Timestamp validTo;

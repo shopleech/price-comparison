@@ -3,7 +3,7 @@ package com.shopleech.publicapi.bll.service;
 import com.shopleech.publicapi.bll.dto.AuthRequest;
 import com.shopleech.publicapi.bll.dto.AuthResponse;
 import com.shopleech.publicapi.domain.RegisterRequest;
-import com.shopleech.publicapi.domain.Role;
+import com.shopleech.base.config.Role;
 import com.shopleech.publicapi.dal.repository.UserRepository;
 import com.shopleech.publicapi.domain.User;
 import lombok.RequiredArgsConstructor;

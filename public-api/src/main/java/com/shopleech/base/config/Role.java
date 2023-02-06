@@ -1,4 +1,4 @@
-package com.shopleech.publicapi.domain;
+package com.shopleech.base.config;
 
 /**
  * @author Ahto Jalak

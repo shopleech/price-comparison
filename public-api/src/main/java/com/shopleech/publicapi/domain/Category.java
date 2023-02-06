@@ -1,6 +1,5 @@
 package com.shopleech.publicapi.domain;
 
-import com.shopleech.base.config.AlarmTypeCode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,28 +9,22 @@ import java.sql.Timestamp;
 
 /**
  * @author Ahto Jalak
- * @since 05.02.2023
+ * @since 06.02.2023
  */
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "_alarm")
-public class Alarm {
+@Table(name = "_category")
+public class Category {
 
    @Id
    @GeneratedValue
    private Integer id;
 
    @ManyToOne
-   private Customer customer;
+   private Category parentCategory;
 
-   @ManyToOne
-   private Product product;
-
-   private AlarmTypeCode alarmTypeCode;
-   private Double minValue;
-   private Double maxValue;
    private String name;
 
    private Timestamp validFrom;

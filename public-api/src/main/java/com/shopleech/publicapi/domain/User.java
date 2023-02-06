@@ -1,14 +1,15 @@
 package com.shopleech.publicapi.domain;
 
+import com.shopleech.base.config.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -39,8 +40,16 @@ public class User implements UserDetails {
    @Enumerated(EnumType.STRING)
    private Role role;
 
+   private Timestamp validFrom;
+   private Timestamp validTo;
+   private Timestamp createdAt;
+   private String createdBy;
+   private Timestamp updatedAt;
+   private String updatedBy;
+
    @OneToMany
-   private Set<AccountUser> accountUsers;
+   @JoinColumn(name="user_id", referencedColumnName="id")
+   private Set<Customer> customers;
 
    @Override
    public Collection<? extends GrantedAuthority> getAuthorities() {

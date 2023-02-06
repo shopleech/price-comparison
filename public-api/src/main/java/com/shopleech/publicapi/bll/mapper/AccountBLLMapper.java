@@ -21,16 +21,14 @@ public class AccountBLLMapper {
    public Account mapToDto(com.shopleech.publicapi.dal.dto.Account c) {
       return new Account(
               c.getId(),
-              c.getName(),
-              c.getDescription()
+              c.getStatus()
       );
    }
 
    public com.shopleech.publicapi.dal.dto.Account mapToEntity(Account newAccount) {
       com.shopleech.publicapi.dal.dto.Account entity = new com.shopleech.publicapi.dal.dto.Account();
       entity.setId(newAccount.getId());
-      entity.setName(newAccount.getName());
-      entity.setDescription(newAccount.getDescription());
+      entity.setStatus(newAccount.getStatus());
       return entity;
    }
 

@@ -1,11 +1,13 @@
 package com.shopleech.publicapi.domain;
 
+import com.shopleech.base.config.Status;
 import com.shopleech.base.domain.BaseDomainEntityMetaId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 /**
@@ -23,34 +25,35 @@ public class Account extends BaseDomainEntityMetaId {
    @GeneratedValue
    private Integer id;
 
-   private String name;
+   @ManyToMany
+   @JoinTable(name = "_customer_account",
+           joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
+           inverseJoinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id")
+   )
+   private Set<Customer> customers;
 
-   private String description;
+   private Status status;
 
-   @OneToMany
-   private Set<AccountUser> accountUsers;
+   private Timestamp validFrom;
+   private Timestamp validTo;
+   private Timestamp createdAt;
+   private String createdBy;
+   private Timestamp updatedAt;
+   private String updatedBy;
 
    public Integer getId() {
       return id;
-   }
-
-   public String getName() {
-      return name;
-   }
-
-   public String getDescription() {
-      return description;
    }
 
    public void setId(Integer id) {
       this.id = id;
    }
 
-   public void setName(String name) {
-      this.name = name;
+   public Status getStatus() {
+      return status;
    }
 
-   public void setDescription(String description) {
-      this.description = description;
+   public void setStatus(Status status) {
+      this.status = status;
    }
 }

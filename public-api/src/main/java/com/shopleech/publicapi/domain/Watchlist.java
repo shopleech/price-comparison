@@ -1,12 +1,12 @@
 package com.shopleech.publicapi.domain;
 
+import com.shopleech.base.config.WatchTypeCode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.sql.Timestamp;
 
 /**
  * @author Ahto Jalak
@@ -18,14 +18,23 @@ import java.util.Set;
 @Entity
 @Table(name = "_watchlist")
 public class Watchlist {
+
    @Id
    @GeneratedValue
    private Integer id;
 
-   @OneToOne
-   private User user;
+   @ManyToOne
+   private Customer customer;
 
-   @OneToMany
-   private Set<Product> products;
+   @ManyToOne
+   private Product product;
 
+   private WatchTypeCode watchTypeCode;
+
+   private Timestamp validFrom;
+   private Timestamp validTo;
+   private Timestamp createdAt;
+   private String createdBy;
+   private Timestamp updatedAt;
+   private String updatedBy;
 }

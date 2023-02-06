@@ -1,5 +1,7 @@
 package com.shopleech.publicapi.dal.dto;
 
+import com.shopleech.base.config.BarcodeTypeCode;
+import com.shopleech.base.config.ProductTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +18,9 @@ import lombok.NoArgsConstructor;
 public class Product {
 
    private Integer id;
-
+   private ProductTypeCode productTypeCode;
+   private String barcode;
+   private BarcodeTypeCode barcodeTypeCode;
+   private String name;
+   private String description;
 }

@@ -1,7 +1,6 @@
 package com.shopleech.publicapi.domain;
 
 import com.shopleech.base.config.BarcodeTypeCode;
-import com.shopleech.base.config.ProductTypeCode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,27 +11,30 @@ import java.util.Set;
 
 /**
  * @author Ahto Jalak
- * @since 04.02.2023
+ * @since 05.02.2023
  */
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "_product")
-public class Product {
+@Table(name = "_account_product")
+public class AccountProduct {
 
    @Id
    @GeneratedValue
-   private Integer id;
+   private Long id;
 
    @ManyToOne
-   private Category category;
+   private Account account;
 
-   private ProductTypeCode productTypeCode;
+   @ManyToOne
+   private Product product;
+
    private String barcode;
    private BarcodeTypeCode barcodeTypeCode;
    private String name;
    private String description;
+   private String url;
 
    private Timestamp validFrom;
    private Timestamp validTo;
@@ -42,14 +44,22 @@ public class Product {
    private String updatedBy;
 
    @OneToMany
-   @JoinColumn(name="product_id", referencedColumnName="id")
-   private Set<Watchlist> watchlists;
+   @JoinColumn(name="account_product_id", referencedColumnName="id")
+   private Set<Review> reviews;
 
    @OneToMany
-   @JoinColumn(name="product_id", referencedColumnName="id")
-   private Set<Alarm> alarms;
+   @JoinColumn(name="account_product_id", referencedColumnName="id")
+   private Set<Feature> features;
 
    @OneToMany
-   @JoinColumn(name="product_id", referencedColumnName="id")
-   private Set<AccountProduct> accountProducts;
+   @JoinColumn(name="account_product_id", referencedColumnName="id")
+   private Set<Price> prices;
+
+   public Long getId() {
+      return id;
+   }
+
+   public void setId(Long id) {
+      this.id = id;
+   }
 }

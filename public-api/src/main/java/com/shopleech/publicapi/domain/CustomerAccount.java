@@ -1,12 +1,12 @@
 package com.shopleech.publicapi.domain;
 
+import com.shopleech.base.config.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.sql.Timestamp;
 
 /**
  * @author Ahto Jalak
@@ -16,19 +16,25 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "_account_user")
-public class AccountUser {
+@Table(name = "_customer_account")
+public class CustomerAccount {
 
    @Id
    @GeneratedValue
    private Integer id;
 
-   @OneToOne
-   private User user;
+   @ManyToOne
+   private Customer customer;
 
-   @OneToOne
+   @ManyToOne
    private Account account;
 
-   @Enumerated(EnumType.STRING)
    private Role role;
+
+   private Timestamp validFrom;
+   private Timestamp validTo;
+   private Timestamp createdAt;
+   private String createdBy;
+   private Timestamp updatedAt;
+   private String updatedBy;
 }
