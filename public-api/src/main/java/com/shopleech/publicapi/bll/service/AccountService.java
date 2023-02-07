@@ -1,8 +1,8 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.dto.Account;
+import com.shopleech.publicapi.bll.dto.AccountBLLDTO;
 import com.shopleech.publicapi.bll.mapper.AccountBLLMapper;
-import com.shopleech.publicapi.dal.repository.CustomAccountRepository;
+import com.shopleech.publicapi.dal.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,23 +16,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountService {
 
-   protected CustomAccountRepository accountRepository;
+   protected AccountRepository accountRepository;
 
    protected AccountBLLMapper accountMapper;
 
-   public void createAccount(Account data) {
-      accountRepository.add(accountMapper.mapToEntity(data));
+   public void createAccount(AccountBLLDTO data) {
+      accountRepository.addAccount(accountMapper.mapToEntity(data));
    }
 
-   public Account get(int id) {
-      return accountMapper.mapToDto(accountRepository.getById(id));
+   public AccountBLLDTO get(int id) {
+      return accountMapper.mapToDto(accountRepository.getAccountById(id));
    }
 
-   public Account getByName(String name) {
-      return accountMapper.mapToDto(accountRepository.getByName(name));
-   }
-
-   public List<Account> getAll() {
-      return accountMapper.mapToDto(accountRepository.getAll());
+   public List<AccountBLLDTO> getAll() {
+      return accountMapper.mapToDto(accountRepository.getAllAccounts());
    }
 }

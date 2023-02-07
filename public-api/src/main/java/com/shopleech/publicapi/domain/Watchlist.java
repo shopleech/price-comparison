@@ -37,4 +37,20 @@ public class Watchlist {
    private String createdBy;
    private Timestamp updatedAt;
    private String updatedBy;
+
+   public Integer getId() {
+      return id;
+   }
+
+   public WatchTypeCode getWatchTypeCode() {
+      return watchTypeCode;
+   }
+
+   public void setId(Integer id) {
+      this.id = id;
+   }
+
+   public void setWatchTypeCode(WatchTypeCode watchTypeCode) {
+      this.watchTypeCode = watchTypeCode;
+   }
 }

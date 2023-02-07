@@ -40,4 +40,44 @@ public class Alarm {
    private String createdBy;
    private Timestamp updatedAt;
    private String updatedBy;
+
+   public Integer getId() {
+      return id;
+   }
+
+   public AlarmTypeCode getAlarmTypeCode() {
+      return alarmTypeCode;
+   }
+
+   public Double getMinValue() {
+      return minValue;
+   }
+
+   public Double getMaxValue() {
+      return maxValue;
+   }
+
+   public String getName() {
+      return name;
+   }
+
+   public void setId(Integer id) {
+      this.id = id;
+   }
+
+   public void setAlarmTypeCode(AlarmTypeCode alarmTypeCode) {
+      this.alarmTypeCode = alarmTypeCode;
+   }
+
+   public void setMinValue(Double minValue) {
+      this.minValue = minValue;
+   }
+
+   public void setMaxValue(Double maxValue) {
+      this.maxValue = maxValue;
+   }
+
+   public void setName(String name) {
+      this.name = name;
+   }
 }

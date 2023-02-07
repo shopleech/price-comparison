@@ -20,13 +20,13 @@ public class AppUOW<T> implements IAppUOW {
 
    private Connection connection=null;
    private HashMap<String, List<Object>> context = new HashMap<>();
-   private Database database;
+//   private Database database;
    private List<Object> entitesToOperate ;
 
    public AppUOW(Connection connection) {
       this.connection = connection;
-      this.database= new Database(connection);
-      this.database.setTableName("account");
+//      this.database= new Database(connection);
+//      this.database.setTableName("account");
    }
 
    private void register(Object entity, String operation) {
@@ -73,46 +73,46 @@ public class AppUOW<T> implements IAppUOW {
          commitDelete();
       }
 
-      try {
-         database.getConnection().commit();
-         LOGGER.info("Commit finished.");
-
-         database.getConnection().close();
-      } catch (SQLException e) {
-         e.printStackTrace();
-      }
+//      try {
+//         database.getConnection().commit();
+//         LOGGER.info("Commit finished.");
+//
+//         database.getConnection().close();
+//      } catch (SQLException e) {
+//         e.printStackTrace();
+//      }
 
    }
 
    @Override
    public void rollback() {
-      try {
-         database.getConnection().rollback();
-      } catch (SQLException e) {
-         e.printStackTrace();
-      }
+//      try {
+//         database.getConnection().rollback();
+//      } catch (SQLException e) {
+//         e.printStackTrace();
+//      }
    }
 
    private void commitInsert() {
       List<Object> entitiesToBeInserted = context.get(IAppUOW.INSERT);
-      for (Object object : entitiesToBeInserted) {
-         LOGGER.info("Saving {} to database.", object.getClass().getCanonicalName());
-         LOGGER.info("table name is :{}",this.database.getTableName());
-         database.persistAdd(object);
-      }
+//      for (Object object : entitiesToBeInserted) {
+//         LOGGER.info("Saving {} to database.", object.getClass().getCanonicalName());
+//         LOGGER.info("table name is :{}",this.database.getTableName());
+//         database.persistAdd(object);
+//      }
    }
 
    private void commitModify() {
       List<Object> modifiedEntities = context.get(IAppUOW.MODIFY);
-      for (Object object : modifiedEntities) {
-         database.persistUpdate(object);
-      }
+//      for (Object object : modifiedEntities) {
+//         database.persistUpdate(object);
+//      }
    }
 
    private void commitDelete() {
       List<Object> deletedEntites = context.get(IAppUOW.DELETE);
-      for (Object object : deletedEntites) {
-         database.persistDelete(object);
-      }
+//      for (Object object : deletedEntites) {
+//         database.persistDelete(object);
+//      }
    }
 }

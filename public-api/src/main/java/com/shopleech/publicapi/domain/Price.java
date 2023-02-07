@@ -38,4 +38,44 @@ public class Price {
    private String createdBy;
    private Timestamp updatedAt;
    private String updatedBy;
+
+   public Integer getId() {
+      return id;
+   }
+
+   public PriceTypeCode getPriceTypeCode() {
+      return priceTypeCode;
+   }
+
+   public Double getQuantity() {
+      return quantity;
+   }
+
+   public Double getAmount() {
+      return amount;
+   }
+
+   public CurrencyTypeCode getCurrency() {
+      return currency;
+   }
+
+   public void setId(Integer id) {
+      this.id = id;
+   }
+
+   public void setPriceTypeCode(PriceTypeCode priceTypeCode) {
+      this.priceTypeCode = priceTypeCode;
+   }
+
+   public void setQuantity(Double quantity) {
+      this.quantity = quantity;
+   }
+
+   public void setAmount(Double amount) {
+      this.amount = amount;
+   }
+
+   public void setCurrency(CurrencyTypeCode currency) {
+      this.currency = currency;
+   }
 }

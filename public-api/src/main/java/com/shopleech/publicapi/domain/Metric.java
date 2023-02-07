@@ -43,4 +43,28 @@ public class Metric extends BaseDomainEntityMetaId {
    private String createdBy;
    private Timestamp updatedAt;
    private String updatedBy;
+
+   public Integer getId() {
+      return id;
+   }
+
+   public MetricTypeCode getMetricTypeCode() {
+      return metricTypeCode;
+   }
+
+   public Double getQuantity() {
+      return quantity;
+   }
+
+   public void setId(Integer id) {
+      this.id = id;
+   }
+
+   public void setMetricTypeCode(MetricTypeCode metricTypeCode) {
+      this.metricTypeCode = metricTypeCode;
+   }
+
+   public void setQuantity(Double quantity) {
+      this.quantity = quantity;
+   }
 }

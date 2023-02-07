@@ -1,10 +1,12 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.dto.AddProductRequest;
-import com.shopleech.publicapi.bll.dto.ProductResponse;
+import com.shopleech.publicapi.bll.dto.ProductBLLDTO;
+import com.shopleech.publicapi.bll.mapper.ProductBLLMapper;
 import com.shopleech.publicapi.dal.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Ahto Jalak
@@ -13,10 +15,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
+   protected ProductRepository productRepository;
 
-   private final ProductRepository repository;
+   protected ProductBLLMapper productMapper;
 
-   public ProductResponse register(AddProductRequest request) {
-      return new ProductResponse();
+   public void createProduct(ProductBLLDTO data) {
+      productRepository.addProduct(productMapper.mapToEntity(data));
+   }
+
+   public ProductBLLDTO get(Integer id) {
+      return productMapper.mapToDto(productRepository.getProductById(id));
+   }
+
+   public List<ProductBLLDTO> getAll() {
+      return productMapper.mapToDto(productRepository.getAllProducts());
    }
 }

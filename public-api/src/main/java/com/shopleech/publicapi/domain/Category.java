@@ -33,4 +33,20 @@ public class Category {
    private String createdBy;
    private Timestamp updatedAt;
    private String updatedBy;
+
+   public Integer getId() {
+      return id;
+   }
+
+   public String getName() {
+      return name;
+   }
+
+   public void setId(Integer id) {
+      this.id = id;
+   }
+
+   public void setName(String name) {
+      this.name = name;
+   }
 }

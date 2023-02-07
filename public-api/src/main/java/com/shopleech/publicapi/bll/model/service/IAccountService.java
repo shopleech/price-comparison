@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.bll.model.service;
 
-import com.shopleech.publicapi.dto.v1.Account;
+import com.shopleech.publicapi.dto.v1.AccountDTO;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import java.util.List;
  * @since 24.01.2023
  */
 public interface IAccountService {
-   List<Account> getAll();
+   List<AccountDTO> getAll();
 }

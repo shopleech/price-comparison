@@ -1,6 +1,7 @@
 package com.shopleech.publicapi.dto.v1.mapper;
 
-import com.shopleech.publicapi.dto.v1.Account;
+import com.shopleech.publicapi.bll.dto.AccountBLLDTO;
+import com.shopleech.publicapi.dto.v1.AccountDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,20 +14,20 @@ import java.util.stream.Collectors;
 @Component
 public class AccountMapper {
 
-   public List<Account> mapToDto(List<com.shopleech.publicapi.bll.dto.Account> accounts) {
+   public List<AccountDTO> mapToDto(List<AccountBLLDTO> accounts) {
       return accounts.stream()
               .map(this::mapToDto).collect(Collectors.toList());
    }
 
-   public Account mapToDto(com.shopleech.publicapi.bll.dto.Account c) {
-      return new Account(
+   public AccountDTO mapToDto(AccountBLLDTO c) {
+      return new AccountDTO(
               c.getId(),
               c.getStatus()
       );
    }
 
-   public com.shopleech.publicapi.bll.dto.Account mapToEntity(Account newAccount) {
-      com.shopleech.publicapi.bll.dto.Account entity = new com.shopleech.publicapi.bll.dto.Account();
+   public AccountBLLDTO mapToEntity(AccountDTO newAccount) {
+      AccountBLLDTO entity = new AccountBLLDTO();
       entity.setId(newAccount.getId());
       entity.setStatus(newAccount.getStatus());
       return entity;

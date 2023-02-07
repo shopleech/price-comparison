@@ -36,4 +36,36 @@ public class Feature {
    private String createdBy;
    private Timestamp updatedAt;
    private String updatedBy;
+
+   public Integer getId() {
+      return id;
+   }
+
+   public FeatureTypeCode getFeatureTypeCode() {
+      return featureTypeCode;
+   }
+
+   public String getName() {
+      return name;
+   }
+
+   public String getDescription() {
+      return description;
+   }
+
+   public void setId(Integer id) {
+      this.id = id;
+   }
+
+   public void setFeatureTypeCode(FeatureTypeCode featureTypeCode) {
+      this.featureTypeCode = featureTypeCode;
+   }
+
+   public void setName(String name) {
+      this.name = name;
+   }
+
+   public void setDescription(String description) {
+      this.description = description;
+   }
 }

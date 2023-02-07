@@ -52,4 +52,52 @@ public class Product {
    @OneToMany
    @JoinColumn(name="product_id", referencedColumnName="id")
    private Set<AccountProduct> accountProducts;
+
+   public Integer getId() {
+      return id;
+   }
+
+   public ProductTypeCode getProductTypeCode() {
+      return productTypeCode;
+   }
+
+   public String getBarcode() {
+      return barcode;
+   }
+
+   public BarcodeTypeCode getBarcodeTypeCode() {
+      return barcodeTypeCode;
+   }
+
+   public String getName() {
+      return name;
+   }
+
+   public String getDescription() {
+      return description;
+   }
+
+   public void setId(Integer id) {
+      this.id = id;
+   }
+
+   public void setProductTypeCode(ProductTypeCode productTypeCode) {
+      this.productTypeCode = productTypeCode;
+   }
+
+   public void setBarcode(String barcode) {
+      this.barcode = barcode;
+   }
+
+   public void setBarcodeTypeCode(BarcodeTypeCode barcodeTypeCode) {
+      this.barcodeTypeCode = barcodeTypeCode;
+   }
+
+   public void setName(String name) {
+      this.name = name;
+   }
+
+   public void setDescription(String description) {
+      this.description = description;
+   }
 }
