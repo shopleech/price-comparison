@@ -1,10 +1,9 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.dto.AuthRequest;
-import com.shopleech.publicapi.bll.dto.AuthResponse;
-import com.shopleech.publicapi.bll.dto.RegisterRequest;
+import com.shopleech.publicapi.dto.v1.AuthRequest;
+import com.shopleech.publicapi.dto.v1.AuthResponse;
+import com.shopleech.publicapi.dto.v1.RegisterRequest;
 import com.shopleech.base.config.Role;
-import com.shopleech.publicapi.dal.mapper.UserDALMapper;
 import com.shopleech.publicapi.dal.repository.UserRepository;
 import com.shopleech.publicapi.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +29,6 @@ public class UserService {
 
    private final AuthenticationManager authenticationManager;
 
-   private final UserDALMapper mapper;
-
    public AuthResponse register(RegisterRequest request) {
       var user = User.builder()
               .firstname(request.getFirstname())
@@ -40,7 +37,7 @@ public class UserService {
               .password(passwordEncoder.encode(request.getPassword()))
               .role(Role.USER)
               .build();
-      repository.addUser(mapper.mapToDto(user));
+      repository.save(user);
 
       return AuthResponse.builder()
               .token(jwtService.generateToken(user)).build();

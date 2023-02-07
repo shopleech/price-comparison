@@ -1,8 +1,8 @@
 package com.shopleech.publicapi.controller;
 
-import com.shopleech.publicapi.bll.dto.AuthRequest;
-import com.shopleech.publicapi.bll.dto.AuthResponse;
-import com.shopleech.publicapi.bll.dto.RegisterRequest;
+import com.shopleech.publicapi.dto.v1.AuthRequest;
+import com.shopleech.publicapi.dto.v1.AuthResponse;
+import com.shopleech.publicapi.dto.v1.RegisterRequest;
 import com.shopleech.publicapi.bll.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

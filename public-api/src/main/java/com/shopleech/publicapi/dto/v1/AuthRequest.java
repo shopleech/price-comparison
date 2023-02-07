@@ -1,4 +1,4 @@
-package com.shopleech.publicapi.bll.dto;
+package com.shopleech.publicapi.dto.v1;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
-   private String token;
+public class AuthRequest {
+
+   private String email;
+   private String password;
 }
