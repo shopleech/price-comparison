@@ -14,23 +14,23 @@ import java.util.stream.Collectors;
 @Component
 public class CategoryDALMapper {
 
-   public List<CategoryDALDTO> mapToDto(List<Category> categories) {
-      return categories.stream()
-              .map(this::mapToDto).collect(Collectors.toList());
-   }
+    public List<CategoryDALDTO> mapToDto(List<Category> categories) {
+        return categories.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+    }
 
-   public CategoryDALDTO mapToDto(Category c) {
-      return new CategoryDALDTO(
-              c.getId(),
-              c.getName()
-      );
-   }
+    public CategoryDALDTO mapToDto(Category c) {
+        return new CategoryDALDTO(
+                c.getId(),
+                c.getName()
+        );
+    }
 
-   public Category mapToEntity(CategoryDALDTO newCategory) {
-      Category entity = new Category();
-      entity.setId(newCategory.getId());
-      entity.setName(newCategory.getName());
-      return entity;
-   }
+    public Category mapToEntity(CategoryDALDTO newCategory) {
+        Category entity = new Category();
+        entity.setId(newCategory.getId());
+        entity.setName(newCategory.getName());
+        return entity;
+    }
 
 }

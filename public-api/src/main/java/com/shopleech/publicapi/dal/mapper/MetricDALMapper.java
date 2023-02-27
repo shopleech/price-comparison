@@ -14,25 +14,25 @@ import java.util.stream.Collectors;
 @Component
 public class MetricDALMapper {
 
-   public List<MetricDALDTO> mapToDto(List<Metric> metrics) {
-      return metrics.stream()
-              .map(this::mapToDto).collect(Collectors.toList());
-   }
+    public List<MetricDALDTO> mapToDto(List<Metric> metrics) {
+        return metrics.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+    }
 
-   public MetricDALDTO mapToDto(Metric c) {
-      return new MetricDALDTO(
-              c.getId(),
-              c.getMetricTypeCode(),
-              c.getQuantity()
-      );
-   }
+    public MetricDALDTO mapToDto(Metric c) {
+        return new MetricDALDTO(
+                c.getId(),
+                c.getMetricTypeCode(),
+                c.getQuantity()
+        );
+    }
 
-   public Metric mapToEntity(MetricDALDTO newMetric) {
-      Metric entity = new Metric();
-      entity.setId(newMetric.getId());
-      entity.setMetricTypeCode(newMetric.getMetricTypeCode());
-      entity.setQuantity(newMetric.getQuantity());
-      return entity;
-   }
+    public Metric mapToEntity(MetricDALDTO newMetric) {
+        Metric entity = new Metric();
+        entity.setId(newMetric.getId());
+        entity.setMetricTypeCode(newMetric.getMetricTypeCode());
+        entity.setQuantity(newMetric.getQuantity());
+        return entity;
+    }
 
 }

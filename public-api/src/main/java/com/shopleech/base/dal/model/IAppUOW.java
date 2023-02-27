@@ -6,17 +6,17 @@ package com.shopleech.base.dal.model;
  */
 public interface IAppUOW<T> {
 
-   String INSERT = "INSERT";
-   String MODIFY = "MODIFY";
-   String DELETE = "DELETE";
+    String INSERT = "INSERT";
+    String MODIFY = "MODIFY";
+    String DELETE = "DELETE";
 
-   void registerNew(T entity);
+    void registerNew(T entity);
 
-   void registerModified(T entity);
+    void registerModified(T entity);
 
-   void registerDeleted(T entity);
+    void registerDeleted(T entity);
 
-   void commit();
+    void commit();
 
-   void rollback();
+    void rollback();
 }

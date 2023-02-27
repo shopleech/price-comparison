@@ -11,22 +11,22 @@ import java.util.List;
  */
 public class FeatureRepositoryImpl implements FeatureRepositoryCustom {
 
-   private FeatureRepository featureRepository;
+    private FeatureRepository featureRepository;
 
-   private FeatureDALMapper featureDALMapper;
+    private FeatureDALMapper featureDALMapper;
 
-   @Override
-   public void addFeature(FeatureDALDTO feature) {
-      // featureRepository.add(featureDALMapper.mapToEntity(feature));
-   }
+    @Override
+    public void addFeature(FeatureDALDTO feature) {
+        // featureRepository.add(featureDALMapper.mapToEntity(feature));
+    }
 
-   @Override
-   public FeatureDALDTO getFeatureById(Integer id) {
-      return featureDALMapper.mapToDto(featureRepository.getReferenceById(id));
-   }
+    @Override
+    public FeatureDALDTO getFeatureById(Integer id) {
+        return featureDALMapper.mapToDto(featureRepository.getReferenceById(id));
+    }
 
-   @Override
-   public List<FeatureDALDTO> getAllFeatures() {
-      return featureDALMapper.mapToDto(featureRepository.findAll());
-   }
+    @Override
+    public List<FeatureDALDTO> getAllFeatures() {
+        return featureDALMapper.mapToDto(featureRepository.findAll());
+    }
 }

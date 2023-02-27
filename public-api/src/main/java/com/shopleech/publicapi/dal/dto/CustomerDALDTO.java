@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CustomerDALDTO {
 
-   private Integer id;
-   private String personalCode;
-   private String firstName;
-   private String lastName;
-   private String email;
-   private String phoneNumber;
-   private Status status;
+    private Integer id;
+    private String personalCode;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
+    private Status status;
 }

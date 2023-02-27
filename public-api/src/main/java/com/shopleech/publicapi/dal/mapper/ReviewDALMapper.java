@@ -14,27 +14,27 @@ import java.util.stream.Collectors;
 @Component
 public class ReviewDALMapper {
 
-   public List<ReviewDALDTO> mapToDto(List<Review> reviews) {
-      return reviews.stream()
-              .map(this::mapToDto).collect(Collectors.toList());
-   }
+    public List<ReviewDALDTO> mapToDto(List<Review> reviews) {
+        return reviews.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+    }
 
-   public ReviewDALDTO mapToDto(Review c) {
-      return new ReviewDALDTO(
-              c.getId(),
-              c.getReviewTypeCode(),
-              c.getScore(),
-              c.getDescription()
-      );
-   }
+    public ReviewDALDTO mapToDto(Review c) {
+        return new ReviewDALDTO(
+                c.getId(),
+                c.getReviewTypeCode(),
+                c.getScore(),
+                c.getDescription()
+        );
+    }
 
-   public Review mapToEntity(ReviewDALDTO newReview) {
-      Review entity = new Review();
-      entity.setId(newReview.getId());
-      entity.setReviewTypeCode(newReview.getReviewTypeCode());
-      entity.setScore(newReview.getScore());
-      entity.setDescription(newReview.getDescription());
-      return entity;
-   }
+    public Review mapToEntity(ReviewDALDTO newReview) {
+        Review entity = new Review();
+        entity.setId(newReview.getId());
+        entity.setReviewTypeCode(newReview.getReviewTypeCode());
+        entity.setScore(newReview.getScore());
+        entity.setDescription(newReview.getDescription());
+        return entity;
+    }
 
 }

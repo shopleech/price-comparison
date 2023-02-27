@@ -20,46 +20,46 @@ import java.util.Set;
 @Table(name = "_account_product")
 public class AccountProduct {
 
-   @Id
-   @GeneratedValue
-   private Long id;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-   @ManyToOne
-   private Account account;
+    @ManyToOne
+    private Account account;
 
-   @ManyToOne
-   private Product product;
+    @ManyToOne
+    private Product product;
 
-   private String barcode;
-   private BarcodeTypeCode barcodeTypeCode;
-   private String name;
-   private String description;
-   private String url;
+    private String barcode;
+    private BarcodeTypeCode barcodeTypeCode;
+    private String name;
+    private String description;
+    private String url;
 
-   private Timestamp validFrom;
-   private Timestamp validTo;
-   private Timestamp createdAt;
-   private String createdBy;
-   private Timestamp updatedAt;
-   private String updatedBy;
+    private Timestamp validFrom;
+    private Timestamp validTo;
+    private Timestamp createdAt;
+    private String createdBy;
+    private Timestamp updatedAt;
+    private String updatedBy;
 
-   @OneToMany
-   @JoinColumn(name="account_product_id", referencedColumnName="id")
-   private Set<Review> reviews;
+    @OneToMany
+    @JoinColumn(name = "account_product_id", referencedColumnName = "id")
+    private Set<Review> reviews;
 
-   @OneToMany
-   @JoinColumn(name="account_product_id", referencedColumnName="id")
-   private Set<Feature> features;
+    @OneToMany
+    @JoinColumn(name = "account_product_id", referencedColumnName = "id")
+    private Set<Feature> features;
 
-   @OneToMany
-   @JoinColumn(name="account_product_id", referencedColumnName="id")
-   private Set<Price> prices;
+    @OneToMany
+    @JoinColumn(name = "account_product_id", referencedColumnName = "id")
+    private Set<Price> prices;
 
-   public Long getId() {
-      return id;
-   }
+    public Long getId() {
+        return id;
+    }
 
-   public void setId(Long id) {
-      this.id = id;
-   }
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

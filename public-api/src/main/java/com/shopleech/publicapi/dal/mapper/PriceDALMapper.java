@@ -14,29 +14,29 @@ import java.util.stream.Collectors;
 @Component
 public class PriceDALMapper {
 
-   public List<PriceDALDTO> mapToDto(List<Price> prices) {
-      return prices.stream()
-              .map(this::mapToDto).collect(Collectors.toList());
-   }
+    public List<PriceDALDTO> mapToDto(List<Price> prices) {
+        return prices.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+    }
 
-   public PriceDALDTO mapToDto(Price c) {
-      return new PriceDALDTO(
-              c.getId(),
-              c.getPriceTypeCode(),
-              c.getQuantity(),
-              c.getAmount(),
-              c.getCurrency()
-      );
-   }
+    public PriceDALDTO mapToDto(Price c) {
+        return new PriceDALDTO(
+                c.getId(),
+                c.getPriceTypeCode(),
+                c.getQuantity(),
+                c.getAmount(),
+                c.getCurrency()
+        );
+    }
 
-   public Price mapToEntity(PriceDALDTO newPrice) {
-      Price entity = new Price();
-      entity.setId(newPrice.getId());
-      entity.setPriceTypeCode(newPrice.getPriceTypeCode());
-      entity.setQuantity(newPrice.getQuantity());
-      entity.setAmount(newPrice.getAmount());
-      entity.setCurrency(newPrice.getCurrency());
-      return entity;
-   }
+    public Price mapToEntity(PriceDALDTO newPrice) {
+        Price entity = new Price();
+        entity.setId(newPrice.getId());
+        entity.setPriceTypeCode(newPrice.getPriceTypeCode());
+        entity.setQuantity(newPrice.getQuantity());
+        entity.setAmount(newPrice.getAmount());
+        entity.setCurrency(newPrice.getCurrency());
+        return entity;
+    }
 
 }

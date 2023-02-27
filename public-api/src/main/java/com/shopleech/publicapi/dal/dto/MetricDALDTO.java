@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MetricDALDTO {
 
-   private Integer id;
-   private MetricTypeCode metricTypeCode;
-   private Double quantity;
+    private Integer id;
+    private MetricTypeCode metricTypeCode;
+    private Double quantity;
 }

@@ -16,19 +16,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService {
 
-   protected CategoryRepository categoryRepository;
+    protected CategoryRepository categoryRepository;
 
-   protected CategoryBLLMapper categoryMapper;
+    protected CategoryBLLMapper categoryMapper;
 
-   public void createCategory(CategoryBLLDTO data) {
-      categoryRepository.addCategory(categoryMapper.mapToEntity(data));
-   }
+    public void createCategory(CategoryBLLDTO data) {
+        categoryRepository.addCategory(categoryMapper.mapToEntity(data));
+    }
 
-   public CategoryBLLDTO get(int id) {
-      return categoryMapper.mapToDto(categoryRepository.getCategoryById(id));
-   }
+    public CategoryBLLDTO get(int id) {
+        return categoryMapper.mapToDto(categoryRepository.getCategoryById(id));
+    }
 
-   public List<CategoryBLLDTO> getAll() {
-      return categoryMapper.mapToDto(categoryRepository.getAllCategories());
-   }
+    public List<CategoryBLLDTO> getAll() {
+        return categoryMapper.mapToDto(categoryRepository.getAllCategories());
+    }
 }

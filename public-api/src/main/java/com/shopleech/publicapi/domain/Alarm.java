@@ -19,65 +19,65 @@ import java.sql.Timestamp;
 @Table(name = "_alarm")
 public class Alarm {
 
-   @Id
-   @GeneratedValue
-   private Integer id;
+    @Id
+    @GeneratedValue
+    private Integer id;
 
-   @ManyToOne
-   private Customer customer;
+    @ManyToOne
+    private Customer customer;
 
-   @ManyToOne
-   private Product product;
+    @ManyToOne
+    private Product product;
 
-   private AlarmTypeCode alarmTypeCode;
-   private Double minValue;
-   private Double maxValue;
-   private String name;
+    private AlarmTypeCode alarmTypeCode;
+    private Double minValue;
+    private Double maxValue;
+    private String name;
 
-   private Timestamp validFrom;
-   private Timestamp validTo;
-   private Timestamp createdAt;
-   private String createdBy;
-   private Timestamp updatedAt;
-   private String updatedBy;
+    private Timestamp validFrom;
+    private Timestamp validTo;
+    private Timestamp createdAt;
+    private String createdBy;
+    private Timestamp updatedAt;
+    private String updatedBy;
 
-   public Integer getId() {
-      return id;
-   }
+    public Integer getId() {
+        return id;
+    }
 
-   public AlarmTypeCode getAlarmTypeCode() {
-      return alarmTypeCode;
-   }
+    public AlarmTypeCode getAlarmTypeCode() {
+        return alarmTypeCode;
+    }
 
-   public Double getMinValue() {
-      return minValue;
-   }
+    public Double getMinValue() {
+        return minValue;
+    }
 
-   public Double getMaxValue() {
-      return maxValue;
-   }
+    public Double getMaxValue() {
+        return maxValue;
+    }
 
-   public String getName() {
-      return name;
-   }
+    public String getName() {
+        return name;
+    }
 
-   public void setId(Integer id) {
-      this.id = id;
-   }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-   public void setAlarmTypeCode(AlarmTypeCode alarmTypeCode) {
-      this.alarmTypeCode = alarmTypeCode;
-   }
+    public void setAlarmTypeCode(AlarmTypeCode alarmTypeCode) {
+        this.alarmTypeCode = alarmTypeCode;
+    }
 
-   public void setMinValue(Double minValue) {
-      this.minValue = minValue;
-   }
+    public void setMinValue(Double minValue) {
+        this.minValue = minValue;
+    }
 
-   public void setMaxValue(Double maxValue) {
-      this.maxValue = maxValue;
-   }
+    public void setMaxValue(Double maxValue) {
+        this.maxValue = maxValue;
+    }
 
-   public void setName(String name) {
-      this.name = name;
-   }
+    public void setName(String name) {
+        this.name = name;
+    }
 }

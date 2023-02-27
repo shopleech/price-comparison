@@ -19,56 +19,56 @@ import java.sql.Timestamp;
 @Table(name = "_review")
 public class Review {
 
-   @Id
-   @GeneratedValue
-   private Integer id;
+    @Id
+    @GeneratedValue
+    private Integer id;
 
-   @ManyToOne
-   private Customer customer;
+    @ManyToOne
+    private Customer customer;
 
-   @ManyToOne
-   private AccountProduct accountProduct;
+    @ManyToOne
+    private AccountProduct accountProduct;
 
-   private ReviewTypeCode reviewTypeCode;
-   private Integer score;
-   private String description;
+    private ReviewTypeCode reviewTypeCode;
+    private Integer score;
+    private String description;
 
-   private Timestamp validFrom;
-   private Timestamp validTo;
-   private Timestamp createdAt;
-   private String createdBy;
-   private Timestamp updatedAt;
-   private String updatedBy;
+    private Timestamp validFrom;
+    private Timestamp validTo;
+    private Timestamp createdAt;
+    private String createdBy;
+    private Timestamp updatedAt;
+    private String updatedBy;
 
-   public void setId(Integer id) {
-      this.id = id;
-   }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-   public void setReviewTypeCode(ReviewTypeCode reviewTypeCode) {
-      this.reviewTypeCode = reviewTypeCode;
-   }
+    public void setReviewTypeCode(ReviewTypeCode reviewTypeCode) {
+        this.reviewTypeCode = reviewTypeCode;
+    }
 
-   public void setScore(Integer score) {
-      this.score = score;
-   }
+    public void setScore(Integer score) {
+        this.score = score;
+    }
 
-   public void setDescription(String description) {
-      this.description = description;
-   }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-   public Integer getId() {
-      return id;
-   }
+    public Integer getId() {
+        return id;
+    }
 
-   public ReviewTypeCode getReviewTypeCode() {
-      return reviewTypeCode;
-   }
+    public ReviewTypeCode getReviewTypeCode() {
+        return reviewTypeCode;
+    }
 
-   public Integer getScore() {
-      return score;
-   }
+    public Integer getScore() {
+        return score;
+    }
 
-   public String getDescription() {
-      return description;
-   }
+    public String getDescription() {
+        return description;
+    }
 }

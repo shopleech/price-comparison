@@ -11,22 +11,22 @@ import java.util.List;
  */
 public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
 
-   private CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
-   private CustomerDALMapper customerDALMapper;
+    private CustomerDALMapper customerDALMapper;
 
-   @Override
-   public void addCustomer(CustomerDALDTO customer) {
-      // customerRepository.add(customerDALMapper.mapToEntity(customer));
-   }
+    @Override
+    public void addCustomer(CustomerDALDTO customer) {
+        // customerRepository.add(customerDALMapper.mapToEntity(customer));
+    }
 
-   @Override
-   public CustomerDALDTO getCustomerById(Integer id) {
-      return customerDALMapper.mapToDto(customerRepository.getReferenceById(id));
-   }
+    @Override
+    public CustomerDALDTO getCustomerById(Integer id) {
+        return customerDALMapper.mapToDto(customerRepository.getReferenceById(id));
+    }
 
-   @Override
-   public List<CustomerDALDTO> getAllCustomers() {
-      return customerDALMapper.mapToDto(customerRepository.findAll());
-   }
+    @Override
+    public List<CustomerDALDTO> getAllCustomers() {
+        return customerDALMapper.mapToDto(customerRepository.findAll());
+    }
 }

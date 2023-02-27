@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface MetricRepositoryCustom {
 
-   void addMetric(MetricDALDTO mapToEntity);
+    void addMetric(MetricDALDTO mapToEntity);
 
-   MetricDALDTO getMetricById(Integer id);
+    MetricDALDTO getMetricById(Integer id);
 
-   List<MetricDALDTO> getAllMetrics();
+    List<MetricDALDTO> getAllMetrics();
 }

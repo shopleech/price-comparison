@@ -10,11 +10,11 @@ import java.util.List;
  */
 public interface AlarmRepositoryCustom {
 
-   void addAlarm(AlarmDALDTO mapToEntity);
+    void addAlarm(AlarmDALDTO mapToEntity);
 
-   AlarmDALDTO getAlarmById(Integer id);
+    AlarmDALDTO getAlarmById(Integer id);
 
-   List<AlarmDALDTO> getAllAlarms();
+    List<AlarmDALDTO> getAllAlarms();
 
-   AlarmDALDTO getAlarmByName(String name);
+    AlarmDALDTO getAlarmByName(String name);
 }

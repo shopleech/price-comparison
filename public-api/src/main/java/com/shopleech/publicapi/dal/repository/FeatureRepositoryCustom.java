@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface FeatureRepositoryCustom {
 
-   void addFeature(FeatureDALDTO mapToEntity);
+    void addFeature(FeatureDALDTO mapToEntity);
 
-   FeatureDALDTO getFeatureById(Integer id);
+    FeatureDALDTO getFeatureById(Integer id);
 
-   List<FeatureDALDTO> getAllFeatures();
+    List<FeatureDALDTO> getAllFeatures();
 }

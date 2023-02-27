@@ -10,9 +10,11 @@ import java.util.List;
  */
 public interface UserRepositoryCustom {
 
-   void addUser(UserDALDTO user);
+    void addUser(UserDALDTO user);
 
-   UserDALDTO getUserById(Integer id);
+    UserDALDTO getUserById(Integer id);
 
-   List<UserDALDTO> getAllUsers();
+    List<UserDALDTO> getAllUsers();
+
+    UserDALDTO getUserByUsername(String username) throws Exception;
 }

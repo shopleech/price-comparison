@@ -10,27 +10,27 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class BaseUOW2<T> implements IRepository<T> {
 
-   private static final Logger LOGGER = LoggerFactory.getLogger(BaseUOW2.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaseUOW2.class);
 
-   private AppUOW<T> uow;
+    private AppUOW<T> uow;
 
-   public void add(T entity) {
-      if (uow == null) {
-         uow = new AppUOW<T>(JdbcConnectionFactory.customizedSqlConnection());
-         LOGGER.info("initialized unit of work : {}", uow.getClass().getCanonicalName());
-      }
-      uow.registerNew(entity);
-   }
+    public void add(T entity) {
+        if (uow == null) {
+            uow = new AppUOW<T>(JdbcConnectionFactory.customizedSqlConnection());
+            LOGGER.info("initialized unit of work : {}", uow.getClass().getCanonicalName());
+        }
+        uow.registerNew(entity);
+    }
 
-   public void update(T entity) {
-      uow.registerModified(entity);
-   }
+    public void update(T entity) {
+        uow.registerModified(entity);
+    }
 
-   public void delete(T entity) {
-      uow.registerDeleted(entity);
-   }
+    public void delete(T entity) {
+        uow.registerDeleted(entity);
+    }
 
-   public void commit() {
-      uow.commit();
-   }
+    public void commit() {
+        uow.commit();
+    }
 }

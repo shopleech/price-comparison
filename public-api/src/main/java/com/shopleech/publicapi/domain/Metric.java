@@ -21,50 +21,50 @@ import java.sql.Timestamp;
 @Table(name = "_metric")
 public class Metric extends BaseDomainEntityMetaId {
 
-   @Id
-   @GeneratedValue
-   private Integer id;
+    @Id
+    @GeneratedValue
+    private Integer id;
 
-   @ManyToOne
-   private Product product;
+    @ManyToOne
+    private Product product;
 
-   @ManyToOne
-   private AccountProduct accountProduct;
+    @ManyToOne
+    private AccountProduct accountProduct;
 
-   @ManyToOne
-   private Category category;
+    @ManyToOne
+    private Category category;
 
-   private MetricTypeCode metricTypeCode;
-   private Double quantity;
+    private MetricTypeCode metricTypeCode;
+    private Double quantity;
 
-   private Timestamp validFrom;
-   private Timestamp validTo;
-   private Timestamp createdAt;
-   private String createdBy;
-   private Timestamp updatedAt;
-   private String updatedBy;
+    private Timestamp validFrom;
+    private Timestamp validTo;
+    private Timestamp createdAt;
+    private String createdBy;
+    private Timestamp updatedAt;
+    private String updatedBy;
 
-   public Integer getId() {
-      return id;
-   }
+    public Integer getId() {
+        return id;
+    }
 
-   public MetricTypeCode getMetricTypeCode() {
-      return metricTypeCode;
-   }
+    public MetricTypeCode getMetricTypeCode() {
+        return metricTypeCode;
+    }
 
-   public Double getQuantity() {
-      return quantity;
-   }
+    public Double getQuantity() {
+        return quantity;
+    }
 
-   public void setId(Integer id) {
-      this.id = id;
-   }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-   public void setMetricTypeCode(MetricTypeCode metricTypeCode) {
-      this.metricTypeCode = metricTypeCode;
-   }
+    public void setMetricTypeCode(MetricTypeCode metricTypeCode) {
+        this.metricTypeCode = metricTypeCode;
+    }
 
-   public void setQuantity(Double quantity) {
-      this.quantity = quantity;
-   }
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
+    }
 }

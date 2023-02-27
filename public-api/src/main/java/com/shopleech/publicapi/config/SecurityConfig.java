@@ -1,13 +1,19 @@
 package com.shopleech.publicapi.config;
 
 import com.shopleech.publicapi.bll.filter.JwtAuthenticationFilter;
+import com.shopleech.publicapi.bll.service.MyUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -17,28 +23,54 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-   private final JwtAuthenticationFilter jwtAuthFilter;
-   private final AuthenticationProvider authenticationProvider;
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthFilter;
 
-   @Bean
-   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-      http.csrf()
-              .disable()
-              .authorizeHttpRequests()
-              .requestMatchers("/api/v1/auth/**")
-              .permitAll()
-              .anyRequest()
-              .authenticated()
-              .and()
-              .sessionManagement()
-              .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-              .and()
-              .authenticationProvider(authenticationProvider)
-              .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-      return http.build();
-   }
+    @Autowired
+    private MyUserDetailsService userDetailsService;
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.cors();
+        http.csrf()
+                .disable()
+                .exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
+
+                })
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().authorizeHttpRequests()
+                .requestMatchers("/api/v1/product/**").hasAnyAuthority("USER")
+                .requestMatchers("/api/v1/user").hasAnyAuthority("USER", "ADMIN")
+                .requestMatchers("/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                .anyRequest().authenticated();
+
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        //http.authenticationProvider(authenticationProvider());
+        return http.build();
+    }
 
 }

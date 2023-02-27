@@ -11,22 +11,22 @@ import java.util.List;
  */
 public class PriceRepositoryImpl implements PriceRepositoryCustom {
 
-   private PriceRepository priceRepository;
+    private PriceRepository priceRepository;
 
-   private PriceDALMapper mapper;
+    private PriceDALMapper mapper;
 
-   @Override
-   public void addPrice(PriceDALDTO price) {
-      // priceRepository.add(mapper.mapToEntity(price));
-   }
+    @Override
+    public void addPrice(PriceDALDTO price) {
+        // priceRepository.add(mapper.mapToEntity(price));
+    }
 
-   @Override
-   public PriceDALDTO getPriceById(Integer id) {
-      return mapper.mapToDto(priceRepository.getReferenceById(id));
-   }
+    @Override
+    public PriceDALDTO getPriceById(Integer id) {
+        return mapper.mapToDto(priceRepository.getReferenceById(id));
+    }
 
-   @Override
-   public List<PriceDALDTO> getAllPrices() {
-      return mapper.mapToDto(priceRepository.findAll());
-   }
+    @Override
+    public List<PriceDALDTO> getAllPrices() {
+        return mapper.mapToDto(priceRepository.findAll());
+    }
 }

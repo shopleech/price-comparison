@@ -1,10 +1,13 @@
 package com.shopleech.publicapi.dal.dto;
 
-import com.shopleech.base.config.Role;
+import com.shopleech.publicapi.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Ahto Jalak
@@ -16,10 +19,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDALDTO {
 
-   private Integer id;
-   private String firstname;
-   private String lastname;
-   private String email;
-   private String password;
-   private Role role;
+    private Integer id;
+    private String firstname;
+    private String lastname;
+    private String email;
+    private String password;
+    private boolean enabled;
+    private Set<Role> roles = new HashSet<>();
 }

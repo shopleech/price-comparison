@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface WatchlistRepositoryCustom {
 
-   void addWatchlist(WatchlistDALDTO mapToEntity);
+    void addWatchlist(WatchlistDALDTO mapToEntity);
 
-   WatchlistDALDTO getWatchlistById(Integer id);
+    WatchlistDALDTO getWatchlistById(Integer id);
 
-   List<WatchlistDALDTO> getAllWatchlists();
+    List<WatchlistDALDTO> getAllWatchlists();
 }

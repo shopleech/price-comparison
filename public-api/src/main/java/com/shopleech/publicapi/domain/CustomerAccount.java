@@ -1,6 +1,5 @@
 package com.shopleech.publicapi.domain;
 
-import com.shopleech.base.config.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,22 +18,20 @@ import java.sql.Timestamp;
 @Table(name = "_customer_account")
 public class CustomerAccount {
 
-   @Id
-   @GeneratedValue
-   private Integer id;
+    @Id
+    @GeneratedValue
+    private Integer id;
 
-   @ManyToOne
-   private Customer customer;
+    @ManyToOne
+    private Customer customer;
 
-   @ManyToOne
-   private Account account;
+    @ManyToOne
+    private Account account;
 
-   private Role role;
-
-   private Timestamp validFrom;
-   private Timestamp validTo;
-   private Timestamp createdAt;
-   private String createdBy;
-   private Timestamp updatedAt;
-   private String updatedBy;
+    private Timestamp validFrom;
+    private Timestamp validTo;
+    private Timestamp createdAt;
+    private String createdBy;
+    private Timestamp updatedAt;
+    private String updatedBy;
 }

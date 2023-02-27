@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AccountBLLDTO {
 
-   private Integer id;
-   private Status status;
+    private Integer id;
+    private Status status;
 }

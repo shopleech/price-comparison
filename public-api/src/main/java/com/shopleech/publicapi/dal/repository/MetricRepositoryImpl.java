@@ -11,22 +11,22 @@ import java.util.List;
  */
 public class MetricRepositoryImpl implements MetricRepositoryCustom {
 
-   private MetricRepository metricRepository;
+    private MetricRepository metricRepository;
 
-   private MetricDALMapper metricDALMapper;
+    private MetricDALMapper metricDALMapper;
 
-   @Override
-   public void addMetric(MetricDALDTO metric) {
-      // metricRepository.add(metricDALMapper.mapToEntity(metric));
-   }
+    @Override
+    public void addMetric(MetricDALDTO metric) {
+        // metricRepository.add(metricDALMapper.mapToEntity(metric));
+    }
 
-   @Override
-   public MetricDALDTO getMetricById(Integer id) {
-      return metricDALMapper.mapToDto(metricRepository.getReferenceById(id));
-   }
+    @Override
+    public MetricDALDTO getMetricById(Integer id) {
+        return metricDALMapper.mapToDto(metricRepository.getReferenceById(id));
+    }
 
-   @Override
-   public List<MetricDALDTO> getAllMetrics() {
-      return metricDALMapper.mapToDto(metricRepository.findAll());
-   }
+    @Override
+    public List<MetricDALDTO> getAllMetrics() {
+        return metricDALMapper.mapToDto(metricRepository.findAll());
+    }
 }

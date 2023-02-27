@@ -16,19 +16,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WatchlistService {
 
-   protected WatchlistRepository watchlistRepository;
+    protected WatchlistRepository watchlistRepository;
 
-   protected WatchlistBLLMapper watchlistMapper;
+    protected WatchlistBLLMapper watchlistMapper;
 
-   public void createWatchlist(WatchlistBLLDTO data) {
-      watchlistRepository.addWatchlist(watchlistMapper.mapToEntity(data));
-   }
+    public void createWatchlist(WatchlistBLLDTO data) {
+        watchlistRepository.addWatchlist(watchlistMapper.mapToEntity(data));
+    }
 
-   public WatchlistBLLDTO get(Integer id) {
-      return watchlistMapper.mapToDto(watchlistRepository.getWatchlistById(id));
-   }
+    public WatchlistBLLDTO get(Integer id) {
+        return watchlistMapper.mapToDto(watchlistRepository.getWatchlistById(id));
+    }
 
-   public List<WatchlistBLLDTO> getAll() {
-      return watchlistMapper.mapToDto(watchlistRepository.getAllWatchlists());
-   }
+    public List<WatchlistBLLDTO> getAll() {
+        return watchlistMapper.mapToDto(watchlistRepository.getAllWatchlists());
+    }
 }

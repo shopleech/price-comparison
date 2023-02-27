@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReviewDALDTO {
 
-   private Integer id;
-   private ReviewTypeCode reviewTypeCode;
-   private Integer score;
-   private String description;
+    private Integer id;
+    private ReviewTypeCode reviewTypeCode;
+    private Integer score;
+    private String description;
 }

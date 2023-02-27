@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WatchlistBLLDTO {
 
-   private Integer id;
-   private WatchTypeCode watchTypeCode;
+    private Integer id;
+    private WatchTypeCode watchTypeCode;
 }

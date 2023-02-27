@@ -12,22 +12,22 @@ import java.util.stream.Collectors;
  */
 public class CategoryBLLMapper {
 
-   public List<CategoryBLLDTO> mapToDto(List<CategoryDALDTO> categories) {
-      return categories.stream()
-              .map(this::mapToDto).collect(Collectors.toList());
-   }
+    public List<CategoryBLLDTO> mapToDto(List<CategoryDALDTO> categories) {
+        return categories.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+    }
 
-   public CategoryBLLDTO mapToDto(CategoryDALDTO c) {
-      return new CategoryBLLDTO(
-              c.getId(),
-              c.getName()
-      );
-   }
+    public CategoryBLLDTO mapToDto(CategoryDALDTO c) {
+        return new CategoryBLLDTO(
+                c.getId(),
+                c.getName()
+        );
+    }
 
-   public CategoryDALDTO mapToEntity(CategoryBLLDTO newCategory) {
-      CategoryDALDTO entity = new CategoryDALDTO();
-      entity.setId(newCategory.getId());
-      entity.setName(newCategory.getName());
-      return entity;
-   }
+    public CategoryDALDTO mapToEntity(CategoryBLLDTO newCategory) {
+        CategoryDALDTO entity = new CategoryDALDTO();
+        entity.setId(newCategory.getId());
+        entity.setName(newCategory.getName());
+        return entity;
+    }
 }

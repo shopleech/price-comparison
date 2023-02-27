@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface ProductRepositoryCustom {
 
-   void addProduct(ProductDALDTO product);
+    void addProduct(ProductDALDTO product);
 
-   ProductDALDTO getProductById(Integer id);
+    ProductDALDTO getProductById(Integer id);
 
-   List<ProductDALDTO> getAllProducts();
+    List<ProductDALDTO> getAllProducts();
 }

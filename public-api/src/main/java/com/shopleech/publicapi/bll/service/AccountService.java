@@ -16,19 +16,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountService {
 
-   protected AccountRepository accountRepository;
+    protected AccountRepository accountRepository;
 
-   protected AccountBLLMapper accountMapper;
+    protected AccountBLLMapper accountMapper;
 
-   public void createAccount(AccountBLLDTO data) {
-      accountRepository.addAccount(accountMapper.mapToEntity(data));
-   }
+    public void createAccount(AccountBLLDTO data) {
+        accountRepository.addAccount(accountMapper.mapToEntity(data));
+    }
 
-   public AccountBLLDTO get(int id) {
-      return accountMapper.mapToDto(accountRepository.getAccountById(id));
-   }
+    public AccountBLLDTO get(int id) {
+        return accountMapper.mapToDto(accountRepository.getAccountById(id));
+    }
 
-   public List<AccountBLLDTO> getAll() {
-      return accountMapper.mapToDto(accountRepository.getAllAccounts());
-   }
+    public List<AccountBLLDTO> getAll() {
+        return accountMapper.mapToDto(accountRepository.getAllAccounts());
+    }
 }

@@ -13,8 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthRequest {
+public class UserTokenDTO {
 
-   private String email;
-   private String password;
+    private String token;
 }

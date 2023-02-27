@@ -14,31 +14,31 @@ import java.util.stream.Collectors;
 @Component
 public class ProductMapper {
 
-   public List<ProductDTO> mapToDto(List<ProductBLLDTO> products) {
-      return products.stream()
-              .map(this::mapToDto).collect(Collectors.toList());
-   }
+    public List<ProductDTO> mapToDto(List<ProductBLLDTO> products) {
+        return products.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+    }
 
-   public ProductDTO mapToDto(ProductBLLDTO c) {
-      return new ProductDTO(
-              c.getId(),
-              c.getProductTypeCode(),
-              c.getBarcode(),
-              c.getBarcodeTypeCode(),
-              c.getName(),
-              c.getDescription()
-      );
-   }
+    public ProductDTO mapToDto(ProductBLLDTO c) {
+        return new ProductDTO(
+                c.getId(),
+                c.getProductTypeCode(),
+                c.getBarcode(),
+                c.getBarcodeTypeCode(),
+                c.getName(),
+                c.getDescription()
+        );
+    }
 
-   public ProductBLLDTO mapToEntity(ProductDTO newProduct) {
-      ProductBLLDTO entity = new ProductBLLDTO();
-      entity.setId(newProduct.getId());
-      entity.setProductTypeCode(newProduct.getProductTypeCode());
-      entity.setBarcode(newProduct.getBarcode());
-      entity.setBarcodeTypeCode(newProduct.getBarcodeTypeCode());
-      entity.setName(newProduct.getName());
-      entity.setDescription(newProduct.getDescription());
-      return entity;
-   }
+    public ProductBLLDTO mapToEntity(ProductDTO newProduct) {
+        ProductBLLDTO entity = new ProductBLLDTO();
+        entity.setId(newProduct.getId());
+        entity.setProductTypeCode(newProduct.getProductTypeCode());
+        entity.setBarcode(newProduct.getBarcode());
+        entity.setBarcodeTypeCode(newProduct.getBarcodeTypeCode());
+        entity.setName(newProduct.getName());
+        entity.setDescription(newProduct.getDescription());
+        return entity;
+    }
 
 }

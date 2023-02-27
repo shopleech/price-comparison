@@ -20,62 +20,62 @@ import java.sql.Timestamp;
 @Table(name = "_price")
 public class Price {
 
-   @Id
-   @GeneratedValue
-   private Integer id;
+    @Id
+    @GeneratedValue
+    private Integer id;
 
-   @ManyToOne
-   private AccountProduct accountProduct;
+    @ManyToOne
+    private AccountProduct accountProduct;
 
-   private PriceTypeCode priceTypeCode;
-   private Double quantity;
-   private Double amount;
-   private CurrencyTypeCode currency;
+    private PriceTypeCode priceTypeCode;
+    private Double quantity;
+    private Double amount;
+    private CurrencyTypeCode currency;
 
-   private Timestamp validFrom;
-   private Timestamp validTo;
-   private Timestamp createdAt;
-   private String createdBy;
-   private Timestamp updatedAt;
-   private String updatedBy;
+    private Timestamp validFrom;
+    private Timestamp validTo;
+    private Timestamp createdAt;
+    private String createdBy;
+    private Timestamp updatedAt;
+    private String updatedBy;
 
-   public Integer getId() {
-      return id;
-   }
+    public Integer getId() {
+        return id;
+    }
 
-   public PriceTypeCode getPriceTypeCode() {
-      return priceTypeCode;
-   }
+    public PriceTypeCode getPriceTypeCode() {
+        return priceTypeCode;
+    }
 
-   public Double getQuantity() {
-      return quantity;
-   }
+    public Double getQuantity() {
+        return quantity;
+    }
 
-   public Double getAmount() {
-      return amount;
-   }
+    public Double getAmount() {
+        return amount;
+    }
 
-   public CurrencyTypeCode getCurrency() {
-      return currency;
-   }
+    public CurrencyTypeCode getCurrency() {
+        return currency;
+    }
 
-   public void setId(Integer id) {
-      this.id = id;
-   }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-   public void setPriceTypeCode(PriceTypeCode priceTypeCode) {
-      this.priceTypeCode = priceTypeCode;
-   }
+    public void setPriceTypeCode(PriceTypeCode priceTypeCode) {
+        this.priceTypeCode = priceTypeCode;
+    }
 
-   public void setQuantity(Double quantity) {
-      this.quantity = quantity;
-   }
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
+    }
 
-   public void setAmount(Double amount) {
-      this.amount = amount;
-   }
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
 
-   public void setCurrency(CurrencyTypeCode currency) {
-      this.currency = currency;
-   }
+    public void setCurrency(CurrencyTypeCode currency) {
+        this.currency = currency;
+    }
 }

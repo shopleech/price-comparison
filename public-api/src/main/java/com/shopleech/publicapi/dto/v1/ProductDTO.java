@@ -17,10 +17,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductDTO {
 
-   private Integer id;
-   private ProductTypeCode productTypeCode;
-   private String barcode;
-   private BarcodeTypeCode barcodeTypeCode;
-   private String name;
-   private String description;
+    private Integer id;
+    private ProductTypeCode productTypeCode;
+    private String barcode;
+    private BarcodeTypeCode barcodeTypeCode;
+    private String name;
+    private String description;
 }

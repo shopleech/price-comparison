@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FeatureDALDTO {
 
-   private Integer id;
-   private FeatureTypeCode featureTypeCode;
-   private String name;
-   private String description;
+    private Integer id;
+    private FeatureTypeCode featureTypeCode;
+    private String name;
+    private String description;
 }

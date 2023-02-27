@@ -14,29 +14,29 @@ import java.util.stream.Collectors;
 @Component
 public class AlarmMapper {
 
-   public List<AlarmDTO> mapToDto(List<AlarmBLLDTO> alarms) {
-      return alarms.stream()
-              .map(this::mapToDto).collect(Collectors.toList());
-   }
+    public List<AlarmDTO> mapToDto(List<AlarmBLLDTO> alarms) {
+        return alarms.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+    }
 
-   public AlarmDTO mapToDto(AlarmBLLDTO c) {
-      return new AlarmDTO(
-              c.getId(),
-              c.getAlarmTypeCode(),
-              c.getMinValue(),
-              c.getMaxValue(),
-              c.getName()
-      );
-   }
+    public AlarmDTO mapToDto(AlarmBLLDTO c) {
+        return new AlarmDTO(
+                c.getId(),
+                c.getAlarmTypeCode(),
+                c.getMinValue(),
+                c.getMaxValue(),
+                c.getName()
+        );
+    }
 
-   public AlarmBLLDTO mapToEntity(AlarmDTO newAlarm) {
-      AlarmBLLDTO entity = new AlarmBLLDTO();
-      entity.setId(newAlarm.getId());
-      entity.setAlarmTypeCode(newAlarm.getAlarmTypeCode());
-      entity.setMinValue(newAlarm.getMinValue());
-      entity.setMaxValue(newAlarm.getMaxValue());
-      entity.setName(newAlarm.getName());
-      return entity;
-   }
+    public AlarmBLLDTO mapToEntity(AlarmDTO newAlarm) {
+        AlarmBLLDTO entity = new AlarmBLLDTO();
+        entity.setId(newAlarm.getId());
+        entity.setAlarmTypeCode(newAlarm.getAlarmTypeCode());
+        entity.setMinValue(newAlarm.getMinValue());
+        entity.setMaxValue(newAlarm.getMaxValue());
+        entity.setName(newAlarm.getName());
+        return entity;
+    }
 
 }

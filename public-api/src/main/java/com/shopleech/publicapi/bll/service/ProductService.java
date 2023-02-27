@@ -15,19 +15,19 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-   protected ProductRepository productRepository;
+    protected ProductRepository productRepository;
 
-   protected ProductBLLMapper productMapper;
+    protected ProductBLLMapper productMapper;
 
-   public void createProduct(ProductBLLDTO data) {
-      productRepository.addProduct(productMapper.mapToEntity(data));
-   }
+    public void createProduct(ProductBLLDTO data) {
+        productRepository.addProduct(productMapper.mapToEntity(data));
+    }
 
-   public ProductBLLDTO get(Integer id) {
-      return productMapper.mapToDto(productRepository.getProductById(id));
-   }
+    public ProductBLLDTO get(Integer id) {
+        return productMapper.mapToDto(productRepository.getProductById(id));
+    }
 
-   public List<ProductBLLDTO> getAll() {
-      return productMapper.mapToDto(productRepository.getAllProducts());
-   }
+    public List<ProductBLLDTO> getAll() {
+        return productMapper.mapToDto(productRepository.getAllProducts());
+    }
 }

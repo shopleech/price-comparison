@@ -14,23 +14,23 @@ import java.util.stream.Collectors;
 @Component
 public class WatchlistMapper {
 
-   public List<WatchlistDTO> mapToDto(List<WatchlistBLLDTO> watchlists) {
-      return watchlists.stream()
-              .map(this::mapToDto).collect(Collectors.toList());
-   }
+    public List<WatchlistDTO> mapToDto(List<WatchlistBLLDTO> watchlists) {
+        return watchlists.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+    }
 
-   public WatchlistDTO mapToDto(WatchlistBLLDTO c) {
-      return new WatchlistDTO(
-              c.getId(),
-              c.getWatchTypeCode()
-      );
-   }
+    public WatchlistDTO mapToDto(WatchlistBLLDTO c) {
+        return new WatchlistDTO(
+                c.getId(),
+                c.getWatchTypeCode()
+        );
+    }
 
-   public WatchlistBLLDTO mapToEntity(WatchlistDTO newWatchlist) {
-      WatchlistBLLDTO entity = new WatchlistBLLDTO();
-      entity.setId(newWatchlist.getId());
-      entity.setWatchTypeCode(newWatchlist.getWatchTypeCode());
-      return entity;
-   }
+    public WatchlistBLLDTO mapToEntity(WatchlistDTO newWatchlist) {
+        WatchlistBLLDTO entity = new WatchlistBLLDTO();
+        entity.setId(newWatchlist.getId());
+        entity.setWatchTypeCode(newWatchlist.getWatchTypeCode());
+        return entity;
+    }
 
 }

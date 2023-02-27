@@ -9,9 +9,9 @@ import java.util.List;
  * @since 07.02.2023
  */
 public interface PriceRepositoryCustom {
-   void addPrice(PriceDALDTO price);
+    void addPrice(PriceDALDTO price);
 
-   PriceDALDTO getPriceById(Integer id);
+    PriceDALDTO getPriceById(Integer id);
 
-   List<PriceDALDTO> getAllPrices();
+    List<PriceDALDTO> getAllPrices();
 }

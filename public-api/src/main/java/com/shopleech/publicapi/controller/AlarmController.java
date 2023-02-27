@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AlarmController {
 
-   private AlarmService alarmService;
+    private AlarmService alarmService;
 
-   private AlarmMapper alarmMapper;
+    private AlarmMapper alarmMapper;
 
-   @GetMapping("/{id}")
-   public ResponseEntity<AlarmDTO> getById(@PathVariable(value = "id") Integer id) {
-      return ResponseEntity.ok(alarmMapper.mapToDto(alarmService.get(id)));
-   }
+    @GetMapping("/{id}")
+    public ResponseEntity<AlarmDTO> getById(@PathVariable(value = "id") Integer id) {
+        return ResponseEntity.ok(alarmMapper.mapToDto(alarmService.get(id)));
+    }
 }

@@ -19,38 +19,38 @@ import java.sql.Timestamp;
 @Table(name = "_watchlist")
 public class Watchlist {
 
-   @Id
-   @GeneratedValue
-   private Integer id;
+    @Id
+    @GeneratedValue
+    private Integer id;
 
-   @ManyToOne
-   private Customer customer;
+    @ManyToOne
+    private Customer customer;
 
-   @ManyToOne
-   private Product product;
+    @ManyToOne
+    private Product product;
 
-   private WatchTypeCode watchTypeCode;
+    private WatchTypeCode watchTypeCode;
 
-   private Timestamp validFrom;
-   private Timestamp validTo;
-   private Timestamp createdAt;
-   private String createdBy;
-   private Timestamp updatedAt;
-   private String updatedBy;
+    private Timestamp validFrom;
+    private Timestamp validTo;
+    private Timestamp createdAt;
+    private String createdBy;
+    private Timestamp updatedAt;
+    private String updatedBy;
 
-   public Integer getId() {
-      return id;
-   }
+    public Integer getId() {
+        return id;
+    }
 
-   public WatchTypeCode getWatchTypeCode() {
-      return watchTypeCode;
-   }
+    public WatchTypeCode getWatchTypeCode() {
+        return watchTypeCode;
+    }
 
-   public void setId(Integer id) {
-      this.id = id;
-   }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-   public void setWatchTypeCode(WatchTypeCode watchTypeCode) {
-      this.watchTypeCode = watchTypeCode;
-   }
+    public void setWatchTypeCode(WatchTypeCode watchTypeCode) {
+        this.watchTypeCode = watchTypeCode;
+    }
 }

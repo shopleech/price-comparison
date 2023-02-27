@@ -16,23 +16,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AlarmService {
 
-   protected AlarmRepository alarmRepository;
+    protected AlarmRepository alarmRepository;
 
-   protected AlarmBLLMapper alarmMapper;
+    protected AlarmBLLMapper alarmMapper;
 
-   public void createAlarm(AlarmBLLDTO data) {
-      alarmRepository.addAlarm(alarmMapper.mapToEntity(data));
-   }
+    public void createAlarm(AlarmBLLDTO data) {
+        alarmRepository.addAlarm(alarmMapper.mapToEntity(data));
+    }
 
-   public AlarmBLLDTO get(int id) {
-      return alarmMapper.mapToDto(alarmRepository.getAlarmById(id));
-   }
+    public AlarmBLLDTO get(int id) {
+        return alarmMapper.mapToDto(alarmRepository.getAlarmById(id));
+    }
 
-   public AlarmBLLDTO getByName(String name) {
-      return alarmMapper.mapToDto(alarmRepository.getAlarmByName(name));
-   }
+    public AlarmBLLDTO getByName(String name) {
+        return alarmMapper.mapToDto(alarmRepository.getAlarmByName(name));
+    }
 
-   public List<AlarmBLLDTO> getAll() {
-      return alarmMapper.mapToDto(alarmRepository.getAllAlarms());
-   }
+    public List<AlarmBLLDTO> getAll() {
+        return alarmMapper.mapToDto(alarmRepository.getAllAlarms());
+    }
 }

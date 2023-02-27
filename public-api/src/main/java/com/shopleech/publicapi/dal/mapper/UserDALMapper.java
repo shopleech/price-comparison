@@ -14,31 +14,31 @@ import java.util.stream.Collectors;
 @Component
 public class UserDALMapper {
 
-   public List<UserDALDTO> mapToDto(List<User> users) {
-      return users.stream()
-              .map(this::mapToDto).collect(Collectors.toList());
-   }
+    public List<UserDALDTO> mapToDto(List<User> users) {
+        return users.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+    }
 
-   public UserDALDTO mapToDto(User c) {
-      return new UserDALDTO(
-              c.getId(),
-              c.getFirstname(),
-              c.getLastname(),
-              c.getEmail(),
-              c.getPassword(),
-              c.getRole()
-      );
-   }
+    public UserDALDTO mapToDto(User c) {
+        return new UserDALDTO(
+                c.getId(),
+                c.getFirstname(),
+                c.getLastname(),
+                c.getEmail(),
+                c.getPassword(),
+                c.isEnabled(),
+                c.getRoles()
+        );
+    }
 
-   public User mapToEntity(UserDALDTO newUser) {
-      User entity = new User();
-      entity.setId(newUser.getId());
-      entity.setFirstname(newUser.getFirstname());
-      entity.setLastname(newUser.getLastname());
-      entity.setEmail(newUser.getEmail());
-      entity.setPassword(newUser.getPassword());
-      entity.setRole(newUser.getRole());
-      return entity;
-   }
+    public User mapToEntity(UserDALDTO newUser) {
+        User entity = new User();
+        entity.setId(newUser.getId());
+        entity.setFirstname(newUser.getFirstname());
+        entity.setLastname(newUser.getLastname());
+        entity.setEmail(newUser.getEmail());
+        entity.setPassword(newUser.getPassword());
+        return entity;
+    }
 
 }

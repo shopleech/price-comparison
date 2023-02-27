@@ -5,5 +5,5 @@ package com.shopleech.base.config;
  * @since 06.02.2023
  */
 public enum ProductTypeCode {
-   DEFAULT
+    DEFAULT
 }

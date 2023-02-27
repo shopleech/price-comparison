@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AlarmDALDTO {
 
-   private Integer id;
-   private AlarmTypeCode alarmTypeCode;
-   private Double minValue;
-   private Double maxValue;
-   private String name;
+    private Integer id;
+    private AlarmTypeCode alarmTypeCode;
+    private Double minValue;
+    private Double maxValue;
+    private String name;
 }

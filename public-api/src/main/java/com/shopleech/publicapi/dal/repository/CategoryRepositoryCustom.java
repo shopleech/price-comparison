@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface CategoryRepositoryCustom {
 
-   void addCategory(CategoryDALDTO mapToEntity);
+    void addCategory(CategoryDALDTO mapToEntity);
 
-   CategoryDALDTO getCategoryById(Integer id);
+    CategoryDALDTO getCategoryById(Integer id);
 
-   List<CategoryDALDTO> getAllCategories();
+    List<CategoryDALDTO> getAllCategories();
 }

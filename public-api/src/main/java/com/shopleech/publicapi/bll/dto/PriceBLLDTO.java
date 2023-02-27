@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PriceBLLDTO {
 
-   private Integer id;
-   private PriceTypeCode priceTypeCode;
-   private Double quantity;
-   private Double amount;
-   private CurrencyTypeCode currency;
+    private Integer id;
+    private PriceTypeCode priceTypeCode;
+    private Double quantity;
+    private Double amount;
+    private CurrencyTypeCode currency;
 }

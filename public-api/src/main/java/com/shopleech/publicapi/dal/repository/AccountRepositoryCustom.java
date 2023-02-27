@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface AccountRepositoryCustom {
 
-   void addAccount(AccountDALDTO mapToEntity);
+    void addAccount(AccountDALDTO mapToEntity);
 
-   AccountDALDTO getAccountById(Integer id);
+    AccountDALDTO getAccountById(Integer id);
 
-   List<AccountDALDTO> getAllAccounts();
+    List<AccountDALDTO> getAllAccounts();
 }

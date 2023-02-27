@@ -11,22 +11,22 @@ import java.util.List;
  */
 public class AccountRepositoryImpl implements AccountRepositoryCustom {
 
-   private AccountRepository accountRepository;
+    private AccountRepository accountRepository;
 
-   private AccountDALMapper accountDALMapper;
+    private AccountDALMapper accountDALMapper;
 
-   @Override
-   public void addAccount(AccountDALDTO account) {
-      // accountRepository.add(accountDALMapper.mapToEntity(account));
-   }
+    @Override
+    public void addAccount(AccountDALDTO account) {
+        // accountRepository.add(accountDALMapper.mapToEntity(account));
+    }
 
-   @Override
-   public AccountDALDTO getAccountById(Integer id) {
-      return accountDALMapper.mapToDto(accountRepository.getReferenceById(id));
-   }
+    @Override
+    public AccountDALDTO getAccountById(Integer id) {
+        return accountDALMapper.mapToDto(accountRepository.getReferenceById(id));
+    }
 
-   @Override
-   public List<AccountDALDTO> getAllAccounts() {
-      return accountDALMapper.mapToDto(accountRepository.findAll());
-   }
+    @Override
+    public List<AccountDALDTO> getAllAccounts() {
+        return accountDALMapper.mapToDto(accountRepository.findAll());
+    }
 }

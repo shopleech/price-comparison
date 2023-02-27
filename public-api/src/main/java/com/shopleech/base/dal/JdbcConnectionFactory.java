@@ -14,26 +14,26 @@ import java.util.Properties;
  */
 public class JdbcConnectionFactory {
 
-   private static final Logger LOGGER = LoggerFactory.getLogger(JdbcConnectionFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JdbcConnectionFactory.class);
 
-   public static Connection customizedSqlConnection() {
+    public static Connection customizedSqlConnection() {
 
-      String url="jdbc:postgresql://localhost/test";
-      Properties props = new Properties();
-      props.setProperty("user", "");
-      props.setProperty("password", "");
-      props.setProperty("ssl", "true");
-      Connection connection;
-      try {
-         connection = DriverManager.getConnection(url, props);
-         LOGGER.info("url is {}",url);
-         return connection;
-      } catch (SQLException e) {
-         e.printStackTrace();
-         return null;
-      }
+        String url = "jdbc:postgresql://localhost/test";
+        Properties props = new Properties();
+        props.setProperty("user", "");
+        props.setProperty("password", "");
+        props.setProperty("ssl", "true");
+        Connection connection;
+        try {
+            connection = DriverManager.getConnection(url, props);
+            LOGGER.info("url is {}", url);
+            return connection;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
 
-   }
+    }
 
 //   public static Connection testConnection() throws SQLException {
 //      Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost/test", "asd", "asd");

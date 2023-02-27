@@ -14,23 +14,23 @@ import java.util.stream.Collectors;
 @Component
 public class AccountMapper {
 
-   public List<AccountDTO> mapToDto(List<AccountBLLDTO> accounts) {
-      return accounts.stream()
-              .map(this::mapToDto).collect(Collectors.toList());
-   }
+    public List<AccountDTO> mapToDto(List<AccountBLLDTO> accounts) {
+        return accounts.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+    }
 
-   public AccountDTO mapToDto(AccountBLLDTO c) {
-      return new AccountDTO(
-              c.getId(),
-              c.getStatus()
-      );
-   }
+    public AccountDTO mapToDto(AccountBLLDTO c) {
+        return new AccountDTO(
+                c.getId(),
+                c.getStatus()
+        );
+    }
 
-   public AccountBLLDTO mapToEntity(AccountDTO newAccount) {
-      AccountBLLDTO entity = new AccountBLLDTO();
-      entity.setId(newAccount.getId());
-      entity.setStatus(newAccount.getStatus());
-      return entity;
-   }
+    public AccountBLLDTO mapToEntity(AccountDTO newAccount) {
+        AccountBLLDTO entity = new AccountBLLDTO();
+        entity.setId(newAccount.getId());
+        entity.setStatus(newAccount.getStatus());
+        return entity;
+    }
 
 }
