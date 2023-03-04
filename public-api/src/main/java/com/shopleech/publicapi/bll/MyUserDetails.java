@@ -2,9 +2,9 @@ package com.shopleech.publicapi.bll;
 
 import com.shopleech.publicapi.bll.dto.UserBLLDTO;
 import com.shopleech.publicapi.domain.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,10 +27,12 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        Logger logger = LoggerFactory.getLogger(MyUserDetails.class);
         Set<Role> roles = user.getRoles();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
         for (Role role : roles) {
+            logger.info(role.getName());
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
 

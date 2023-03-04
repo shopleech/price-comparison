@@ -2,6 +2,7 @@ package com.shopleech.publicapi.bll.mapper;
 
 import com.shopleech.publicapi.bll.dto.AlarmBLLDTO;
 import com.shopleech.publicapi.dal.dto.AlarmDALDTO;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
  * @author Ahto Jalak
  * @since 07.02.2023
  */
+@Component
 public class AlarmBLLMapper {
 
     public List<AlarmBLLDTO> mapToDto(List<AlarmDALDTO> alarms) {

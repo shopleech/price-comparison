@@ -2,9 +2,7 @@ package com.shopleech.publicapi.domain;
 
 import com.shopleech.base.config.WatchTypeCode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -12,9 +10,10 @@ import java.sql.Timestamp;
  * @author Ahto Jalak
  * @since 05.02.2023
  */
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "_watchlist")
 public class Watchlist {
@@ -37,20 +36,4 @@ public class Watchlist {
     private String createdBy;
     private Timestamp updatedAt;
     private String updatedBy;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public WatchTypeCode getWatchTypeCode() {
-        return watchTypeCode;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setWatchTypeCode(WatchTypeCode watchTypeCode) {
-        this.watchTypeCode = watchTypeCode;
-    }
 }

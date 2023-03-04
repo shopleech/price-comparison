@@ -9,7 +9,6 @@ import java.sql.Timestamp;
  * @author Ahto Jalak
  * @since 25.02.2023
  */
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

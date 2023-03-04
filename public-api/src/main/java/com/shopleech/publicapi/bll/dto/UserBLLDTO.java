@@ -1,11 +1,9 @@
 package com.shopleech.publicapi.bll.dto;
 
 import com.shopleech.publicapi.domain.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -13,7 +11,8 @@ import java.util.Set;
  * @since 24.01.2023
  */
 @Data
-@Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserBLLDTO {
@@ -23,6 +22,6 @@ public class UserBLLDTO {
     private String lastname;
     private String email;
     private String password;
-    private Set<Role> roles;
     private boolean enabled;
+    private Set<Role> roles = new HashSet<>();
 }

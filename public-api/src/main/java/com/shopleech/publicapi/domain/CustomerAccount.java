@@ -1,9 +1,7 @@
 package com.shopleech.publicapi.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -11,9 +9,10 @@ import java.sql.Timestamp;
  * @author Ahto Jalak
  * @since 05.02.2023
  */
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "_customer_account")
 public class CustomerAccount {

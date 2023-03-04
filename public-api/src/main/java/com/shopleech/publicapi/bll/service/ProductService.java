@@ -4,6 +4,7 @@ import com.shopleech.publicapi.bll.dto.ProductBLLDTO;
 import com.shopleech.publicapi.bll.mapper.ProductBLLMapper;
 import com.shopleech.publicapi.dal.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +15,12 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class ProductService {
+public class ProductService implements IProductService {
+
+    @Autowired
     protected ProductRepository productRepository;
 
+    @Autowired
     protected ProductBLLMapper productMapper;
 
     public void createProduct(ProductBLLDTO data) {
@@ -27,6 +31,7 @@ public class ProductService {
         return productMapper.mapToDto(productRepository.getProductById(id));
     }
 
+    @Override
     public List<ProductBLLDTO> getAll() {
         return productMapper.mapToDto(productRepository.getAllProducts());
     }

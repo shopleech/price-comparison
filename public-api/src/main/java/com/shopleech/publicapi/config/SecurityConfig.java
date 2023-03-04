@@ -1,7 +1,7 @@
 package com.shopleech.publicapi.config;
 
 import com.shopleech.publicapi.bll.filter.JwtAuthenticationFilter;
-import com.shopleech.publicapi.bll.service.MyUserDetailsService;
+import com.shopleech.publicapi.bll.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +31,7 @@ public class SecurityConfig {
     private JwtAuthenticationFilter jwtAuthFilter;
 
     @Autowired
-    private MyUserDetailsService userDetailsService;
+    private UserService userDetailsService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -55,6 +55,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        String allowed[] = {"/api/v1/**", "/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**"};
+
         http.cors();
         http.csrf()
                 .disable()
@@ -63,13 +65,13 @@ public class SecurityConfig {
                 })
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
-                .requestMatchers("/api/v1/product/**").hasAnyAuthority("USER")
-                .requestMatchers("/api/v1/user").hasAnyAuthority("USER", "ADMIN")
-                .requestMatchers("/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                //.requestMatchers("/api/v1/product/**").hasAnyAuthority("USER")
+                //.requestMatchers("/api/v1/user").hasAnyAuthority("USER", "ADMIN")
+                .requestMatchers(allowed).permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        //http.authenticationProvider(authenticationProvider());
+        http.authenticationProvider(authenticationProvider());
         return http.build();
     }
 

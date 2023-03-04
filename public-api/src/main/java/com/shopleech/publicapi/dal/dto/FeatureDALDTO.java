@@ -2,7 +2,6 @@ package com.shopleech.publicapi.dal.dto;
 
 import com.shopleech.base.config.FeatureTypeCode;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
  * @since 07.02.2023
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeatureDALDTO {

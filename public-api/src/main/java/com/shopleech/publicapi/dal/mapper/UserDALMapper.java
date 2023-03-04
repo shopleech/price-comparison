@@ -15,11 +15,13 @@ import java.util.stream.Collectors;
 public class UserDALMapper {
 
     public List<UserDALDTO> mapToDto(List<User> users) {
+
         return users.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
     }
 
     public UserDALDTO mapToDto(User c) {
+
         return new UserDALDTO(
                 c.getId(),
                 c.getFirstname(),
@@ -32,12 +34,16 @@ public class UserDALMapper {
     }
 
     public User mapToEntity(UserDALDTO newUser) {
+
         User entity = new User();
         entity.setId(newUser.getId());
         entity.setFirstname(newUser.getFirstname());
         entity.setLastname(newUser.getLastname());
         entity.setEmail(newUser.getEmail());
         entity.setPassword(newUser.getPassword());
+        entity.setEnabled(newUser.isEnabled());
+        entity.setRoles(newUser.getRoles());
+
         return entity;
     }
 

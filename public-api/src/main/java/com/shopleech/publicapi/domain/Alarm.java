@@ -3,8 +3,9 @@ package com.shopleech.publicapi.domain;
 import com.shopleech.base.config.AlarmTypeCode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
@@ -12,9 +13,10 @@ import java.sql.Timestamp;
  * @author Ahto Jalak
  * @since 05.02.2023
  */
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "_alarm")
 public class Alarm {
@@ -40,44 +42,4 @@ public class Alarm {
     private String createdBy;
     private Timestamp updatedAt;
     private String updatedBy;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public AlarmTypeCode getAlarmTypeCode() {
-        return alarmTypeCode;
-    }
-
-    public Double getMinValue() {
-        return minValue;
-    }
-
-    public Double getMaxValue() {
-        return maxValue;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setAlarmTypeCode(AlarmTypeCode alarmTypeCode) {
-        this.alarmTypeCode = alarmTypeCode;
-    }
-
-    public void setMinValue(Double minValue) {
-        this.minValue = minValue;
-    }
-
-    public void setMaxValue(Double maxValue) {
-        this.maxValue = maxValue;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.controller;
 
-import com.shopleech.publicapi.bll.service.MyUserDetailsService;
+import com.shopleech.publicapi.bll.service.UserService;
 import com.shopleech.publicapi.bll.util.JwtTokenUtil;
 import com.shopleech.publicapi.dto.v1.UserLoginDTO;
 import com.shopleech.publicapi.dto.v1.UserRegisterDTO;
@@ -39,7 +39,7 @@ public class UserController {
     @Autowired
     private UserMapper mapper;
     @Autowired
-    private MyUserDetailsService userDetailsService;
+    private UserService userDetailsService;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
@@ -51,7 +51,6 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRegisterDTO request) {
         logger.info("register request");
-
 
         Map<String, Object> responseMap = new HashMap<>();
         try {
@@ -125,5 +124,25 @@ public class UserController {
         }
 
         // return ResponseEntity.ok(userService.createJwtToken(request));
+    }
+
+    @Operation(
+            summary = "User list",
+            responses = @ApiResponse(responseCode = "200", description = "Success"))
+    @GetMapping("/users")
+    public ResponseEntity<?> getUserList() {
+        logger.info("user list request");
+
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var users = userDetailsService.findUsers();
+            responseMap.put("details", users);
+            responseMap.put("error", false);
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
     }
 }

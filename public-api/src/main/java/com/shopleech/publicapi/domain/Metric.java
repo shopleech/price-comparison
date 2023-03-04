@@ -4,8 +4,9 @@ import com.shopleech.base.config.MetricTypeCode;
 import com.shopleech.base.domain.BaseDomainEntityMetaId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
@@ -14,9 +15,10 @@ import java.sql.Timestamp;
  * @since 06.02.2023
  */
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "_metric")
 public class Metric extends BaseDomainEntityMetaId {
@@ -43,28 +45,4 @@ public class Metric extends BaseDomainEntityMetaId {
     private String createdBy;
     private Timestamp updatedAt;
     private String updatedBy;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public MetricTypeCode getMetricTypeCode() {
-        return metricTypeCode;
-    }
-
-    public Double getQuantity() {
-        return quantity;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setMetricTypeCode(MetricTypeCode metricTypeCode) {
-        this.metricTypeCode = metricTypeCode;
-    }
-
-    public void setQuantity(Double quantity) {
-        this.quantity = quantity;
-    }
 }

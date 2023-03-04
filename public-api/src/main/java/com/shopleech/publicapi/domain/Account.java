@@ -3,9 +3,7 @@ package com.shopleech.publicapi.domain;
 import com.shopleech.base.config.Status;
 import com.shopleech.base.domain.BaseDomainEntityMetaId;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.Set;
@@ -14,9 +12,10 @@ import java.util.Set;
  * @author Ahto Jalak
  * @since 24.01.2023
  */
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "_account")
 public class Account extends BaseDomainEntityMetaId {
@@ -40,20 +39,4 @@ public class Account extends BaseDomainEntityMetaId {
     private String createdBy;
     private Timestamp updatedAt;
     private String updatedBy;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 }

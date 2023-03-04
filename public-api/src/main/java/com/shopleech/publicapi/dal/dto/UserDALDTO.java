@@ -2,7 +2,6 @@ package com.shopleech.publicapi.dal.dto;
 
 import com.shopleech.publicapi.domain.Role;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,6 @@ import java.util.Set;
  * @since 03.02.2023
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDALDTO {

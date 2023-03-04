@@ -2,7 +2,6 @@ package com.shopleech.publicapi.dal.dto;
 
 import com.shopleech.base.config.WatchTypeCode;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
  * @since 06.02.2023
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class WatchlistDALDTO {

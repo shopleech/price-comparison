@@ -3,13 +3,14 @@ package com.shopleech.publicapi.controller;
 import com.shopleech.publicapi.bll.service.ProductService;
 import com.shopleech.publicapi.dto.v1.ProductDTO;
 import com.shopleech.publicapi.dto.v1.mapper.ProductMapper;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Ahto Jalak
@@ -25,16 +26,30 @@ public class ProductController {
     private final ProductMapper mapper;
 
     @GetMapping("/mylist")
-    @PreAuthorize("hasRole('USER')")
-    @SecurityRequirement(name = "Authorization")
-    public ResponseEntity<String> demo() {
+    public ResponseEntity<?> demo() {
         logger.info("demo request");
-        return ResponseEntity.ok("Hello");
+
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var serviceAll = service.getAll();
+            responseMap.put("error", false);
+            responseMap.put("details", mapper.mapToDto(serviceAll));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @GetMapping("/something")
+    public ResponseEntity<?> something() {
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("something", true);
+        return ResponseEntity.ok(responseMap);
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('USER')")
-    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<ProductDTO> add(@RequestBody ProductDTO request) {
         logger.info("add request");
         service.createProduct(mapper.mapToEntity(request));

@@ -3,9 +3,7 @@ package com.shopleech.publicapi.domain;
 import com.shopleech.base.config.CurrencyTypeCode;
 import com.shopleech.base.config.PriceTypeCode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -13,10 +11,11 @@ import java.sql.Timestamp;
  * @author Ahto Jalak
  * @since 06.02.2023
  */
-@Builder
+@Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name = "_price")
 public class Price {
 
@@ -38,44 +37,4 @@ public class Price {
     private String createdBy;
     private Timestamp updatedAt;
     private String updatedBy;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public PriceTypeCode getPriceTypeCode() {
-        return priceTypeCode;
-    }
-
-    public Double getQuantity() {
-        return quantity;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public CurrencyTypeCode getCurrency() {
-        return currency;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setPriceTypeCode(PriceTypeCode priceTypeCode) {
-        this.priceTypeCode = priceTypeCode;
-    }
-
-    public void setQuantity(Double quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public void setCurrency(CurrencyTypeCode currency) {
-        this.currency = currency;
-    }
 }
