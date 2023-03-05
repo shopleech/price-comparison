@@ -70,6 +70,7 @@ class ContainerServiceStack(Stack):
             self, f"{id}_task_def",
             task_role=task_role,
             family=f"{id}_task_def",
+            network_mode=ecs.NetworkMode.HOST,
         )
 
         container = task_definition.add_container(
