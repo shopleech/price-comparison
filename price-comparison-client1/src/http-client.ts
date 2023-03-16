@@ -1,0 +1,10 @@
+import axios from 'axios'
+
+export const httpCLient = axios.create({
+    baseURL: (process.env.NODE_ENV === 'production') ? 'https://api.shopleech.com' : 'http://localhost:8080',
+    headers: {
+        'Content-type': 'application/json'
+    },
+})
+
+export default httpCLient
