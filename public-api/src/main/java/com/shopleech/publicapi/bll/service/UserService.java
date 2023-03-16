@@ -46,6 +46,8 @@ public class UserService implements IUserService {
 
         UserDALDTO userDALDTO = userBLLMapper.mapToEntity(userBLLDTO);
         userDALDTO.setPassword(new BCryptPasswordEncoder().encode(userBLLDTO.getPassword()));
+        userDALDTO.setFirstname(userBLLDTO.getFirstname());
+        userDALDTO.setLastname(userBLLDTO.getLastname());
         // userDALDTO.setRoles(new ArrayList<Role>() { "USER" });
 
         userRepository.addUser(userDALDTO);

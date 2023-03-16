@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 06.02.2023
  */
 @RestController
-@RequestMapping("/api/v1/alarm")
+@RequestMapping("/v1/alarm")
 @RequiredArgsConstructor
 public class AlarmController {
 

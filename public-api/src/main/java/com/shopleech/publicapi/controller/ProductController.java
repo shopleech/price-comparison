@@ -17,7 +17,7 @@ import java.util.Map;
  * @since 04.02.2023
  */
 @RestController
-@RequestMapping("/api/v1/product")
+@RequestMapping("/v1/product")
 @RequiredArgsConstructor
 public class ProductController {
 

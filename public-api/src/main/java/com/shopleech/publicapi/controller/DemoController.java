@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 04.02.2023
  */
 @RestController
-@RequestMapping("/api/v1/demo")
+@RequestMapping("/v1/demo")
 public class DemoController {
     @GetMapping
     public ResponseEntity<String> demo() {

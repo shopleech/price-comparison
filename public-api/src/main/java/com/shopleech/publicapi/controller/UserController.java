@@ -3,6 +3,7 @@ package com.shopleech.publicapi.controller;
 import com.shopleech.publicapi.bll.service.UserService;
 import com.shopleech.publicapi.bll.util.JwtTokenUtil;
 import com.shopleech.publicapi.dto.v1.UserLoginDTO;
+import com.shopleech.publicapi.dto.v1.UserRefreshDTO;
 import com.shopleech.publicapi.dto.v1.UserRegisterDTO;
 import com.shopleech.publicapi.dto.v1.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,19 +30,22 @@ import java.util.Map;
  * @since 04.02.2023
  */
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/v1/auth")
 @RequiredArgsConstructor
 @Tag(name = "User Controller", description = "Endpoint for user access")
 public class UserController {
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
-    // private final UserService userService;
+
     @Autowired
     private UserMapper mapper;
+
     @Autowired
     private UserService userDetailsService;
+
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -57,38 +61,42 @@ public class UserController {
             var register = userDetailsService.register(request);
             if (register != null) {
                 responseMap.put("error", false);
-                responseMap.put("message", "register done");
-                responseMap.put("token", register);
+                responseMap.put("message", "registration_success");
+                responseMap.put("token", register.getToken());
+                responseMap.put("refreshToken", "");
+                responseMap.put("firstname", "");
+                responseMap.put("lastname", "");
+                responseMap.put("roles", "");
                 return ResponseEntity.ok(responseMap);
             } else {
                 responseMap.put("error", true);
-                responseMap.put("message", "Invalid input");
+                responseMap.put("message", "invalid_input");
                 return ResponseEntity.status(401).body(responseMap);
             }
         } catch (DisabledException e) {
             e.printStackTrace();
             responseMap.put("error", true);
-            responseMap.put("message", "User is disabled");
+            responseMap.put("message", "user_is_disabled");
             return ResponseEntity.status(500).body(responseMap);
         } catch (BadCredentialsException e) {
             responseMap.put("error", true);
-            responseMap.put("message", "Invalid Credentials");
+            responseMap.put("message", "invalid_credentials");
             return ResponseEntity.status(401).body(responseMap);
         } catch (Exception e) {
             e.printStackTrace();
             responseMap.put("error", true);
-            responseMap.put("message", "Something went wrong");
+            responseMap.put("message", "something_went_wrong");
             return ResponseEntity.status(500).body(responseMap);
         }
-
     }
 
     @Operation(
             summary = "User login",
             responses = @ApiResponse(responseCode = "200", description = "Access token returned"))
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody UserLoginDTO request) throws Exception {
-        logger.info("login request");
+    public ResponseEntity<?> authenticate(
+            @RequestBody UserLoginDTO request) throws Exception {
+        logger.info("login request + " + request.toString());
 
         Map<String, Object> responseMap = new HashMap<>();
         try {
@@ -98,32 +106,84 @@ public class UserController {
                 logger.info("Logged In");
                 UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
                 String token = jwtTokenUtil.generateToken(userDetails);
+
                 responseMap.put("error", false);
-                responseMap.put("message", "Logged In");
+                responseMap.put("message", "logged_in_success");
                 responseMap.put("token", token);
+                responseMap.put("refreshToken", "");
+                responseMap.put("firstname", "");
+                responseMap.put("lastname", "");
+                responseMap.put("roles", "");
                 return ResponseEntity.ok(responseMap);
             } else {
                 responseMap.put("error", true);
-                responseMap.put("message", "Invalid Credentials");
+                responseMap.put("message", "invalid_credentials");
                 return ResponseEntity.status(401).body(responseMap);
             }
         } catch (DisabledException e) {
             e.printStackTrace();
             responseMap.put("error", true);
-            responseMap.put("message", "User is disabled");
+            responseMap.put("message", "user_is_disabled");
             return ResponseEntity.status(500).body(responseMap);
         } catch (BadCredentialsException e) {
             responseMap.put("error", true);
-            responseMap.put("message", "Invalid Credentials");
+            responseMap.put("message", "invalid_credentials");
             return ResponseEntity.status(401).body(responseMap);
         } catch (Exception e) {
             e.printStackTrace();
             responseMap.put("error", true);
-            responseMap.put("message", "Something went wrong");
+            responseMap.put("message", "something_went_wrong");
             return ResponseEntity.status(500).body(responseMap);
         }
+    }
 
-        // return ResponseEntity.ok(userService.createJwtToken(request));
+    @Operation(
+            summary = "User refresh token",
+            responses = @ApiResponse(responseCode = "200", description = "Access token returned"))
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(
+            @RequestBody UserRefreshDTO request) throws Exception {
+        logger.info("refresh token request");
+        logger.info(request.toString());
+
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(
+                    jwtTokenUtil.getUsernameFromToken(request.getToken()));
+
+            if (!userDetails.getUsername().isEmpty()) {
+                logger.info("Username found from token");
+
+                String token = jwtTokenUtil.generateToken(userDetails);
+
+                responseMap.put("error", false);
+                responseMap.put("message", "refresh_token_success");
+                responseMap.put("token", token);
+                responseMap.put("refreshToken", "");
+                responseMap.put("firstname", "");
+                responseMap.put("lastname", "");
+                responseMap.put("roles", "");
+                return ResponseEntity.ok(responseMap);
+            } else {
+                responseMap.put("error", true);
+                responseMap.put("message", "invalid_credentials");
+                return ResponseEntity.status(401).body(responseMap);
+            }
+        } catch (DisabledException e) {
+            e.printStackTrace();
+            responseMap.put("error", true);
+            responseMap.put("message", "user_is_disabled");
+            return ResponseEntity.status(500).body(responseMap);
+        } catch (BadCredentialsException e) {
+            responseMap.put("error", true);
+            responseMap.put("message", "invalid_credentials");
+            return ResponseEntity.status(401).body(responseMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseMap.put("error", true);
+            responseMap.put("message", "something_went_wrong");
+            return ResponseEntity.status(500).body(responseMap);
+        }
     }
 
     @Operation(

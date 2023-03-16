@@ -16,6 +16,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 /**
  * @author Ahto Jalak
@@ -55,20 +58,29 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        String allowed[] = {"/api/v1/**", "/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**"};
+        String allowed[] = {"/v1/**", "/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**"};
+
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        corsConfiguration.setAllowedOrigins(List.of("*"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
+        corsConfiguration.setAllowCredentials(false);
+        corsConfiguration.setExposedHeaders(List.of("Authorization"));
 
         http.cors();
         http.csrf()
                 .disable()
-                .exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
-
-                })
+                .cors().configurationSource(request -> corsConfiguration)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
-                //.requestMatchers("/api/v1/product/**").hasAnyAuthority("USER")
-                //.requestMatchers("/api/v1/user").hasAnyAuthority("USER", "ADMIN")
+                //.requestMatchers("/v1/product/**").hasAnyAuthority("USER")
+                //.requestMatchers("/v1/user").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(allowed).permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
+
+                });
 
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         http.authenticationProvider(authenticationProvider());
