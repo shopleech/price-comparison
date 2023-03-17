@@ -1,5 +1,8 @@
 # price-comparison-client1
 
+## Intro
+
+
 ## Project setup
 ```
 npm install
@@ -13,6 +16,15 @@ npm run serve
 ### Compiles and minifies for production
 ```
 npm run build
+
+cd dist/
+docker build --build-arg APP_ENV=production -t sl-client .
+
+docker run -it -p 8888:80 --rm sl-client
+
+docker tag sl-client:latest XXXXX.dkr.ecr.eu-west-1.amazonaws.com/sl-client:latest-prod
+aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin XXXXX.dkr.ecr.eu-west-1.amazonaws.com
+docker push XXXXX.dkr.ecr.eu-west-1.amazonaws.com/sl-client:latest-prod
 ```
 
 ### Run your unit tests
@@ -24,16 +36,3 @@ npm run test:unit
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-
-### Docker
-Build frontend container: https://price-comparison-system-frontend.azurewebsites.net/
-~~~
-docker build -t aht0/price-comparison-system-vuejs:latest .
-docker images
-docker tag acc58fa1ec8e aht0/price-comparison-system-vuejs:latest
-docker push aht0/price-comparison-system-vuejs:latest
-~~~
