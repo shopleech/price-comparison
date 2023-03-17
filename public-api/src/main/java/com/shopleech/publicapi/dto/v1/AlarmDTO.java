@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.dto.v1;
 
-import com.shopleech.base.config.AlarmTypeCode;
+import com.shopleech.base.config.type.AlarmTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

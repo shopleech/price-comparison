@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.dto.v1;
 
-import com.shopleech.base.config.Status;
+import com.shopleech.base.config.type.StatusTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +22,5 @@ public class CustomerDTO {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private Status status;
+    private StatusTypeCode status;
 }

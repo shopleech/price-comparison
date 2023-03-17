@@ -1,7 +1,7 @@
 package com.shopleech.publicapi.domain;
 
-import com.shopleech.base.config.BarcodeTypeCode;
-import com.shopleech.base.config.ProductTypeCode;
+import com.shopleech.base.config.type.BarcodeTypeCode;
+import com.shopleech.base.config.type.ProductTypeCode;
 import jakarta.persistence.*;
 import lombok.*;
 

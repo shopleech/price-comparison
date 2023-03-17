@@ -1,7 +1,7 @@
 package com.shopleech.publicapi.dal.dto;
 
-import com.shopleech.base.config.BarcodeTypeCode;
-import com.shopleech.base.config.ProductTypeCode;
+import com.shopleech.base.config.type.BarcodeTypeCode;
+import com.shopleech.base.config.type.ProductTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

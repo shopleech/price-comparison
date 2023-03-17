@@ -1,7 +1,7 @@
 package com.shopleech.publicapi.dto.v1;
 
-import com.shopleech.base.config.CurrencyTypeCode;
-import com.shopleech.base.config.PriceTypeCode;
+import com.shopleech.base.config.type.CurrencyTypeCode;
+import com.shopleech.base.config.type.PriceTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

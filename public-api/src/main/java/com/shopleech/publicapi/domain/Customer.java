@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.domain;
 
-import com.shopleech.base.config.Status;
+import com.shopleech.base.config.type.StatusTypeCode;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,7 +38,7 @@ public class Customer {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private Status status;
+    private StatusTypeCode status;
 
     private Timestamp validFrom;
     private Timestamp validTo;

@@ -1,10 +1,10 @@
-package com.shopleech.base.config;
+package com.shopleech.base.config.type;
 
 /**
  * @author Ahto Jalak
  * @since 05.02.2023
  */
-public enum CategoryType {
+public enum CategoryTypeCode {
     AUDIO_VIDEO,
     BEAUTY_HEALTH,
     FOOD,

@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.bll.dto;
 
-import com.shopleech.base.config.WatchTypeCode;
+import com.shopleech.base.config.type.WatchTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

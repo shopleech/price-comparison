@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.domain;
 
-import com.shopleech.base.config.AlarmTypeCode;
+import com.shopleech.base.config.type.AlarmTypeCode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

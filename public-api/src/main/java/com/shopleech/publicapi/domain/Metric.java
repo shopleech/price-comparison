@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.domain;
 
-import com.shopleech.base.config.MetricTypeCode;
+import com.shopleech.base.config.type.MetricTypeCode;
 import com.shopleech.base.domain.BaseDomainEntityMetaId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

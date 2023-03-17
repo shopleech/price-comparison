@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.domain;
 
-import com.shopleech.base.config.FeatureTypeCode;
+import com.shopleech.base.config.type.FeatureTypeCode;
 import jakarta.persistence.*;
 import lombok.*;
 

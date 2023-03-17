@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:buster-slim as production-stage
 
 ARG APP_ENV
 ARG APP_NAME="public-api"
@@ -7,7 +7,7 @@ ARG JAR_FILE="${APP_NAME}-${APP_VERSION}.jar"
 ARG WORK_DIR="/home/sl/public-api"
 
 RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y curl logrotate awscli python3-pip software-properties-common fontconfig ttf-dejavu nfs-utils
+    apt-get install -y curl logrotate awscli python3-pip software-properties-common
 
 RUN curl -fsSL https://apt.corretto.aws/corretto.key | apt-key add -
 RUN add-apt-repository 'deb https://apt.corretto.aws stable main'
@@ -28,12 +28,10 @@ RUN { \
 RUN chmod +x /usr/local/bin/app.sh
 
 WORKDIR "${WORK_DIR}"
-
-COPY "/${JAR_FILE}" "public-api.jar"
-
+COPY "/build/libs/${JAR_FILE}" "public-api.jar"
 RUN chown -R sl:sl "${WORK_DIR}"
 
 RUN echo 1
-EXPOSE 8080/tcp 8080/udp
+EXPOSE 8080
 ENV RUN_IN_CONTAINER="True"
 ENTRYPOINT ["/bin/bash", "-c", "/usr/local/bin/app.sh && java -jar public-api.jar"]

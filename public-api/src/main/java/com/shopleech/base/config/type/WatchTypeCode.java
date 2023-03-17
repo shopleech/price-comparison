@@ -1,4 +1,4 @@
-package com.shopleech.base.config;
+package com.shopleech.base.config.type;
 
 /**
  * @author Ahto Jalak

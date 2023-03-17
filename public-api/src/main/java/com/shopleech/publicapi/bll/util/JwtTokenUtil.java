@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static com.shopleech.publicapi.config.ApplicationConstants.EXPIRATION_TIME;
-import static com.shopleech.publicapi.config.ApplicationConstants.SECRET_KEY;
 
 /**
  * @author Ahto Jalak
@@ -24,6 +24,9 @@ import static com.shopleech.publicapi.config.ApplicationConstants.SECRET_KEY;
  */
 @Component
 public class JwtTokenUtil implements Serializable {
+
+    @Value("${secret}")
+    private String secret;
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
@@ -42,7 +45,7 @@ public class JwtTokenUtil implements Serializable {
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY)))
+                .setSigningKey(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)))
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -60,7 +63,7 @@ public class JwtTokenUtil implements Serializable {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY)))
+                .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret)))
                 .compact();
     }
 

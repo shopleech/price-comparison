@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.dal.dto;
 
-import com.shopleech.base.config.FeatureTypeCode;
+import com.shopleech.base.config.type.FeatureTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

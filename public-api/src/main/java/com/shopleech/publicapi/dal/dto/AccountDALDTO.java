@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.dal.dto;
 
-import com.shopleech.base.config.Status;
+import com.shopleech.base.config.type.StatusTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +15,5 @@ import lombok.NoArgsConstructor;
 public class AccountDALDTO {
 
     private Integer id;
-    private Status status;
+    private StatusTypeCode status;
 }

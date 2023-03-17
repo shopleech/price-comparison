@@ -1,7 +1,7 @@
 package com.shopleech.publicapi.domain;
 
-import com.shopleech.base.config.CurrencyTypeCode;
-import com.shopleech.base.config.PriceTypeCode;
+import com.shopleech.base.config.type.CurrencyTypeCode;
+import com.shopleech.base.config.type.PriceTypeCode;
 import jakarta.persistence.*;
 import lombok.*;
 

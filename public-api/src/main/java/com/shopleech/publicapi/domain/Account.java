@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.domain;
 
-import com.shopleech.base.config.Status;
+import com.shopleech.base.config.type.StatusTypeCode;
 import com.shopleech.base.domain.BaseDomainEntityMetaId;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,7 +31,7 @@ public class Account extends BaseDomainEntityMetaId {
     )
     private Set<Customer> customers;
 
-    private Status status;
+    private StatusTypeCode status;
 
     private Timestamp validFrom;
     private Timestamp validTo;
