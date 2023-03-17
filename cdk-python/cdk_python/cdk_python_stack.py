@@ -38,12 +38,13 @@ class CdkPythonStack(Stack):
             subnets=self.public_subnets,
             sg=ec2.SecurityGroup.from_security_group_id(
                 self, f"default-ecs-cluster-sg", env_vars['cluster_sg_name'], mutable=False),
-            main_tag="latest-dev",
+            main_tag="latest-prod",
             key_pair="slkey",
             env={
-                'name': 'dev',
+                'name': 'prod',
                 'service_desired_count': 1,
                 'region': env_vars['region'],
                 'account': env_vars['account'],
+                'file_system_id': env_vars['file_system_id'],
             },
         )

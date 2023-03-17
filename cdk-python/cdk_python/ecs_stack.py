@@ -66,11 +66,19 @@ class ContainerServiceStack(Stack):
             )
         )
 
+        # BACKEND
         task_definition = ecs.Ec2TaskDefinition(
-            self, f"{id}_task_def",
+            self, f"{id}_public-api",
             task_role=task_role,
-            family=f"{id}_task_def",
+            family=f"{id}_public-api",
             network_mode=ecs.NetworkMode.HOST,
+            # volumes=[
+            #     ecs.Volume(
+            #         name=f"{id}_efs-ec2",
+            #         efs_volume_configuration=ecs.EfsVolumeConfiguration(
+            #             file_system_id=env['file_system_id'],
+            #             transit_encryption="ENABLED"))
+            # ],
         )
 
         container = task_definition.add_container(
@@ -83,8 +91,8 @@ class ContainerServiceStack(Stack):
                 tag=main_tag,
             ),
             logging=ecs.LogDrivers.aws_logs(stream_prefix=id),
-            memory_limit_mib=256,
-            cpu=512,
+            memory_limit_mib=750,
+            cpu=1000,
             environment={},
             linux_parameters=ecs.LinuxParameters(
                 self, f"{id}_linux_parameters",
@@ -98,6 +106,9 @@ class ContainerServiceStack(Stack):
             protocol=ecs.Protocol.TCP,
         )
         container.add_port_mappings(port_mapping)
+        # container.add_mount_points(
+        #     ecs.MountPoint(container_path="/sldisk", source_volume=f"{id}_efs-ec2", read_only=False)
+        # )
 
         # sg.connections.allow_from(port_range=ec2.Port.tcp(80))
 
@@ -115,3 +126,65 @@ class ContainerServiceStack(Stack):
 
         ecs_service.connections.allow_from_any_ipv4(port_range=ec2.Port.tcp(22))
         ecs_service.connections.allow_from_any_ipv4(port_range=ec2.Port.tcp(8080))
+
+        # FRONTEND
+        task_definition3 = ecs.Ec2TaskDefinition(
+            self, f"{id}_client",
+            task_role=task_role,
+            family=f"{id}_client",
+            network_mode=ecs.NetworkMode.HOST,
+            # volumes=[
+            #     ecs.Volume(
+            #         name=f"{id}_efs-ec2",
+            #         efs_volume_configuration=ecs.EfsVolumeConfiguration(
+            #             file_system_id=env['file_system_id'],
+            #             transit_encryption="ENABLED"))
+            # ],
+        )
+
+        container3 = task_definition3.add_container(
+            f"{id}_task_container3",
+            image=ecs.ContainerImage.from_ecr_repository(
+                repository=ecr.Repository.from_repository_name(
+                    self, f"{id}_task_repo3",
+                    repository_name="sl-client",
+                ),
+                tag=main_tag,
+            ),
+            logging=ecs.LogDrivers.aws_logs(stream_prefix=f"{id}3"),
+            memory_limit_mib=200,
+            cpu=500,
+            environment={},
+            linux_parameters=ecs.LinuxParameters(
+                self, f"{id}_linux_parameters3",
+                init_process_enabled=True,
+            ),
+        )
+
+        port_mapping3 = ecs.PortMapping(
+            container_port=80,
+            host_port=80,
+            protocol=ecs.Protocol.TCP,
+        )
+        container3.add_port_mappings(port_mapping3)
+        # container.add_mount_points(
+        #     ecs.MountPoint(container_path="/sldisk", source_volume=f"{id}_efs-ec2", read_only=False)
+        # )
+
+        # sg.connections.allow_from(port_range=ec2.Port.tcp(80))
+
+        # backend
+        ecs_service3 = ecs.Ec2Service(
+            self, f"{id}_client-service",
+            cluster=cluster,
+            task_definition=task_definition3,
+            # assign_public_ip=True,
+            # vpc_subnets=subnets,
+            # desired_count=1,
+            # security_groups=[sg],
+            # cloud_map_options=ecs.CloudMapOptions(
+            #   name="sl", cloud_map_namespace=example_private_dns_namespace, dns_record_type=sd.DnsRecordType.A)
+        )
+
+        ecs_service3.connections.allow_from_any_ipv4(port_range=ec2.Port.tcp(22))
+        ecs_service3.connections.allow_from_any_ipv4(port_range=ec2.Port.tcp(80))
