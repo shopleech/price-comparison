@@ -2,9 +2,9 @@ package com.shopleech.publicapi.bll.service;
 
 import com.shopleech.publicapi.bll.MyUserDetails;
 import com.shopleech.publicapi.bll.dto.UserBLLDTO;
+import com.shopleech.publicapi.bll.mapper.UserBLLMapper;
 import com.shopleech.publicapi.bll.util.JwtTokenUtil;
 import com.shopleech.publicapi.dal.dto.UserDALDTO;
-import com.shopleech.publicapi.bll.mapper.UserBLLMapper;
 import com.shopleech.publicapi.dal.repository.UserRepository;
 import com.shopleech.publicapi.domain.User;
 import com.shopleech.publicapi.dto.v1.UserRegisterDTO;
@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.CredentialException;
 import java.util.List;
 
 /**
@@ -80,7 +81,19 @@ public class UserService implements IUserService {
         return null;
     }
 
-    public UserTokenDTO register(UserRegisterDTO request) {
+    public UserTokenDTO register(UserRegisterDTO request) throws Exception {
+
+        if (!request.isConsent()) {
+            throw new Exception("consent is missing");
+        }
+
+        if (request.getEmail().isEmpty() || request.getPassword().isEmpty()) {
+            throw new CredentialException("email and password is a must");
+        }
+
+        if (loadUserByUsername(request.getEmail()).isEnabled()) {
+            throw new Exception("user exists");
+        }
 
         UserBLLDTO user = new UserBLLDTO();
         user.setFirstname(request.getFirstname());
@@ -115,14 +128,13 @@ public class UserService implements IUserService {
     public UserDetails loadUserByUsername(String username) {
 
         logger.info("loadUserByUsername: " + username);
-        UserDALDTO user = null;
+        UserDALDTO user = new UserDALDTO();
+
         try {
             user = userRepository.getUserByUsername(username);
-            logger.info("found something");
+            logger.info("user found");
         } catch (Exception e) {
-            user = new UserDALDTO();
-            user.setEmail(username);
-            user.setEnabled(true);
+            logger.info("user not found");
         }
 
         return new MyUserDetails(userBLLMapper.mapToDto(user));

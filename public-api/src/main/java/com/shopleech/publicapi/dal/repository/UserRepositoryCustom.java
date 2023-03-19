@@ -16,5 +16,5 @@ public interface UserRepositoryCustom {
 
     List<UserDALDTO> getAllUsers();
 
-    UserDALDTO getUserByUsername(String username) throws Exception;
+    UserDALDTO getUserByUsername(String username);
 }

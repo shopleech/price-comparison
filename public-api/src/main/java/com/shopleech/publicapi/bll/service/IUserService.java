@@ -21,7 +21,7 @@ public interface IUserService extends UserDetailsService {
     public void deleteUser(String userId);
     public List<UserBLLDTO> getUsers(int page, int limit);
 
-    UserTokenDTO register(UserRegisterDTO request);
+    UserTokenDTO register(UserRegisterDTO request) throws Exception;
 
     // UserTokenDTO login(UserLoginDTO request);
 

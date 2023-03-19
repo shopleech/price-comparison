@@ -11,4 +11,6 @@ import java.util.List;
 public interface IProductService {
 
     List<ProductBLLDTO> getAll();
+
+    List<ProductBLLDTO> getAllByKeyword(String keyword);
 }

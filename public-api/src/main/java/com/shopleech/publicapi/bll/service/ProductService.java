@@ -35,4 +35,9 @@ public class ProductService implements IProductService {
     public List<ProductBLLDTO> getAll() {
         return productMapper.mapToDto(productRepository.getAllProducts());
     }
+
+    @Override
+    public List<ProductBLLDTO> getAllByKeyword(String keyword) {
+        return productMapper.mapToDto(productRepository.getAllProductsByKeyword(keyword));
+    }
 }

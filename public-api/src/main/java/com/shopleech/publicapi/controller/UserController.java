@@ -74,7 +74,6 @@ public class UserController {
                 return ResponseEntity.status(401).body(responseMap);
             }
         } catch (DisabledException e) {
-            e.printStackTrace();
             responseMap.put("error", true);
             responseMap.put("message", "user_is_disabled");
             return ResponseEntity.status(500).body(responseMap);
@@ -83,9 +82,13 @@ public class UserController {
             responseMap.put("message", "invalid_credentials");
             return ResponseEntity.status(401).body(responseMap);
         } catch (Exception e) {
-            e.printStackTrace();
             responseMap.put("error", true);
-            responseMap.put("message", "something_went_wrong");
+            if ("consent is missing".equals(e.getMessage())) {
+                responseMap.put("message", "consent_is_missing");
+            } else {
+                responseMap.put("message", "something_went_wrong");
+                responseMap.put("message_meta", e.getMessage());
+            }
             return ResponseEntity.status(500).body(responseMap);
         }
     }
@@ -121,7 +124,6 @@ public class UserController {
                 return ResponseEntity.status(401).body(responseMap);
             }
         } catch (DisabledException e) {
-            e.printStackTrace();
             responseMap.put("error", true);
             responseMap.put("message", "user_is_disabled");
             return ResponseEntity.status(500).body(responseMap);
@@ -130,7 +132,6 @@ public class UserController {
             responseMap.put("message", "invalid_credentials");
             return ResponseEntity.status(401).body(responseMap);
         } catch (Exception e) {
-            e.printStackTrace();
             responseMap.put("error", true);
             responseMap.put("message", "something_went_wrong");
             return ResponseEntity.status(500).body(responseMap);
@@ -170,7 +171,6 @@ public class UserController {
                 return ResponseEntity.status(401).body(responseMap);
             }
         } catch (DisabledException e) {
-            e.printStackTrace();
             responseMap.put("error", true);
             responseMap.put("message", "user_is_disabled");
             return ResponseEntity.status(500).body(responseMap);
@@ -179,7 +179,6 @@ public class UserController {
             responseMap.put("message", "invalid_credentials");
             return ResponseEntity.status(401).body(responseMap);
         } catch (Exception e) {
-            e.printStackTrace();
             responseMap.put("error", true);
             responseMap.put("message", "something_went_wrong");
             return ResponseEntity.status(500).body(responseMap);

@@ -2,6 +2,7 @@ package com.shopleech.publicapi.controller;
 
 import com.shopleech.publicapi.bll.service.ProductService;
 import com.shopleech.publicapi.dto.v1.ProductDTO;
+import com.shopleech.publicapi.dto.v1.ProductSearchDTO;
 import com.shopleech.publicapi.dto.v1.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class ProductController {
 
     Logger logger = LoggerFactory.getLogger(ProductController.class);
-    private final ProductService service;
+    private final ProductService productService;
     private final ProductMapper mapper;
 
     @GetMapping("/mylist")
@@ -31,7 +32,7 @@ public class ProductController {
 
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var serviceAll = service.getAll();
+            var serviceAll = productService.getAll();
             responseMap.put("error", false);
             responseMap.put("details", mapper.mapToDto(serviceAll));
             return ResponseEntity.ok(responseMap);
@@ -52,7 +53,22 @@ public class ProductController {
     @PostMapping("/add")
     public ResponseEntity<ProductDTO> add(@RequestBody ProductDTO request) {
         logger.info("add request");
-        service.createProduct(mapper.mapToEntity(request));
+        productService.createProduct(mapper.mapToEntity(request));
         return ResponseEntity.ok(request);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<?> search(@RequestBody ProductSearchDTO request) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var serviceAll = productService.getAllByKeyword(request.getKeyword());
+            responseMap.put("error", false);
+            responseMap.put("details", mapper.mapToDto(serviceAll));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
     }
 }

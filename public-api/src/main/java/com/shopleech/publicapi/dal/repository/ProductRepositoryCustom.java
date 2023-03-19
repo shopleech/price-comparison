@@ -15,4 +15,6 @@ public interface ProductRepositoryCustom {
     ProductDALDTO getProductById(Integer id);
 
     List<ProductDALDTO> getAllProducts();
+
+    List<ProductDALDTO> getAllProductsByKeyword(String keyword);
 }
