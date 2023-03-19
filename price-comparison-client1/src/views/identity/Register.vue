@@ -1,6 +1,9 @@
 <template>
-    <h1>Register</h1>
+    <RouterLink :to="{ name: 'home' }">
+        <img src="https://via.placeholder.com/40x40.png?text=back" alt="back"/>
+    </RouterLink>
 
+    <h2>Register</h2>
     <div className="row">
         <div className="col-md-12">
 
@@ -12,16 +15,12 @@
 
             <div>
                 <div className="form-group">
-                    <label className="control-label" htmlFor="Email">email</label>
+                    <label className="control-label" htmlFor="invitation">Invitation code</label>
+                    <input v-model="invitation" className="form-control" type="text"/>
+                </div>
+                <div className="form-group">
+                    <label className="control-label" htmlFor="email">E-mail</label>
                     <input v-model="email" className="form-control" type="text"/>
-                </div>
-                <div className="form-group">
-                    <label className="control-label" htmlFor="Password">password</label>
-                    <input v-model="password" className="form-control" type="password"/>
-                </div>
-                <div className="form-group">
-                    <label className="control-label" htmlFor="PasswordRepeat">password repeat</label>
-                    <input v-model="passwordRepeat" className="form-control" type="password"/>
                 </div>
                 <div className="form-group">
                     <label className="control-label" htmlFor="firstname">First name</label>
@@ -30,6 +29,14 @@
                 <div className="form-group">
                     <label className="control-label" htmlFor="lastname">Last name</label>
                     <input v-model="lastname" className="form-control" type="text"/>
+                </div>
+                <div className="form-group">
+                    <label className="control-label" htmlFor="password">Password</label>
+                    <input v-model="password" className="form-control" type="password"/>
+                </div>
+                <div className="form-group">
+                    <label className="control-label" htmlFor="passwordRepeat">Password repeat</label>
+                    <input v-model="passwordRepeat" className="form-control" type="password"/>
                 </div>
                 <div className="form-group">
                     <div class="form-check form-switch">
@@ -52,6 +59,7 @@ import { useIdentityStore } from '@/stores/identity'
 import { Options, Vue } from 'vue-class-component'
 import { IRegisterInfo } from '@/domain/ILoginInfo'
 import router from '@/router'
+import { IResponseMessage } from '@/domain/IResponseMessage'
 
 @Options({
     components: {},
@@ -61,28 +69,35 @@ import router from '@/router'
 export default class Register extends Vue {
     private identityStore = useIdentityStore()
     private loginWasOk: boolean | null = null
-
-    email = ''
-    password = ''
-    passwordRepeat = ''
-    firstname = ''
-    lastname = ''
-    consent = ''
-    errorMsg: string | null = null
+    private errorMsg: string | null = null
+    private invitation = ''
+    private email = ''
+    private firstname = ''
+    private lastname = ''
+    private password = ''
+    private passwordRepeat = ''
+    private consent = false
 
     async registerClicked (): Promise<void> {
         console.log('submitClicked')
         const registerInfo: IRegisterInfo = {
+            invitation: this.invitation,
             email: this.email,
-            password: this.password,
             firstname: this.firstname,
             lastname: this.lastname,
+            password: this.password,
+            consent: this.consent,
         }
         this.identityStore.registerUser(registerInfo)
-            .then((isLoggedIn: boolean) => {
-                this.loginWasOk = isLoggedIn
-                console.log('after auth user got: ' + this.loginWasOk)
-                router.push('/')
+            .then((response: IResponseMessage) => {
+                this.loginWasOk = response.data !== undefined
+                if (this.loginWasOk) {
+                    router.push('/')
+                } else {
+                    if (response.errorMsg != null) {
+                        this.errorMsg = response.errorMsg
+                    }
+                }
             })
     }
 }

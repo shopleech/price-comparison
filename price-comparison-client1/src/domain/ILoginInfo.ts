@@ -4,8 +4,10 @@ export interface ILoginInfo {
 }
 
 export interface IRegisterInfo {
+    invitation: string;
     email: string;
-    password: string;
     firstname: string;
     lastname: string;
+    password: string;
+    consent: boolean;
 }

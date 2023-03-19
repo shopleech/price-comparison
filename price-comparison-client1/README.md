@@ -8,6 +8,8 @@
 npm install
 ```
 
+Edit host in src/http-client.ts
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve

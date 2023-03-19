@@ -41,10 +41,10 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
         name: 'home',
-        component: import(/* webpackChunkName: "about" */ '../views/HomeView.vue'),
+        component: import('../views/HomeView.vue'),
     },
     {
-        path: '/api/about',
+        path: '/about',
         name: 'about',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route

@@ -34,9 +34,6 @@ export class ProductService extends BaseService<IProduct> {
         try {
             response = await httpCLient.get(`${this._path}`, {
                 headers: {
-                    MinPrice: form.filterByMinPrice,
-                    MaxPrice: form.filterByMaxPrice,
-                    CategoryId: categoryId,
                     Authorization: 'Bearer ' + this.identityStore.$state.jwt?.token
                 }
             })

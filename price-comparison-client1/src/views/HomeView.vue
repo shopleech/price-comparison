@@ -1,74 +1,107 @@
 <template>
-    <div>
-        <h2> Cheat Sheet Samples </h2>
-        <div> {{result}} </div>
-        <form v-on:submit.prevent="submitForm">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Your name" v-model="form.name">
-            </div>
-            <div class="form-group">
-                <label for="email">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="name@example.com"
-                       v-model="form.email">
-            </div>
-            <div class="form-group">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="terms" value="yes" v-model="form.terms">
-                    <label class="form-check-label" for="terms">Agree to Terms & Conditions</label>
+    <div class="row" v-if="isAuthenticated">
+        <div class="col-12 p-3">
+            <h3>Price comparison app</h3>
+            <hr/>
+            <div class="row">
+                <div class="col-12">
+
                 </div>
             </div>
-            <div class="form-group">
-                <button class="btn btn-primary">Submit</button>
+            <div class="row">
+                <div class="col-12">
+                    <form>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Product barcode"
+                                   aria-label="Product title or barcode" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
+            <div class="row fixed-bottom p-3">
+                <div class="col-6 col-md-2">
+                    <a @click="logoutClicked()" class="btn btn-secondary btn-lg w-100">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" v-if="!isAuthenticated">
+        <div class="col-12 p-3">
+            <h3>Price comparison app</h3>
+            <hr/>
+            <div class="row">
+                <div class="col-8 hidden-md-down col-md-2">
+                    Number of products
+                </div>
+                <div class="col-4 col-md-2">
+                    {{ num_of_products }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 col-md-2">
+                    Number of price updates
+                </div>
+                <div class="col-4 col-md-2">
+                    {{ num_of_price_updates }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8 col-md-2">
+                    Number of users
+                </div>
+                <div class="col-4 col-md-2">
+                    {{ num_of_users }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12"></div>
+            </div>
+            <div class="row fixed-bottom p-3">
+                <div class="col-6 col-md-2">
+                    <RouterLink :to="{ name: 'identity-login'}" class="btn btn-secondary btn-lg w-100">
+                        Login
+                    </RouterLink>
+                </div>
+                <div class="col-6 col-md-2">
+                    <RouterLink :to="{ name: 'identity-register'}" class="btn btn-primary btn-lg w-100">
+                        Get started
+                    </RouterLink>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import HttpClient from '@/http-client'
-import CameraScanner from '../components/CameraScanner.vue'
+import { useIdentityStore } from '@/stores/identity'
+import router from '@/router'
 
 @Options({
-    components: {
-    },
+    components: {},
     data () {
         return {
-            result: null
+            num_of_products: 0,
+            num_of_price_updates: 0,
+            num_of_users: 0,
         }
     },
-    methods: {
-    },
-    props: {
-    }
+    methods: {},
+    props: {}
 })
 export default class AboutView extends Vue {
-    form = {
-        name: '',
-        email: '',
-        gender: '',
-        refer: '',
-        profession: [],
-        message: '',
-        satisfaction: '5',
-        interested: [],
-        terms: false
+    private identityStore = useIdentityStore()
+
+    get isAuthenticated (): boolean {
+        return this.identityStore.getJwt() !== null
     }
 
-    async submitForm () {
-        await HttpClient.post('/v1/about', this.form)
-            .then((res) => {
-                // Perform Success Action
-                console.log(res)
-            })
-            .catch((error) => {
-                // error.response.status Check status code
-                console.log(error)
-            }).finally(() => {
-                // Perform action in always
-                console.log("submit finished")
-            });
+    logoutClicked (): void {
+        this.identityStore.clearJwt()
+        router.push('/')
     }
 }
 </script>

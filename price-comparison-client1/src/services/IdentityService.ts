@@ -6,7 +6,7 @@ import type { IServiceResult } from './IServiceResult'
 import { ILoginInfo, IRegisterInfo } from '@/domain/ILoginInfo'
 
 export class IdentityService {
-    identityStore = useIdentityStore()
+    private identityStore = useIdentityStore()
 
     async login (loginInfo: ILoginInfo): Promise<IServiceResult<IJwtResponse>> {
         try {
@@ -16,44 +16,37 @@ export class IdentityService {
                 data: response.data as IJwtResponse
             }
         } catch (e) {
-            const response = {
-                status: (e as AxiosError).response!.status,
-                // errorMsg: (e as AxiosError).response!.data.error,
+            if ((e as AxiosError).response) {
+                return {
+                    status: (e as AxiosError).response!.status,
+                    errorMsg: (e as AxiosError).response!.statusText,
+                }
+            } else {
+                console.log((e as AxiosError).message);
+                return {
+                    status: 400,
+                    errorMsg: 'unknown: ' + (e as AxiosError).message,
+                }
             }
-
-            console.log(response)
-
-            console.log((e as AxiosError).response)
-
-            return response
         }
     }
 
     async refreshIdentity (): Promise<IServiceResult<IJwtResponse>> {
         try {
-            console.log(this.identityStore.$state.jwt)
-
-            const response = await httpCLient.post('/v1/auth/refresh',
-                {
-                    token: this.identityStore.$state.jwt?.token,
-                    refreshToken: this.identityStore.$state.jwt?.refreshToken
-                }
-            )
+            const response = await httpCLient.post('/v1/auth/refresh', {
+                token: this.identityStore.$state.jwt?.token,
+                refreshToken: this.identityStore.$state.jwt?.refreshToken
+            })
             return {
                 status: response.status,
-                data: response.data as IJwtResponse
+                data: response.data as IJwtResponse,
             }
         } catch (e) {
-            const response = {
-                status: (e as AxiosError).response!.status,
-                // errorMsg: (e as AxiosError).response!.data.error,
+            const err = e as AxiosError
+            return {
+                status: err.response!.status,
+                errorMsg: err.response!.statusText,
             }
-
-            console.log(response)
-
-            console.log((e as AxiosError).response)
-
-            return response
         }
     }
 
@@ -62,19 +55,14 @@ export class IdentityService {
             const response = await httpCLient.post('/v1/auth/register', registerInfo)
             return {
                 status: response.status,
-                data: response.data as IJwtResponse
+                data: response.data as IJwtResponse,
             }
         } catch (e) {
-            const response = {
-                status: (e as AxiosError).response!.status,
-                // errorMsg: (e as AxiosError).response!.data,
+            const err = e as AxiosError
+            return {
+                status: err.response!.status,
+                errorMsg: err.response!.statusText,
             }
-
-            console.log(response)
-
-            console.log((e as AxiosError).response)
-
-            return response
         }
     }
 }
