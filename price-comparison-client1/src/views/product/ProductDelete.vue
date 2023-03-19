@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { ProductService } from '@/services/ProductService'
-import { useProductsStore } from '@/stores/products'
+import { useProductStore } from '@/stores/productStore'
 import { Options, Vue } from 'vue-class-component'
 
 @Options({
@@ -36,7 +36,7 @@ import { Options, Vue } from 'vue-class-component'
 })
 export default class ProductDelete extends Vue {
     id!: string;
-    productsStore = useProductsStore()
+    productsStore = useProductStore()
     productService = new ProductService()
 
     errorMsg: string | null = null

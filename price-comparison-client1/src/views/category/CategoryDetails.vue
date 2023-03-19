@@ -51,12 +51,11 @@
 import { CategoryService } from '@/services/CategoryService'
 import { useCategoriesStore } from '@/stores/categories'
 import { Options, Vue } from 'vue-class-component'
-import { useProductsStore } from '@/stores/products'
+import { useProductStore } from '@/stores/productStore'
 import { ProductService } from '@/services/ProductService'
 import { useIdentityStore } from '@/stores/identity'
 import { ICategory } from '@/domain/ICategory'
 import { IProduct } from '@/domain/IProduct'
-import { IFormProductPage } from '@/domain/forms/IFormProductPage'
 
 @Options({
     components: {},
@@ -69,7 +68,7 @@ export default class CategoryDetails extends Vue {
     id!: string
     categoriesStore = useCategoriesStore()
     categoryService = new CategoryService()
-    productsStore = useProductsStore()
+    productsStore = useProductStore()
     productService = new ProductService()
     private identityStore = useIdentityStore()
     private form = {
@@ -91,8 +90,8 @@ export default class CategoryDetails extends Vue {
     name: string | undefined = ''
 
     async applyPriceRangeFilter (): Promise<void> {
-        this.products =
-            await this.productService.getAllByCategoryIdAndFilters(this.id, this.form as IFormProductPage)
+        // this.products =
+        //     await this.productService.getAllByCategoryIdAndFilters(this.id, this.form as IFormProductPage)
     }
 
     async mounted (): Promise<void> {
@@ -104,8 +103,8 @@ export default class CategoryDetails extends Vue {
             })
         this.categories =
             await this.categoryService.getAllByCategoryId(this.id)
-        this.products =
-            await this.productService.getAllByCategoryId(this.id)
+        // this.products =
+        //     await this.productService.getAllByCategoryId(this.id)
     }
 }
 

@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { ProductService } from '@/services/ProductService'
-import { useProductsStore } from '@/stores/products'
+import { useProductStore } from '@/stores/productStore'
 import { Options, Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
 
@@ -32,7 +32,7 @@ import { useIdentityStore } from '@/stores/identity'
 })
 export default class ProductIndex extends Vue {
     categoryId = "asd"
-    productsStore = useProductsStore()
+    productsStore = useProductStore()
     productService = new ProductService()
     private identityStore = useIdentityStore();
 

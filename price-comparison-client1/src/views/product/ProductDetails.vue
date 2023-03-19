@@ -55,7 +55,7 @@ import { Options, Vue } from 'vue-class-component'
 import vue3StarRatings from 'vue3-star-ratings'
 import { ProductService } from '@/services/ProductService'
 import { MerchandiseService } from '@/services/MerchandiseService'
-import { useProductsStore } from '@/stores/products'
+import { useProductStore } from '@/stores/productStore'
 import { useIdentityStore } from '@/stores/identity'
 import { IProduct } from '@/domain/IProduct'
 import { IMerchandise } from '@/domain/IMerchandise'
@@ -77,7 +77,7 @@ import { WishService } from '@/services/WishService'
 export default class ProductDetails extends Vue {
     id!: string
 
-    private productsStore = useProductsStore()
+    private productsStore = useProductStore()
     private productService = new ProductService()
     private merchandiseService = new MerchandiseService()
     private ratingService = new RatingService()

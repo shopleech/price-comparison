@@ -21,7 +21,12 @@
                     <input v-model="password" className="form-control" type="password"/>
                 </div>
                 <div class="form-group">
-                    <input @click="loginClicked()" type="submit" value="Login" class="btn btn-primary"/>
+                    <button @click="loginClicked" class="btn btn-primary">
+                        Login
+                    </button>
+                </div>
+                <div>
+                    Forgot your password?
                 </div>
             </div>
         </div>

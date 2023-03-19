@@ -1,49 +1,29 @@
 import type { IProduct } from '@/domain/IProduct'
 import httpCLient from '@/http-client'
 import { BaseService } from './BaseService'
-import { IFormProductPage } from '@/domain/forms/IFormProductPage'
+import { ISearchItem } from '@/domain/ISearchItem'
 
 export class ProductService extends BaseService<IProduct> {
     constructor () {
-        super('v1/products')
+        super('v1/product')
     }
 
-    async getAllByCategoryId (categoryId: string): Promise<IProduct[]> {
-        console.log('getAll')
+    async getAllByKeyword (searchEntity: ISearchItem) {
         let response
         try {
-            response = await httpCLient.get(`${this._path}`, {
-                headers: {
-                    CategoryId: categoryId,
-                    Authorization: 'Bearer ' + this.identityStore.$state.jwt?.token
-                }
-            })
-        } catch (e) {
-            // TODO
-            throw new TypeError('error with get all by category id')
-        }
-        console.log(response)
-
-        const res = response.data as IProduct[]
-        return res
-    }
-
-    async getAllByCategoryIdAndFilters (categoryId: string, form: IFormProductPage) : Promise<IProduct[]> {
-        console.log('getAll')
-        let response
-        try {
-            response = await httpCLient.get(`${this._path}`, {
+            response = await httpCLient.post(`${this._path}/search`, searchEntity, {
                 headers: {
                     Authorization: 'Bearer ' + this.identityStore.$state.jwt?.token
                 }
             })
         } catch (e) {
-            // TODO
-            throw new TypeError('error with get all by category id')
+            throw new TypeError('failed getting all by keyword')
         }
-        console.log(response)
 
-        const res = response.data as IProduct[]
-        return res
+        if (response.data.details) {
+            return response.data.details as IProduct[]
+        }
+
+        return [] as IProduct[]
     }
 }

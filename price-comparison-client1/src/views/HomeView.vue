@@ -10,15 +10,27 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <form>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Product barcode"
-                                   aria-label="Product title or barcode" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">Search</button>
-                            </div>
+                    <div class="input-group mb-3">
+                        <input v-model="keyword" type="text" class="form-control" placeholder="Product barcode"
+                               aria-label="Product title or barcode" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" @click="searchProductClicked" type="button">
+                                Search
+                            </button>
                         </div>
-                    </form>
+                    </div>
+                </div>
+            </div>
+            <div v-for="item of products" :key="item.id" class="border p-2 mb-4 row">
+                <div class="col-3">
+                    <img src="https://via.placeholder.com/50x50.png?text=product" alt="product"/>
+                </div>
+                <div class="col-6">
+                    <h3>
+                        <RouterLink :to="{ name: 'products-details', params: { id: item.id } }" class="text-dark">
+                            {{ item.name }}
+                        </RouterLink>
+                    </h3>
                 </div>
             </div>
             <div class="row fixed-bottom p-3">
@@ -79,6 +91,10 @@
 import { Options, Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
 import router from '@/router'
+import { ProductService } from '@/services/ProductService'
+import { useProductStore } from '@/stores/productStore'
+import { IProduct } from '@/domain/IProduct'
+import { ISearchItem } from '@/domain/ISearchItem'
 
 @Options({
     components: {},
@@ -87,13 +103,17 @@ import router from '@/router'
             num_of_products: 0,
             num_of_price_updates: 0,
             num_of_users: 0,
+            keyword: '',
         }
     },
     methods: {},
     props: {}
 })
-export default class AboutView extends Vue {
+export default class HomeView extends Vue {
     private identityStore = useIdentityStore()
+    private productStore = useProductStore()
+    private productService = new ProductService()
+    private keyword = ''
 
     get isAuthenticated (): boolean {
         return this.identityStore.getJwt() !== null
@@ -102,6 +122,13 @@ export default class AboutView extends Vue {
     logoutClicked (): void {
         this.identityStore.clearJwt()
         router.push('/')
+    }
+
+    products: IProduct[] | null = null
+
+    async searchProductClicked (): Promise<void> {
+        this.products =
+            await this.productService.getAllByKeyword({ keyword: this.keyword } as ISearchItem)
     }
 }
 </script>

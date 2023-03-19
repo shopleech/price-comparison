@@ -45,7 +45,7 @@
 import { CategoryService } from '@/services/CategoryService'
 import { CustomerService } from '@/services/CustomerService'
 import { ProductService } from '@/services/ProductService'
-import { useProductsStore } from '@/stores/products'
+import { useProductStore } from '@/stores/productStore'
 import { Options, Vue } from 'vue-class-component'
 import { IProduct } from '@/domain/IProduct'
 import { ICategory } from '@/domain/ICategory'
@@ -56,7 +56,7 @@ import { ICategory } from '@/domain/ICategory'
     emits: [],
 })
 export default class ProductCreate extends Vue {
-    productsStore = useProductsStore()
+    productsStore = useProductStore()
     productService = new ProductService()
     customerService = new CustomerService()
     categoryService = new CategoryService()

@@ -46,7 +46,9 @@
                     </div>
                 </div>
                 <div className="form-group">
-                    <input @click="registerClicked()" type="submit" value="Register" class="btn btn-primary"/>
+                    <button @click="registerClicked()" class="btn btn-primary">
+                        Register
+                    </button>
                 </div>
             </div>
         </div>
