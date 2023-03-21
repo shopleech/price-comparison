@@ -49,7 +49,7 @@
                     Number of products
                 </div>
                 <div class="col-4 col-md-2">
-                    {{ num_of_products }}
+                    {{ numOfProducts }}
                 </div>
             </div>
             <div class="row">
@@ -57,7 +57,7 @@
                     Number of price updates
                 </div>
                 <div class="col-4 col-md-2">
-                    {{ num_of_price_updates }}
+                    {{ numOfPriceUpdates }}
                 </div>
             </div>
             <div class="row">
@@ -65,7 +65,7 @@
                     Number of users
                 </div>
                 <div class="col-4 col-md-2">
-                    {{ num_of_users }}
+                    {{ numOfUsers }}
                 </div>
             </div>
             <div class="row">
@@ -95,14 +95,13 @@ import { ProductService } from '@/services/ProductService'
 import { useProductStore } from '@/stores/productStore'
 import { IProduct } from '@/domain/IProduct'
 import { ISearchItem } from '@/domain/ISearchItem'
+import { IPublicStats } from '@/domain/IPublicStats'
+import { StatsService } from '@/services/StatsService'
 
 @Options({
     components: {},
     data () {
         return {
-            num_of_products: 0,
-            num_of_price_updates: 0,
-            num_of_users: 0,
             keyword: '',
         }
     },
@@ -113,7 +112,11 @@ export default class HomeView extends Vue {
     private identityStore = useIdentityStore()
     private productStore = useProductStore()
     private productService = new ProductService()
+    private statsService = new StatsService()
     private keyword = ''
+    private numOfProducts: number | undefined = 0
+    private numOfPriceUpdates: number | undefined = 0
+    private numOfUsers: number | undefined = 0
 
     get isAuthenticated (): boolean {
         return this.identityStore.getJwt() !== null
@@ -125,10 +128,21 @@ export default class HomeView extends Vue {
     }
 
     products: IProduct[] | null = null
+    publicStats: IPublicStats | null = null
 
     async searchProductClicked (): Promise<void> {
         this.products =
             await this.productService.getAllByKeyword({ keyword: this.keyword } as ISearchItem)
+    }
+
+    async mounted (): Promise<void> {
+        console.log('mounted')
+
+        this.publicStats = await this.statsService.getPublicStats()
+
+        this.numOfProducts = this.publicStats?.numOfProducts
+        this.numOfPriceUpdates = this.publicStats?.numOfPriceUpdates
+        this.numOfUsers = this.publicStats?.numOfUsers
     }
 }
 </script>
