@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Ahto Jalak
@@ -14,12 +16,11 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
-@Table(name = "_roles")
+@Table(name = "role")
 public class Role {
 
     @Id
-    @Column(name = "role_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Integer id;
 
     private String name;
@@ -30,4 +31,7 @@ public class Role {
     private String createdBy;
     private Timestamp updatedAt;
     private String updatedBy;
+
+    @OneToMany(mappedBy = "role")
+    Set<UserRole> userRoles = new HashSet<>();
 }

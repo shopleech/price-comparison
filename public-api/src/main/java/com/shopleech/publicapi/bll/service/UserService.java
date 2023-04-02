@@ -4,19 +4,30 @@ import com.shopleech.publicapi.bll.MyUserDetails;
 import com.shopleech.publicapi.bll.dto.UserBLLDTO;
 import com.shopleech.publicapi.bll.mapper.UserBLLMapper;
 import com.shopleech.publicapi.bll.util.JwtTokenUtil;
-import com.shopleech.publicapi.dal.dto.UserDALDTO;
+import com.shopleech.publicapi.dal.mapper.UserDALMapper;
+import com.shopleech.publicapi.dal.repository.AccountRepository;
+import com.shopleech.publicapi.dal.repository.CustomerAccountRepository;
+import com.shopleech.publicapi.dal.repository.CustomerRepository;
 import com.shopleech.publicapi.dal.repository.UserRepository;
+import com.shopleech.publicapi.domain.Account;
+import com.shopleech.publicapi.domain.Customer;
+import com.shopleech.publicapi.domain.CustomerAccount;
 import com.shopleech.publicapi.domain.User;
 import com.shopleech.publicapi.dto.v1.UserRegisterDTO;
 import com.shopleech.publicapi.dto.v1.UserTokenDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.CredentialException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -32,29 +43,25 @@ public class UserService implements IUserService {
     UserRepository userRepository;
 
     @Autowired
+    UserRepository roleRepository;
+
+    @Autowired
+    CustomerRepository customerRepository;
+
+    @Autowired
+    AccountRepository accountRepository;
+
+    @Autowired
+    CustomerAccountRepository customerAccountRepository;
+
+    @Autowired
     private UserBLLMapper userBLLMapper;
 
     @Autowired
+    private UserDALMapper userDALMapper;
+
+    @Autowired
     private JwtTokenUtil jwtTokenUtil;
-
-    @Override
-    public UserBLLDTO createUser(UserBLLDTO userBLLDTO) throws Exception {
-
-        UserDALDTO userByEmail = userRepository.getUserByUsername(userBLLDTO.getEmail());
-        if (userByEmail != null) {
-            throw new RuntimeException("Record already exists");
-        }
-
-        UserDALDTO userDALDTO = userBLLMapper.mapToEntity(userBLLDTO);
-        userDALDTO.setPassword(new BCryptPasswordEncoder().encode(userBLLDTO.getPassword()));
-        userDALDTO.setFirstname(userBLLDTO.getFirstname());
-        userDALDTO.setLastname(userBLLDTO.getLastname());
-        // userDALDTO.setRoles(new ArrayList<Role>() { "USER" });
-
-        userRepository.addUser(userDALDTO);
-
-        return userBLLMapper.mapToDto(userDALDTO);
-    }
 
     @Override
     public UserBLLDTO getUser(String email) {
@@ -67,8 +74,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserBLLDTO updateUser(String userId, UserBLLDTO userBLLDTO) {
-        return null;
+    public UserBLLDTO updateUser(UserBLLDTO userBLLDTO) {
+
+        return userBLLMapper.mapToDto(userDALMapper.mapToDto(
+                userRepository.save(userDALMapper.mapToEntity(
+                        userBLLMapper.mapToEntity(userBLLDTO)))
+        ));
     }
 
     @Override
@@ -91,22 +102,55 @@ public class UserService implements IUserService {
             throw new CredentialException("email and password is a must");
         }
 
-        if (loadUserByUsername(request.getEmail()).isEnabled()) {
+        if (userRepository.isUsernameExist(request.getEmail()) > 0) {
             throw new Exception("user exists");
         }
 
-        UserBLLDTO user = new UserBLLDTO();
+        if (loadUserByUsername(request.getEmail()).isEnabled()) {
+            throw new Exception("user is enabled");
+        }
+
+        var user = new User();
         user.setFirstname(request.getFirstname());
         user.setLastname(request.getLastname());
         user.setEmail(request.getEmail());
         user.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
         user.setEnabled(true);
 
-        userRepository.addUser(userBLLMapper.mapToEntity(user));
-        UserDetails userDetails = loadUserByUsername(user.getEmail());
+        var customer = new Customer();
+        customer.setFirstName(user.getFirstname());
+        customer.setLastName(user.getLastname());
+        customer.setEmail(user.getEmail());
+        customer.setValidFrom(Timestamp.from(Instant.now()));
+        customer.setCreatedAt(Timestamp.from(Instant.now()));
+        customer.setUpdatedAt(Timestamp.from(Instant.now()));
+        var customerAdded = customerRepository.save(customer);
+
+        user.setCustomer(customerAdded);
+        user.setValidFrom(Timestamp.from(Instant.now()));
+        user.setCreatedAt(Timestamp.from(Instant.now()));
+        user.setUpdatedAt(Timestamp.from(Instant.now()));
+        var userAdded = userRepository.save(user);
+
+        var account = new Account();
+        account.setValidFrom(Timestamp.from(Instant.now()));
+        account.setCreatedAt(Timestamp.from(Instant.now()));
+        account.setUpdatedAt(Timestamp.from(Instant.now()));
+        var accountAdded = accountRepository.save(account);
+
+        var customerAccount = new CustomerAccount();
+        customerAccount.setCustomer(customerAdded);
+        customerAccount.setAccount(accountAdded);
+        customerAccount.setValidFrom(Timestamp.from(Instant.now()));
+        customerAccount.setCreatedAt(Timestamp.from(Instant.now()));
+        customerAccount.setUpdatedAt(Timestamp.from(Instant.now()));
+        var customerAccountAdded = customerAccountRepository.save(customerAccount);
+        logger.info(customerAccountAdded.toString());
+
+        var userDetails = loadUserByUsername(userAdded.getEmail());
         String token = jwtTokenUtil.generateToken(userDetails);
 
-        return new UserTokenDTO(token);
+        return new UserTokenDTO(token, userAdded.getEmail());
     }
 
     @Override
@@ -125,18 +169,25 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User getUserByUsername(String username) {
+        return userRepository.getUserByUsername(username);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) {
 
         logger.info("loadUserByUsername: " + username);
-        UserDALDTO user = new UserDALDTO();
 
-        try {
-            user = userRepository.getUserByUsername(username);
-            logger.info("user found");
-        } catch (Exception e) {
-            logger.info("user not found");
+        return new MyUserDetails(userRepository.getUserByUsername(username));
+    }
+
+    public static UserDetails currentUserDetails() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        if (authentication != null) {
+            Object principal = authentication.getPrincipal();
+            return principal instanceof UserDetails ? (UserDetails) principal : null;
         }
-
-        return new MyUserDetails(userBLLMapper.mapToDto(user));
+        return null;
     }
 }

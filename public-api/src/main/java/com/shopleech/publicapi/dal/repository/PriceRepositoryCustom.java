@@ -2,8 +2,6 @@ package com.shopleech.publicapi.dal.repository;
 
 import com.shopleech.publicapi.dal.dto.PriceDALDTO;
 
-import java.util.List;
-
 /**
  * @author Ahto Jalak
  * @since 07.02.2023
@@ -11,7 +9,9 @@ import java.util.List;
 public interface PriceRepositoryCustom {
     void addPrice(PriceDALDTO price);
 
-    PriceDALDTO getPriceById(Integer id);
+//    PriceDALDTO getPriceById(Integer id);
+//
+//    List<PriceDALDTO> getAllPrices();
 
-    List<PriceDALDTO> getAllPrices();
+    int getPriceUpdateCount();
 }

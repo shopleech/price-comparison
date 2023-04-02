@@ -1,21 +1,24 @@
 package com.shopleech.publicapi.bll.dto;
 
-import com.shopleech.base.config.type.WatchTypeCode;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.shopleech.base.config.type.WatchlistTypeCode;
+import lombok.*;
 
 /**
  * @author Ahto Jalak
  * @since 06.02.2023
  */
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class WatchlistBLLDTO {
 
     private Integer id;
-    private WatchTypeCode watchTypeCode;
+
+    private CustomerBLLDTO customer;
+
+    private ProductBLLDTO product;
+
+    private WatchlistTypeCode watchlistTypeCode;
 }

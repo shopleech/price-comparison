@@ -14,23 +14,40 @@ import java.util.stream.Collectors;
 @Component
 public class WatchlistDALMapper {
 
-    public List<WatchlistDALDTO> mapToDto(List<Watchlist> watchlists) {
-        return watchlists.stream()
+//    @Autowired
+//    CustomerDALMapper customerDALMapper;
+//    @Autowired
+//    ProductDALMapper productDALMapper;
+
+    public List<WatchlistDALDTO> mapToDto(List<Watchlist> entities) {
+        return entities.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
     }
 
     public WatchlistDALDTO mapToDto(Watchlist c) {
-        return new WatchlistDALDTO(
-                c.getId(),
-                c.getWatchTypeCode()
-        );
+
+        WatchlistDALDTO dto = new WatchlistDALDTO();
+        dto.setId(c.getId());
+        // dto.setCustomer(customerDALMapper.mapToDto(c.getCustomer()));
+        // dto.setProduct(productDALMapper.mapToDto(c.getProduct()));
+        dto.setWatchlistTypeCode(c.getWatchlistTypeCode());
+
+        return dto;
     }
 
-    public Watchlist mapToEntity(WatchlistDALDTO newWatchlist) {
-        Watchlist entity = new Watchlist();
-        entity.setId(newWatchlist.getId());
-        entity.setWatchTypeCode(newWatchlist.getWatchTypeCode());
-        return entity;
+    public List<Watchlist> mapToEntity(List<WatchlistDALDTO> entities) {
+        return entities.stream()
+                .map(this::mapToEntity).collect(Collectors.toList());
     }
 
+    public Watchlist mapToEntity(WatchlistDALDTO entity) {
+
+        Watchlist c = new Watchlist();
+        c.setId(entity.getId());
+//        c.setCustomer(customerDALMapper.mapToEntity(entity.getCustomer()));
+//        c.setProduct(productDALMapper.mapToEntity(entity.getProduct()));
+        c.setWatchlistTypeCode(entity.getWatchlistTypeCode());
+
+        return c;
+    }
 }

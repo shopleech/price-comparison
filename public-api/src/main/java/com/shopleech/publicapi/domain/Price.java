@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "_price")
+@Table(name = "price")
 public class Price {
 
     @Id
@@ -24,7 +24,8 @@ public class Price {
     private Integer id;
 
     @ManyToOne
-    private AccountProduct accountProduct;
+    @JoinColumn(name = "offer_id", nullable = false)
+    private Offer offer;
 
     private PriceTypeCode priceTypeCode;
     private Double quantity;

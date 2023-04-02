@@ -1,7 +1,6 @@
 package com.shopleech.publicapi.dto.v1;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,10 +9,9 @@ import lombok.NoArgsConstructor;
  * @since 04.02.2023
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserTokenDTO {
-
     private String token;
+    private String username;
 }

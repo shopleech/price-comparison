@@ -10,11 +10,9 @@ import lombok.NoArgsConstructor;
  * @since 04.02.2023
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserLoginDTO {
-
     private String email;
     private String password;
 }

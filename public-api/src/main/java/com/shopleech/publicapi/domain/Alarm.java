@@ -2,10 +2,7 @@ package com.shopleech.publicapi.domain;
 
 import com.shopleech.base.config.type.AlarmTypeCode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -18,7 +15,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
-@Table(name = "_alarm")
+@Table(name = "alarm")
 public class Alarm {
 
     @Id
@@ -26,9 +23,11 @@ public class Alarm {
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     private AlarmTypeCode alarmTypeCode;

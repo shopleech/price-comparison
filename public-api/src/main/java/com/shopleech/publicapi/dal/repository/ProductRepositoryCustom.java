@@ -1,6 +1,7 @@
 package com.shopleech.publicapi.dal.repository;
 
 import com.shopleech.publicapi.dal.dto.ProductDALDTO;
+import com.shopleech.publicapi.dal.dto.ShopDALDTO;
 
 import java.util.List;
 
@@ -17,4 +18,10 @@ public interface ProductRepositoryCustom {
     List<ProductDALDTO> getAllProducts();
 
     List<ProductDALDTO> getAllProductsByKeyword(String keyword);
+
+    int getProductCount();
+
+    void addShop(String shopName);
+
+    ShopDALDTO getShopByName(String shopName);
 }

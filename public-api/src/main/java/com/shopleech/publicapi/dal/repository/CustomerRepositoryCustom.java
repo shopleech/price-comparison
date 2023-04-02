@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface CustomerRepositoryCustom {
 
-    void addCustomer(CustomerDALDTO mapToEntity);
+    CustomerDALDTO addCustomer(CustomerDALDTO mapToEntity);
 
     CustomerDALDTO getCustomerById(Integer id);
 

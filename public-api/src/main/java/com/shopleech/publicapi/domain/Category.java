@@ -1,9 +1,12 @@
 package com.shopleech.publicapi.domain;
 
+import com.shopleech.base.config.type.CategoryTypeCode;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Ahto Jalak
@@ -14,7 +17,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
-@Table(name = "_category")
+@Table(name = "category")
 public class Category {
 
     @Id
@@ -22,9 +25,11 @@ public class Category {
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "parent_category_id", nullable = true)
     private Category parentCategory;
 
     private String name;
+    private CategoryTypeCode categoryTypeCode;
 
     private Timestamp validFrom;
     private Timestamp validTo;
@@ -32,4 +37,10 @@ public class Category {
     private String createdBy;
     private Timestamp updatedAt;
     private String updatedBy;
+
+    @OneToMany(mappedBy="category")
+    private Set<Product> products = new HashSet<>();
+
+    @OneToMany(mappedBy="parentCategory")
+    private Set<Category> categories = new HashSet<>();
 }

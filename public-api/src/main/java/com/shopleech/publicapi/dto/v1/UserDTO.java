@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
  * @since 24.01.2023
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {

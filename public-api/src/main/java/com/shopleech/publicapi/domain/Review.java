@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
-@Table(name = "_review")
+@Table(name = "review")
 public class Review {
 
     @Id
@@ -23,10 +23,12 @@ public class Review {
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     @ManyToOne
-    private AccountProduct accountProduct;
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     private ReviewTypeCode reviewTypeCode;
     private Integer score;

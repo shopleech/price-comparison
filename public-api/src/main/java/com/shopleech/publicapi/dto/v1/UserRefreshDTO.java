@@ -10,11 +10,9 @@ import lombok.NoArgsConstructor;
  * @since 16.03.2023
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRefreshDTO {
-
     private String token;
     private String refreshToken;
 }

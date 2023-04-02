@@ -20,8 +20,8 @@ public class AccountService {
 
     protected AccountBLLMapper accountMapper;
 
-    public void createAccount(AccountBLLDTO data) {
-        accountRepository.addAccount(accountMapper.mapToEntity(data));
+    public AccountBLLDTO createAccount(AccountBLLDTO data) {
+        return accountMapper.mapToDto(accountRepository.addAccount(accountMapper.mapToEntity(data)));
     }
 
     public AccountBLLDTO get(int id) {

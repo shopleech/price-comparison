@@ -1,9 +1,7 @@
 package com.shopleech.publicapi.dal.dto;
 
-import com.shopleech.base.config.type.WatchTypeCode;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.shopleech.base.config.type.WatchlistTypeCode;
+import lombok.*;
 
 /**
  * @author Ahto Jalak
@@ -12,8 +10,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class WatchlistDALDTO {
 
     private Integer id;
-    private WatchTypeCode watchTypeCode;
+
+//    private CustomerDALDTO customer;
+
+//    private ProductDALDTO product;
+
+    private WatchlistTypeCode watchlistTypeCode;
 }

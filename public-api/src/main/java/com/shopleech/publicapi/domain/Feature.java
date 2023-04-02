@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
-@Table(name = "_feature")
+@Table(name = "feature")
 public class Feature {
 
     @Id
@@ -23,7 +23,8 @@ public class Feature {
     private Integer id;
 
     @ManyToOne
-    private AccountProduct accountProduct;
+    @JoinColumn(name = "offer_id", nullable = false)
+    private Offer offer;
 
     private FeatureTypeCode featureTypeCode;
     private String name;

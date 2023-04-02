@@ -2,12 +2,10 @@ package com.shopleech.publicapi.domain;
 
 import com.shopleech.base.config.type.BarcodeTypeCode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -19,18 +17,24 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "_account_product")
-public class AccountProduct {
+@Table(name = "offer")
+public class Offer {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
     @ManyToOne
+    @JoinColumn(name = "product_id", nullable = true)
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_id", nullable = true)
+    private Shop shop;
 
     private String barcode;
     private BarcodeTypeCode barcodeTypeCode;
@@ -45,23 +49,12 @@ public class AccountProduct {
     private Timestamp updatedAt;
     private String updatedBy;
 
-    @OneToMany
-    @JoinColumn(name = "account_product_id", referencedColumnName = "id")
-    private Set<Review> reviews;
+    @OneToMany(mappedBy="offer")
+    private Set<Feature> features = new HashSet<>();
 
-    @OneToMany
-    @JoinColumn(name = "account_product_id", referencedColumnName = "id")
-    private Set<Feature> features;
+    @OneToMany(mappedBy="offer")
+    private Set<Price> prices = new HashSet<>();
 
-    @OneToMany
-    @JoinColumn(name = "account_product_id", referencedColumnName = "id")
-    private Set<Price> prices;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy="offer")
+    private Set<Metric> metrics = new HashSet<>();
 }

@@ -1,21 +1,24 @@
 package com.shopleech.publicapi.bll.dto;
 
 import com.shopleech.base.config.type.StatusTypeCode;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author Ahto Jalak
  * @since 24.01.2023
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class AccountBLLDTO {
 
-    private Integer id;
-    private StatusTypeCode status;
+    public Integer id;
+
+    public StatusTypeCode status;
+
+//    public List<CustomerAccountBLLDTO> customerAccounts;
+//
+//    public List<OfferBLLDTO> offers;
 }

@@ -1,10 +1,7 @@
 package com.shopleech.publicapi.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
@@ -19,31 +16,22 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "_users")
+@Table(name = "_user")
 public class User {
 
     @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = true)
+    private Customer customer;
+
     private String firstname;
-
     private String lastname;
-
     private String email;
-
     private String password;
-
     private boolean enabled;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "_users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles = new HashSet<>();
 
     private Timestamp validFrom;
     private Timestamp validTo;
@@ -51,4 +39,7 @@ public class User {
     private String createdBy;
     private Timestamp updatedAt;
     private String updatedBy;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserRole> userRoles = new HashSet<>();
 }

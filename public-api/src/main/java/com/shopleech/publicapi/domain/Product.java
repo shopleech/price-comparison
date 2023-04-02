@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,7 +18,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "_product")
+@Table(name = "product")
 public class Product {
 
     @Id
@@ -25,6 +26,7 @@ public class Product {
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     private ProductTypeCode productTypeCode;
@@ -40,15 +42,18 @@ public class Product {
     private Timestamp updatedAt;
     private String updatedBy;
 
-    @OneToMany
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Set<Watchlist> watchlists;
+    @OneToMany(mappedBy="product")
+    private Set<Watchlist> watchlists = new HashSet<>();;
 
-    @OneToMany
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Set<Alarm> alarms;
+    @OneToMany(mappedBy="product")
+    private Set<Alarm> alarms = new HashSet<>();
 
-    @OneToMany
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Set<AccountProduct> accountProducts;
+    @OneToMany(mappedBy="product")
+    private Set<Review> reviews = new HashSet<>();
+
+    @OneToMany(mappedBy="product")
+    private Set<Offer> offers = new HashSet<>();
+
+    @OneToMany(mappedBy="product")
+    private Set<Metric> metrics = new HashSet<>();
 }

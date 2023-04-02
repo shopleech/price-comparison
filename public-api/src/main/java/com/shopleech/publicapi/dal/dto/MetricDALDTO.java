@@ -1,9 +1,7 @@
 package com.shopleech.publicapi.dal.dto;
 
 import com.shopleech.base.config.type.MetricTypeCode;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author Ahto Jalak
@@ -12,9 +10,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class MetricDALDTO {
 
     private Integer id;
+
+//    private ProductDALDTO product;
+
+//    private OfferDALDTO offer;
+
+//    private CategoryDALDTO category;
+
     private MetricTypeCode metricTypeCode;
     private Double quantity;
 }

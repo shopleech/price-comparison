@@ -1,8 +1,7 @@
 package com.shopleech.publicapi.dto.v1;
 
-import com.shopleech.base.config.type.WatchTypeCode;
+import com.shopleech.base.config.type.WatchlistTypeCode;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,11 +10,9 @@ import lombok.NoArgsConstructor;
  * @since 24.01.2023
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class WatchlistDTO {
-
     private Integer id;
-    private WatchTypeCode watchTypeCode;
+    private WatchlistTypeCode watchlistTypeCode;
 }

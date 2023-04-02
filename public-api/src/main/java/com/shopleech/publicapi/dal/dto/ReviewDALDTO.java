@@ -1,9 +1,7 @@
 package com.shopleech.publicapi.dal.dto;
 
 import com.shopleech.base.config.type.ReviewTypeCode;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author Ahto Jalak
@@ -12,9 +10,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class ReviewDALDTO {
 
     private Integer id;
+
+//    private CustomerDALDTO customer;
+
+//    private ProductDALDTO product;
+
     private ReviewTypeCode reviewTypeCode;
     private Integer score;
     private String description;

@@ -1,22 +1,25 @@
 package com.shopleech.publicapi.bll.dto;
 
 import com.shopleech.base.config.type.AlarmTypeCode;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author Ahto Jalak
  * @since 07.02.2023
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class AlarmBLLDTO {
 
     private Integer id;
+
+    private CustomerBLLDTO customer;
+
+    private ProductBLLDTO product;
+
     private AlarmTypeCode alarmTypeCode;
     private Double minValue;
     private Double maxValue;

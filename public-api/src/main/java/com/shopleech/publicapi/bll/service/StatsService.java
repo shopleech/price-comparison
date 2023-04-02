@@ -1,8 +1,7 @@
 package com.shopleech.publicapi.bll.service;
 
 import com.shopleech.publicapi.bll.dto.StatsBLLDTO;
-import com.shopleech.publicapi.bll.mapper.ProductBLLMapper;
-import com.shopleech.publicapi.bll.mapper.UserBLLMapper;
+import com.shopleech.publicapi.dal.repository.PriceRepository;
 import com.shopleech.publicapi.dal.repository.ProductRepository;
 import com.shopleech.publicapi.dal.repository.UserRepository;
 import org.slf4j.Logger;
@@ -26,16 +25,13 @@ public class StatsService implements IStatsService {
     private ProductRepository productRepository;
 
     @Autowired
-    private UserBLLMapper userBLLMapper;
-
-    @Autowired
-    private ProductBLLMapper productBLLMapper;
+    private PriceRepository priceRepository;
 
     public StatsBLLDTO getPublicStats() {
         StatsBLLDTO stats = new StatsBLLDTO();
-        stats.setNumOfProducts(1);
-        stats.setNumOfPriceUpdates(2);
-        stats.setNumOfUsers(3);
+        stats.setNumOfProducts(productRepository.getProductCount());
+        stats.setNumOfPriceUpdates(priceRepository.getPriceUpdateCount());
+        stats.setNumOfUsers(userRepository.getUserCount());
         return stats;
     }
 }

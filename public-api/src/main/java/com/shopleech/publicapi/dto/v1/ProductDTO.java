@@ -3,7 +3,6 @@ package com.shopleech.publicapi.dto.v1;
 import com.shopleech.base.config.type.BarcodeTypeCode;
 import com.shopleech.base.config.type.ProductTypeCode;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
  * @since 24.01.2023
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDTO {

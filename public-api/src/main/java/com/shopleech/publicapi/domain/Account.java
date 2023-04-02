@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,19 +18,12 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "_account")
+@Table(name = "account")
 public class Account extends BaseDomainEntityMetaId {
 
     @Id
     @GeneratedValue
     private Integer id;
-
-    @ManyToMany
-    @JoinTable(name = "_customer_account",
-            joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    )
-    private Set<Customer> customers;
 
     private StatusTypeCode status;
 
@@ -39,4 +33,10 @@ public class Account extends BaseDomainEntityMetaId {
     private String createdBy;
     private Timestamp updatedAt;
     private String updatedBy;
+
+    @OneToMany(mappedBy = "account")
+    Set<CustomerAccount> customerAccounts = new HashSet<>();
+
+    @OneToMany(mappedBy = "account")
+    private Set<Offer> offers = new HashSet<>();
 }

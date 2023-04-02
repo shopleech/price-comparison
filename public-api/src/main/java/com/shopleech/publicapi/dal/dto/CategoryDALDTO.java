@@ -1,8 +1,7 @@
 package com.shopleech.publicapi.dal.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.shopleech.base.config.type.CategoryTypeCode;
+import lombok.*;
 
 /**
  * @author Ahto Jalak
@@ -11,8 +10,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class CategoryDALDTO {
 
     private Integer id;
+
+//    private CategoryDALDTO parentCategory;
+
     private String name;
+    private CategoryTypeCode categoryTypeCode;
+
+//    private List<ProductDALDTO> products;
+
+//    private List<CategoryDALDTO> categories;
 }

@@ -5,6 +5,7 @@ import com.shopleech.publicapi.domain.User;
 import com.shopleech.publicapi.dto.v1.UserRegisterDTO;
 import com.shopleech.publicapi.dto.v1.UserTokenDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,12 +15,12 @@ import java.util.List;
  */
 public interface IUserService extends UserDetailsService {
 
-    public UserBLLDTO createUser(UserBLLDTO userBLLDTO) throws Exception;
-    public UserBLLDTO getUser(String email);
-    public UserBLLDTO getUserByUserId(String userId);
-    public UserBLLDTO updateUser(String userId,UserBLLDTO userBLLDTO);
-    public void deleteUser(String userId);
-    public List<UserBLLDTO> getUsers(int page, int limit);
+    //UserBLLDTO createUser(UserBLLDTO userBLLDTO) throws Exception;
+    UserBLLDTO getUser(String email);
+    UserBLLDTO getUserByUserId(String userId);
+    UserBLLDTO updateUser(UserBLLDTO userBLLDTO);
+    void deleteUser(String userId);
+    List<UserBLLDTO> getUsers(int page, int limit);
 
     UserTokenDTO register(UserRegisterDTO request) throws Exception;
 
@@ -30,4 +31,6 @@ public interface IUserService extends UserDetailsService {
     List<UserBLLDTO> findUsers();
 
     User post(User user);
+
+    User getUserByUsername(String username) throws Exception;
 }

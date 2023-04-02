@@ -2,6 +2,12 @@ package com.shopleech.publicapi.dal.repository;
 
 import com.shopleech.publicapi.dal.dto.AccountDALDTO;
 import com.shopleech.publicapi.dal.mapper.AccountDALMapper;
+import com.shopleech.publicapi.domain.Account;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -9,24 +15,35 @@ import java.util.List;
  * @author Ahto Jalak
  * @since 06.02.2023
  */
+@Repository
 public class AccountRepositoryImpl implements AccountRepositoryCustom {
 
-    private AccountRepository accountRepository;
-
+    @Autowired
     private AccountDALMapper accountDALMapper;
 
+    @PersistenceContext
+    EntityManager em;
+
     @Override
-    public void addAccount(AccountDALDTO account) {
-        // accountRepository.add(accountDALMapper.mapToEntity(account));
+    public AccountDALDTO addAccount(AccountDALDTO account) {
+        return null;
     }
 
     @Override
     public AccountDALDTO getAccountById(Integer id) {
-        return accountDALMapper.mapToDto(accountRepository.getReferenceById(id));
+        return null;
     }
 
     @Override
     public List<AccountDALDTO> getAllAccounts() {
-        return accountDALMapper.mapToDto(accountRepository.findAll());
+        TypedQuery<Account> query = em.createQuery("select p from Account p", Account.class);
+        List<Account> accounts = query.getResultList();
+
+        return accountDALMapper.mapToDto(accounts);
+    }
+
+    @Override
+    public Account createAccount(AccountDALDTO account) {
+        return null;
     }
 }

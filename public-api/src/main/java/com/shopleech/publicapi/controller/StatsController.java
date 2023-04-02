@@ -22,7 +22,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/v1/stats")
 public class StatsController {
-
     Logger logger = LoggerFactory.getLogger(StatsController.class);
 
     @Autowired

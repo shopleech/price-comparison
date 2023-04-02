@@ -22,14 +22,14 @@ public class WatchlistMapper {
     public WatchlistDTO mapToDto(WatchlistBLLDTO c) {
         return new WatchlistDTO(
                 c.getId(),
-                c.getWatchTypeCode()
+                c.getWatchlistTypeCode()
         );
     }
 
     public WatchlistBLLDTO mapToEntity(WatchlistDTO newWatchlist) {
         WatchlistBLLDTO entity = new WatchlistBLLDTO();
         entity.setId(newWatchlist.getId());
-        entity.setWatchTypeCode(newWatchlist.getWatchTypeCode());
+        entity.setWatchlistTypeCode(newWatchlist.getWatchlistTypeCode());
         return entity;
     }
 

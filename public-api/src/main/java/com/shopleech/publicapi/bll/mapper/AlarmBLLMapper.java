@@ -14,28 +14,46 @@ import java.util.stream.Collectors;
 @Component
 public class AlarmBLLMapper {
 
+//    @Autowired
+//    CustomerBLLMapper customerBLLMapper;
+//    @Autowired
+//    ProductBLLMapper productBLLMapper;
+
     public List<AlarmBLLDTO> mapToDto(List<AlarmDALDTO> alarms) {
         return alarms.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
     }
 
     public AlarmBLLDTO mapToDto(AlarmDALDTO c) {
-        return new AlarmBLLDTO(
-                c.getId(),
-                c.getAlarmTypeCode(),
-                c.getMinValue(),
-                c.getMaxValue(),
-                c.getName()
-        );
+
+        AlarmBLLDTO dto = new AlarmBLLDTO();
+        dto.setId(c.getId());
+//        dto.setCustomer(customerBLLMapper.mapToDto(c.getCustomer()));
+//        dto.setProduct(productBLLMapper.mapToDto(c.getProduct()));
+        dto.setAlarmTypeCode(c.getAlarmTypeCode());
+        dto.setMinValue(c.getMinValue());
+        dto.setMaxValue(c.getMaxValue());
+        dto.setName(c.getName());
+
+        return dto;
+    }
+
+    public List<AlarmDALDTO> mapToEntity(List<AlarmBLLDTO> alarms) {
+        return alarms.stream()
+                .map(this::mapToEntity).collect(Collectors.toList());
     }
 
     public AlarmDALDTO mapToEntity(AlarmBLLDTO newAlarm) {
+
         AlarmDALDTO entity = new AlarmDALDTO();
         entity.setId(newAlarm.getId());
+//        entity.setCustomer(customerBLLMapper.mapToEntity(newAlarm.getCustomer()));
+//        entity.setProduct(productBLLMapper.mapToEntity(newAlarm.getProduct()));
         entity.setAlarmTypeCode(newAlarm.getAlarmTypeCode());
         entity.setMinValue(newAlarm.getMinValue());
         entity.setMaxValue(newAlarm.getMaxValue());
         entity.setName(newAlarm.getName());
+
         return entity;
     }
 }

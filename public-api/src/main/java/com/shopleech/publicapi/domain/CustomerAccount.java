@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
-@Table(name = "_customer_account")
+@Table(name = "customer_account")
 public class CustomerAccount {
 
     @Id
@@ -22,9 +22,11 @@ public class CustomerAccount {
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
     private Timestamp validFrom;

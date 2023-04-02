@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.domain;
 
-import com.shopleech.base.config.type.WatchTypeCode;
+import com.shopleech.base.config.type.WatchlistTypeCode;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
-@Table(name = "_watchlist")
+@Table(name = "watchlist")
 public class Watchlist {
 
     @Id
@@ -23,12 +23,14 @@ public class Watchlist {
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    private WatchTypeCode watchTypeCode;
+    private WatchlistTypeCode watchlistTypeCode;
 
     private Timestamp validFrom;
     private Timestamp validTo;

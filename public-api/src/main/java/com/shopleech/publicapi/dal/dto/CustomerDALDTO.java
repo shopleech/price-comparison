@@ -1,9 +1,7 @@
 package com.shopleech.publicapi.dal.dto;
 
 import com.shopleech.base.config.type.StatusTypeCode;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author Ahto Jalak
@@ -12,13 +10,26 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class CustomerDALDTO {
 
     private Integer id;
+
     private String personalCode;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
     private StatusTypeCode status;
+
+//    private UserDALDTO user;
+
+//    private List<CustomerAccountDALDTO> customerAccounts;
+
+//    private List<WatchlistDALDTO> watchlists;
+
+//    private List<AlarmDALDTO> alarms;
+
+//    private List<ReviewDALDTO> reviews;
 }

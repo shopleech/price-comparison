@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -16,22 +17,12 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "_customer")
+@Table(name = "customer")
 public class Customer {
 
     @Id
     @GeneratedValue
     private Integer id;
-
-    @ManyToOne
-    private User user;
-
-    @ManyToMany
-    @JoinTable(name = "_customer_account",
-            joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id")
-    )
-    private Set<Account> accounts;
 
     private String personalCode;
     private String firstName;
@@ -47,15 +38,18 @@ public class Customer {
     private Timestamp updatedAt;
     private String updatedBy;
 
-    @OneToMany
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private Set<Watchlist> watchlists;
+    @OneToMany(mappedBy = "customer")
+    private Set<User> users = new HashSet<>();
 
-    @OneToMany
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private Set<Alarm> alarms;
+    @OneToMany(mappedBy = "customer")
+    private Set<CustomerAccount> customerAccounts = new HashSet<>();
 
-    @OneToMany
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private Set<Review> reviews;
+    @OneToMany(mappedBy = "customer")
+    private Set<Watchlist> watchlists = new HashSet<>();
+
+    @OneToMany(mappedBy = "customer")
+    private Set<Alarm> alarms = new HashSet<>();
+
+    @OneToMany(mappedBy = "customer")
+    private Set<Review> reviews = new HashSet<>();
 }

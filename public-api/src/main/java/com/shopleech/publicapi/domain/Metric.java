@@ -3,10 +3,7 @@ package com.shopleech.publicapi.domain;
 import com.shopleech.base.config.type.MetricTypeCode;
 import com.shopleech.base.domain.BaseDomainEntityMetaId;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -20,7 +17,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
-@Table(name = "_metric")
+@Table(name = "metric")
 public class Metric extends BaseDomainEntityMetaId {
 
     @Id
@@ -28,12 +25,15 @@ public class Metric extends BaseDomainEntityMetaId {
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "product_id", nullable = true)
     private Product product;
 
     @ManyToOne
-    private AccountProduct accountProduct;
+    @JoinColumn(name = "offer_id", nullable = true)
+    private Offer offer;
 
     @ManyToOne
+    @JoinColumn(name = "category_id", nullable = true)
     private Category category;
 
     private MetricTypeCode metricTypeCode;

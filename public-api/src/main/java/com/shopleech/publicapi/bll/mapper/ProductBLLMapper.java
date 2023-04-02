@@ -14,30 +14,63 @@ import java.util.stream.Collectors;
 @Component
 public class ProductBLLMapper {
 
+//    @Autowired
+//    CategoryBLLMapper categoryBLLMapper;
+//    @Autowired
+//    WatchlistBLLMapper watchlistBLLMapper;
+//    @Autowired
+//    AlarmBLLMapper alarmBLLMapper;
+//    @Autowired
+//    ReviewBLLMapper reviewBLLMapper;
+//    @Autowired
+//    OfferBLLMapper offerBLLMapper;
+//    @Autowired
+//    MetricBLLMapper metricBLLMapper;
+
     public List<ProductBLLDTO> mapToDto(List<ProductDALDTO> products) {
         return products.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
     }
 
     public ProductBLLDTO mapToDto(ProductDALDTO c) {
-        return new ProductBLLDTO(
-                c.getId(),
-                c.getProductTypeCode(),
-                c.getBarcode(),
-                c.getBarcodeTypeCode(),
-                c.getName(),
-                c.getDescription()
-        );
+        ProductBLLDTO dto = new ProductBLLDTO();
+        dto.setId(c.getId());
+        // categoryBLLDALMapper.mapToDto(c.getCategory()),
+        dto.setProductTypeCode(c.getProductTypeCode());
+        dto.setBarcode(c.getBarcode());
+        dto.setBarcodeTypeCode(c.getBarcodeTypeCode());
+        dto.setName(c.getName());
+        dto.setDescription(c.getDescription());
+        // watchlistBLLMapper.mapToDto(c.getWatchlists()),
+        // alarmBLLMapper.mapToDto(c.getAlarms()),
+        // reviewBLLMapper.mapToDto(c.getReviews()),
+        // offerBLLMapper.mapToDto(c.getOffers()),
+        // metricBLLMapper.mapToDto(c.getMetrics())
+
+        return dto;
+    }
+
+    public List<ProductDALDTO> mapToEntity(List<ProductBLLDTO> products) {
+        return products.stream()
+                .map(this::mapToEntity).collect(Collectors.toList());
     }
 
     public ProductDALDTO mapToEntity(ProductBLLDTO newProduct) {
+
         ProductDALDTO entity = new ProductDALDTO();
         entity.setId(newProduct.getId());
+        // entity.setCategory(categoryBLLMapper.mapToEntity(newProduct.getCategory()));
         entity.setProductTypeCode(newProduct.getProductTypeCode());
         entity.setBarcode(newProduct.getBarcode());
         entity.setBarcodeTypeCode(newProduct.getBarcodeTypeCode());
         entity.setName(newProduct.getName());
         entity.setDescription(newProduct.getDescription());
+        // entity.setWatchlists(watchlistBLLMapper.mapToEntity(newProduct.getWatchlists()));
+        // entity.setAlarms(alarmBLLMapper.mapToEntity(newProduct.getAlarms()));
+        // entity.setReviews(reviewBLLMapper.mapToEntity(newProduct.getReviews()));
+        // entity.setOffers(offerBLLMapper.mapToEntity(newProduct.getOffers()));
+        // entity.setMetrics(metricBLLMapper.mapToEntity(newProduct.getMetrics()));
+
         return entity;
     }
 }

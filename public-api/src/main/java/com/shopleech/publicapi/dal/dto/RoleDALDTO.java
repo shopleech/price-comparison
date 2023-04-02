@@ -9,6 +9,13 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class RoleDALDTO {
+
+    private Integer id;
+
     private String name;
+
+//    List<UserRoleDALDTO> userRoles;
 }

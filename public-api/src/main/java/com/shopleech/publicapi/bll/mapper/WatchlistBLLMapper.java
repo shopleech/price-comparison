@@ -2,6 +2,7 @@ package com.shopleech.publicapi.bll.mapper;
 
 import com.shopleech.publicapi.bll.dto.WatchlistBLLDTO;
 import com.shopleech.publicapi.dal.dto.WatchlistDALDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,23 +15,40 @@ import java.util.stream.Collectors;
 @Component
 public class WatchlistBLLMapper {
 
-    public List<WatchlistBLLDTO> mapToDto(List<WatchlistDALDTO> accounts) {
-        return accounts.stream()
+//    @Autowired
+//    CustomerBLLMapper customerBLLMapper;
+//    @Autowired
+//    ProductBLLMapper productBLLMapper;
+
+    public List<WatchlistBLLDTO> mapToDto(List<WatchlistDALDTO> entities) {
+        return entities.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
     }
 
     public WatchlistBLLDTO mapToDto(WatchlistDALDTO c) {
-        return new WatchlistBLLDTO(
-                c.getId(),
-                c.getWatchTypeCode()
-        );
+
+        WatchlistBLLDTO dto = new WatchlistBLLDTO();
+        dto.setId(c.getId());
+        // customerBLLMapper.mapToDto(c.getCustomer()),
+        // productBLLMapper.mapToDto(c.getProduct()),
+        dto.setWatchlistTypeCode(c.getWatchlistTypeCode());
+
+        return dto;
     }
 
-    public WatchlistDALDTO mapToEntity(WatchlistBLLDTO newWatchlist) {
-        WatchlistDALDTO entity = new WatchlistDALDTO();
-        entity.setId(newWatchlist.getId());
-        entity.setWatchTypeCode(newWatchlist.getWatchTypeCode());
-        return entity;
+    public List<WatchlistDALDTO> mapToEntity(List<WatchlistBLLDTO> entities) {
+        return entities.stream()
+                .map(this::mapToEntity).collect(Collectors.toList());
     }
 
+    public WatchlistDALDTO mapToEntity(WatchlistBLLDTO entity) {
+
+        WatchlistDALDTO c = new WatchlistDALDTO();
+        c.setId(entity.getId());
+//        c.setCustomer(customerBLLMapper.mapToEntity(entity.getCustomer()));
+//        c.setProduct(productBLLMapper.mapToEntity(entity.getProduct()));
+        c.setWatchlistTypeCode(entity.getWatchlistTypeCode());
+
+        return c;
+    }
 }

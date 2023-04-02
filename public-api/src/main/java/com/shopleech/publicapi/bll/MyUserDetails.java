@@ -1,7 +1,11 @@
 package com.shopleech.publicapi.bll;
 
+import com.shopleech.publicapi.bll.dto.RoleBLLDTO;
 import com.shopleech.publicapi.bll.dto.UserBLLDTO;
+import com.shopleech.publicapi.bll.dto.UserRoleBLLDTO;
 import com.shopleech.publicapi.domain.Role;
+import com.shopleech.publicapi.domain.User;
+import com.shopleech.publicapi.domain.UserRole;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,20 +22,20 @@ import java.util.Set;
  * @author Ahto Jalak
  * @since 25.02.2023
  */
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class MyUserDetails implements UserDetails {
 
-    private UserBLLDTO user;
+    private User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Logger logger = LoggerFactory.getLogger(MyUserDetails.class);
-        Set<Role> roles = user.getRoles();
+        Set<UserRole> userRoles = user.getUserRoles();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-        for (Role role : roles) {
+        for (UserRole userRole : userRoles) {
+            Role role = userRole.getRole();
             logger.info(role.getName());
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }

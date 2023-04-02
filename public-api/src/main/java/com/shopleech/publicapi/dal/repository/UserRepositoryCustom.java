@@ -1,5 +1,6 @@
 package com.shopleech.publicapi.dal.repository;
 
+import com.shopleech.publicapi.dal.dto.RoleDALDTO;
 import com.shopleech.publicapi.dal.dto.UserDALDTO;
 
 import java.util.List;
@@ -10,11 +11,15 @@ import java.util.List;
  */
 public interface UserRepositoryCustom {
 
-    void addUser(UserDALDTO user);
+    UserDALDTO addUser(UserDALDTO user);
 
     UserDALDTO getUserById(Integer id);
 
     List<UserDALDTO> getAllUsers();
 
-    UserDALDTO getUserByUsername(String username);
+    int getUserCount();
+
+    RoleDALDTO getRole(String user);
+
+    UserDALDTO updateUser(UserDALDTO mapToEntity);
 }

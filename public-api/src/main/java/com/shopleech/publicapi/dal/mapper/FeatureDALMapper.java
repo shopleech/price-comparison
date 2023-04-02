@@ -14,27 +14,41 @@ import java.util.stream.Collectors;
 @Component
 public class FeatureDALMapper {
 
+//    @Autowired
+//    OfferDALMapper offerDALMapper;
+
     public List<FeatureDALDTO> mapToDto(List<Feature> features) {
         return features.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
     }
 
     public FeatureDALDTO mapToDto(Feature c) {
-        return new FeatureDALDTO(
-                c.getId(),
-                c.getFeatureTypeCode(),
-                c.getName(),
-                c.getDescription()
-        );
+
+        FeatureDALDTO dto = new FeatureDALDTO();
+        dto.setId(c.getId());
+        //offerDALMapper.mapToDto(c.getOffer())
+        dto.setFeatureTypeCode(c.getFeatureTypeCode());
+        dto.setName(c.getName());
+        dto.setDescription(c.getName());
+
+        return dto;
     }
 
-    public Feature mapToEntity(FeatureDALDTO newFeature) {
-        Feature entity = new Feature();
-        entity.setId(newFeature.getId());
-        entity.setFeatureTypeCode(newFeature.getFeatureTypeCode());
-        entity.setName(newFeature.getName());
-        entity.setDescription(newFeature.getDescription());
-        return entity;
+    public List<Feature> mapToEntity(List<FeatureDALDTO> features) {
+        return features.stream()
+                .map(this::mapToEntity).collect(Collectors.toList());
+    }
+
+    public Feature mapToEntity(FeatureDALDTO entity) {
+
+        Feature c = new Feature();
+        c.setId(entity.getId());
+//        c.setOffer(offerDALMapper.mapToEntity(entity.getOffer()));
+        c.setFeatureTypeCode(entity.getFeatureTypeCode());
+        c.setName(entity.getName());
+        c.setDescription(entity.getDescription());
+
+        return c;
     }
 
 }

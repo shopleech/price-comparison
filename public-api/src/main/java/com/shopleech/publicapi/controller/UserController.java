@@ -1,5 +1,8 @@
 package com.shopleech.publicapi.controller;
 
+import com.shopleech.publicapi.bll.service.AccountService;
+import com.shopleech.publicapi.bll.service.CustomerAccountService;
+import com.shopleech.publicapi.bll.service.CustomerService;
 import com.shopleech.publicapi.bll.service.UserService;
 import com.shopleech.publicapi.bll.util.JwtTokenUtil;
 import com.shopleech.publicapi.dto.v1.UserLoginDTO;
@@ -34,7 +37,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Tag(name = "User Controller", description = "Endpoint for user access")
 public class UserController {
-
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
@@ -42,6 +44,15 @@ public class UserController {
 
     @Autowired
     private UserService userDetailsService;
+
+    @Autowired
+    private CustomerService customerService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private CustomerAccountService customerAccountService;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -76,15 +87,18 @@ public class UserController {
         } catch (DisabledException e) {
             responseMap.put("error", true);
             responseMap.put("message", "user_is_disabled");
+            responseMap.put("message_meta", e.getMessage());
             return ResponseEntity.status(500).body(responseMap);
         } catch (BadCredentialsException e) {
             responseMap.put("error", true);
             responseMap.put("message", "invalid_credentials");
+            responseMap.put("message_meta", e.getMessage());
             return ResponseEntity.status(401).body(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);
             if ("consent is missing".equals(e.getMessage())) {
                 responseMap.put("message", "consent_is_missing");
+                responseMap.put("message_meta", e.getMessage());
             } else {
                 responseMap.put("message", "something_went_wrong");
                 responseMap.put("message_meta", e.getMessage());
@@ -97,8 +111,7 @@ public class UserController {
             summary = "User login",
             responses = @ApiResponse(responseCode = "200", description = "Access token returned"))
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(
-            @RequestBody UserLoginDTO request) throws Exception {
+    public ResponseEntity<?> authenticate(@RequestBody UserLoginDTO request) {
         logger.info("login request + " + request.toString());
 
         Map<String, Object> responseMap = new HashMap<>();
@@ -126,14 +139,17 @@ public class UserController {
         } catch (DisabledException e) {
             responseMap.put("error", true);
             responseMap.put("message", "user_is_disabled");
+            responseMap.put("message_meta", e.getMessage());
             return ResponseEntity.status(500).body(responseMap);
         } catch (BadCredentialsException e) {
             responseMap.put("error", true);
             responseMap.put("message", "invalid_credentials");
+            responseMap.put("message_meta", e.getMessage());
             return ResponseEntity.status(401).body(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);
             responseMap.put("message", "something_went_wrong");
+            responseMap.put("message_meta", e.getMessage());
             return ResponseEntity.status(500).body(responseMap);
         }
     }
