@@ -5,13 +5,18 @@
     </div>
 
     <div>
-        <RouterLink :to="{ name: 'wishes' }">Back to Wishes</RouterLink>
+        <RouterLink :to="{ name: 'wishes' }">Back to Featurees</RouterLink>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -19,7 +24,8 @@ import { Options, Vue } from 'vue-class-component'
     },
     emits: [],
 })
-export default class WishEdit extends Vue {
+export default class FeatureEdit extends Vue {
+    private logger = new Logger(FeatureEdit.name)
     id!: string
 }
 </script>

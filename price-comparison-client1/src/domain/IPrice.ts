@@ -1,8 +1,12 @@
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 export interface IPrice {
-    id?: string;
-    merchandiseId?: string;
+    id?: number;
+    offerId?: number;
     priceTypeCode?: string;
-    quantity?: string;
-    amount?: string;
+    quantity?: number;
+    amount?: number;
     currency?: string;
 }

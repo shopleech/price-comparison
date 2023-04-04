@@ -24,30 +24,35 @@
 
 <script lang="ts">
 import { AlarmService } from '@/services/AlarmService'
-import { useAlarmsStore } from '@/stores/alarms'
+import { useAlarmStore } from '@/stores/alarm'
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
 export default class AlarmCreate extends Vue {
-    alarmsStore = useAlarmsStore()
+    private logger = new Logger(AlarmCreate.name)
+    alarmsStore = useAlarmStore()
     alarmService = new AlarmService()
     // alarmService = new AlarmService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
         const res = await this.alarmService.add(
-            {
-            }
+            {}
         )
 
-        if (res.status >= 300) {
+        if (res.status == null || res.status >= 300) {
             this.errorMsg = res.status + ' ' + res.errorMsg
         } else {
             // this.alarmsStore.$state.alarms =

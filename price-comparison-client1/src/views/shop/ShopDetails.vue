@@ -13,15 +13,20 @@
     </div>
 
     <div>
-        <RouterLink :to="{ name: 'ratings' }">Back to Ratings</RouterLink>
+        <RouterLink :to="{ name: 'ratings' }">Back to Shops</RouterLink>
     </div>
 </template>
 
 <script lang="ts">
-import { RatingService } from '@/services/RatingService'
-import { useRatingsStore } from '@/stores/ratings'
 import { Options, Vue } from 'vue-class-component'
+import { useShopStore } from '@/stores/shop'
+import { ShopService } from '@/services/ShopService'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 31.03.2023
+ */
 @Options({
     components: {},
     props: {
@@ -29,15 +34,16 @@ import { Options, Vue } from 'vue-class-component'
     },
     emits: [],
 })
-export default class RatingDetails extends Vue {
-    id!: string;
-    ratingsStore = useRatingsStore()
-    ratingService = new RatingService()
+export default class ShopDetails extends Vue {
+    private logger = new Logger(ShopDetails.name)
+    id!: string
+    shopStore = useShopStore()
+    shopService = new ShopService()
 
     async mounted (): Promise<void> {
-        console.log('mounted')
-        this.ratingsStore.$state.rating =
-            await this.ratingService.get(this.id);
+        this.logger.info('mounted')
+        this.shopStore.$state.shop =
+            await this.shopService.get(this.id)
     }
 }
 

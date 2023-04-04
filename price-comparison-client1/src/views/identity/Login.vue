@@ -40,7 +40,12 @@ import { Options, Vue } from 'vue-class-component'
 import { ILoginInfo } from '@/domain/ILoginInfo'
 import router from '@/router'
 import { IResponseMessage } from '@/domain/IResponseMessage'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     data () {
@@ -52,6 +57,7 @@ import { IResponseMessage } from '@/domain/IResponseMessage'
     emits: [],
 })
 export default class Login extends Vue {
+    private logger = new Logger(Login.name)
     private identityStore = useIdentityStore()
     private loginWasOk: boolean | null = null
     private errorMsg: string | null = null
@@ -59,15 +65,15 @@ export default class Login extends Vue {
     private password = ''
 
     loginClicked (): void {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
         const loginInfo: ILoginInfo = {
             email: this.email,
             password: this.password
         }
         this.identityStore.authenticateUser(loginInfo)
             .then((response: IResponseMessage) => {
-                console.log(response)
                 this.loginWasOk = response.errorMsg == null
+
                 if (this.loginWasOk) {
                     router.push('/')
                 } else {
@@ -80,35 +86,35 @@ export default class Login extends Vue {
 
     // ============ Lifecycle methods ==========
     beforeCreate (): void {
-        console.log('beforeCreate')
+        this.logger.info('beforeCreate')
     }
 
     created (): void {
-        console.log('created')
+        this.logger.info('created')
     }
 
     beforeMount (): void {
-        console.log('beforeMount')
+        this.logger.info('beforeMount')
     }
 
     mounted (): void {
-        console.log('mounted')
+        this.logger.info('mounted')
     }
 
     beforeUpdate (): void {
-        console.log('beforeUpdate')
+        this.logger.info('beforeUpdate')
     }
 
     updated (): void {
-        console.log('updated')
+        this.logger.info('updated')
     }
 
     beforeDestroy (): void {
-        console.log('beforeDestroy')
+        this.logger.info('beforeDestroy')
     }
 
     destroyed (): void {
-        console.log('destroyed')
+        this.logger.info('destroyed')
     }
 }
 </script>

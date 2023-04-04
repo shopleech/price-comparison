@@ -29,20 +29,26 @@
 
 <script lang="ts">
 import { CustomerService } from '@/services/CustomerService'
-import { useCustomersStore } from '@/stores/customers'
+import { useCustomerStore } from '@/stores/customer'
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
 export default class CustomerIndex extends Vue {
-    customersStore = useCustomersStore()
+    private logger = new Logger(CustomerIndex.name)
+    customersStore = useCustomerStore()
     customerService = new CustomerService()
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         this.customersStore.$state.customers =
             await this.customerService.getAll()
     }

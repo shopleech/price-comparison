@@ -24,9 +24,14 @@
 
 <script lang="ts">
 import { CustomerService } from '@/services/CustomerService'
-import { useCustomersStore } from '@/stores/customers'
+import { useCustomerStore } from '@/stores/customer'
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -35,16 +40,17 @@ import { Options, Vue } from 'vue-class-component'
     emits: [],
 })
 export default class CustomerDelete extends Vue {
-    id!: string;
-    customersStore = useCustomersStore()
+    private logger = new Logger(CustomerDelete.name)
+    id!: string
+    customersStore = useCustomerStore()
     customerService = new CustomerService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
-        const res = await this.customerService.delete(this.id);
+        await this.customerService.delete(this.id)
 
         /*
         if (res.status >= 300) {

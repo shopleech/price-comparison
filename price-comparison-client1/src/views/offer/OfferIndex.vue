@@ -42,19 +42,25 @@
 </template>
 
 <script lang="ts">
-import { MerchandiseService } from '@/services/MerchandiseService'
-import { useMerchandisesStore } from '@/stores/merchandises'
+import { OfferService } from '@/services/OfferService'
 import { Options, Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
+import { useOfferStore } from '@/stores/offer'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
-export default class MerchandiseIndex extends Vue {
-    merchandisesStore = useMerchandisesStore()
-    merchandiseService = new MerchandiseService()
+export default class OfferIndex extends Vue {
+    private logger = new Logger(OfferIndex.name)
+    merchandisesStore = useOfferStore()
+    merchandiseService = new OfferService()
     private identityStore = useIdentityStore()
 
     get isAuthenticated (): boolean {
@@ -65,13 +71,13 @@ export default class MerchandiseIndex extends Vue {
         return this.identityStore.isAdmin()
     }
 
-    limitArray (length = 3) {
-        return this.merchandisesStore.$state.merchandises
+    limitArray () {
+        return this.merchandisesStore.$state.offers
     }
 
     async mounted (): Promise<void> {
-        console.log('mounted')
-        this.merchandisesStore.$state.merchandises =
+        this.logger.info('mounted')
+        this.merchandisesStore.$state.offers =
             await this.merchandiseService.getAll()
     }
 }

@@ -28,22 +28,29 @@
 </template>
 
 <script lang="ts">
-import { WishService } from '@/services/WishService'
-import { useWishesStore } from '@/stores/wishes'
 import { Options, Vue } from 'vue-class-component'
+import { RoleService } from '@/services/RoleService'
+import { useRoleStore } from '@/stores/role'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
-export default class WishIndex extends Vue {
-    wishesStore = useWishesStore()
-    wishService = new WishService()
+export default class RoleIndex extends Vue {
+    private logger = new Logger(RoleIndex.name)
+
+    wishesStore = useRoleStore()
+    wishService = new RoleService()
 
     async mounted (): Promise<void> {
-        console.log('mounted')
-        this.wishesStore.$state.wishes =
+        this.logger.info('mounted')
+        this.wishesStore.$state.roles =
             await this.wishService.getAll()
     }
 }

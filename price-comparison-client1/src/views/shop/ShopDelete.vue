@@ -18,16 +18,21 @@
     </div>
 
     <div>
-        <RouterLink :to="{ name: 'ratings' }">Back to Ratings</RouterLink>
+        <RouterLink :to="{ name: 'ratings' }">Back to Shops</RouterLink>
     </div>
 </template>
 
 <script lang="ts">
-import { RatingService } from '@/services/RatingService'
-import { useRatingsStore } from '@/stores/ratings'
 import { Options, Vue } from 'vue-class-component'
 import router from '@/router'
+import { ShopService } from '@/services/ShopService'
+import { useShopStore } from '@/stores/shop'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 31.03.2023
+ */
 @Options({
     components: {},
     props: {
@@ -35,31 +40,31 @@ import router from '@/router'
     },
     emits: [],
 })
-export default class RatingDelete extends Vue {
+export default class ShopDelete extends Vue {
+    private logger = new Logger(ShopDelete.name)
     id!: string
-    ratingsStore = useRatingsStore()
-    ratingService = new RatingService()
+    shopStore = useShopStore()
+    ratingService = new ShopService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
         await this.ratingService
             .delete(this.id)
-            .then(entity => {
-                console.log(entity.id)
-                router.push('/ratings')
+            .then(() => {
+                router.push('/shop')
             })
 
         /*
         if (res.status >= 300) {
             this.errorMsg = res.status + ' ' + res.errorMsg
         } else {
-            this.ratingsStore.$state.ratings =
+            this.shopStore.$state.shops =
                 await this.ratingService.getAll()
 
-            this.$router.push('/ratings')
+            this.$router.push('/shop')
         }
          */
     }

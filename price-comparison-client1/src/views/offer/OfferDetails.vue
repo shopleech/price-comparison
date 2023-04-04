@@ -13,15 +13,20 @@
     </div>
 
     <div>
-        <RouterLink :to="{ name: 'merchandises' }">Back to Merchandises</RouterLink>
+        <RouterLink :to="{ name: 'merchandises' }">Back to Offers</RouterLink>
     </div>
 </template>
 
 <script lang="ts">
-import { MerchandiseService } from '@/services/MerchandiseService'
-import { useMerchandisesStore } from '@/stores/merchandises'
+import { OfferService } from '@/services/OfferService'
 import { Options, Vue } from 'vue-class-component'
+import { useOfferStore } from '@/stores/offer'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -29,15 +34,16 @@ import { Options, Vue } from 'vue-class-component'
     },
     emits: [],
 })
-export default class MerchandiseDetails extends Vue {
-    id!: string;
-    merchandisesStore = useMerchandisesStore()
-    merchandiseService = new MerchandiseService()
+export default class OfferDetails extends Vue {
+    private logger = new Logger(OfferDetails.name)
+    id!: string
+    merchandisesStore = useOfferStore()
+    merchandiseService = new OfferService()
 
     async mounted (): Promise<void> {
-        console.log('mounted')
-        this.merchandisesStore.$state.merchandise =
-            await this.merchandiseService.get(this.id);
+        this.logger.info('mounted')
+        this.merchandisesStore.$state.offer =
+            await this.merchandiseService.get(this.id)
     }
 }
 

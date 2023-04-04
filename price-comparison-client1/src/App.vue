@@ -10,12 +10,14 @@
 import { Options, Vue } from 'vue-class-component'
 import router from '@/router/index'
 import { useIdentityStore } from '@/stores/identity'
+import Logger from '@/logger'
 
 @Options({
     // don't forget to register imported components
     components: {},
 })
 export default class App extends Vue {
+    private logger = new Logger(App.name)
     private identityStore = useIdentityStore()
 
     get isAuthenticated (): boolean {
@@ -30,7 +32,7 @@ export default class App extends Vue {
     refreshTokenClicked (): void {
         this.identityStore.refreshUser().then(async value => {
             if (value) {
-                console.log('token refresh')
+                this.logger.info('token refresh')
             }
         })
         router.push('/')
@@ -41,7 +43,7 @@ export default class App extends Vue {
 <style>
 @import './assets/base.css';
 
-html,body {
+html, body {
     height: 100%;
 }
 

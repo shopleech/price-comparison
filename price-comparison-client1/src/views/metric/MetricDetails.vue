@@ -13,15 +13,20 @@
     </div>
 
     <div>
-        <RouterLink :to="{ name: 'wishes' }">Back to Wishes</RouterLink>
+        <RouterLink :to="{ name: 'wishes' }">Back to Metrices</RouterLink>
     </div>
 </template>
 
 <script lang="ts">
-import { WishService } from '@/services/WishService'
-import { useWishesStore } from '@/stores/wishes'
 import { Options, Vue } from 'vue-class-component'
+import { MetricService } from '@/services/MetricService'
+import { useMetricStore } from '@/stores/metric'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -29,15 +34,16 @@ import { Options, Vue } from 'vue-class-component'
     },
     emits: [],
 })
-export default class WishDetails extends Vue {
-    id!: string;
-    wishesStore = useWishesStore()
-    wishService = new WishService()
+export default class MetricDetails extends Vue {
+    private logger = new Logger(MetricDetails.name)
+    id!: string
+    wishesStore = useMetricStore()
+    wishService = new MetricService()
 
     async mounted (): Promise<void> {
-        console.log('mounted')
-        this.wishesStore.$state.wish =
-            await this.wishService.get(this.id);
+        this.logger.info('mounted')
+        this.wishesStore.$state.metric =
+            await this.wishService.get(this.id)
     }
 }
 

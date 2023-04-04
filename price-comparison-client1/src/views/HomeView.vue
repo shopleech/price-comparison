@@ -4,8 +4,13 @@
             <h3>Price comparison app</h3>
             <hr/>
             <div class="row">
-                <div class="col-12">
-
+                <div class="col-6">
+                    <RouterLink :to="{ name: 'shop-create' }" class="text-dark">
+                        Add store
+                    </RouterLink>
+                </div>
+                <div>
+                    Import prices in bulk
                 </div>
             </div>
             <div class="row">
@@ -89,15 +94,19 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { useIdentityStore } from '@/stores/identity'
 import router from '@/router'
 import { ProductService } from '@/services/ProductService'
-import { useProductStore } from '@/stores/productStore'
 import { IProduct } from '@/domain/IProduct'
 import { ISearchItem } from '@/domain/ISearchItem'
 import { IPublicStats } from '@/domain/IPublicStats'
 import { StatsService } from '@/services/StatsService'
+import { IdentityService } from '@/services/IdentityService'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     data () {
@@ -109,22 +118,27 @@ import { StatsService } from '@/services/StatsService'
     props: {}
 })
 export default class HomeView extends Vue {
-    private identityStore = useIdentityStore()
-    private productStore = useProductStore()
+    private logger = new Logger(HomeView.name)
+
+    private identityService = new IdentityService()
+
     private productService = new ProductService()
+
     private statsService = new StatsService()
+
     private keyword = ''
     private numOfProducts: number | undefined = 0
     private numOfPriceUpdates: number | undefined = 0
     private numOfUsers: number | undefined = 0
 
     get isAuthenticated (): boolean {
-        return this.identityStore.getJwt() !== null
+        return this.identityService.isAuthenticated()
     }
 
-    logoutClicked (): void {
-        this.identityStore.clearJwt()
-        router.push('/')
+    async logoutClicked (): Promise<void> {
+        this.logger.info('trying to logout')
+        await this.identityService.logout()
+        await router.push('/')
     }
 
     products: IProduct[] | null = null
@@ -136,7 +150,7 @@ export default class HomeView extends Vue {
     }
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
 
         this.publicStats = await this.statsService.getPublicStats()
 

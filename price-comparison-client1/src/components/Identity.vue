@@ -18,7 +18,6 @@
 
 <script>
 import { Options, Vue } from 'vue-class-component'
-import router from '@/router'
 
 @Options({
     components: {},

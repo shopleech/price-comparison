@@ -49,14 +49,19 @@
 
 <script lang="ts">
 import { CategoryService } from '@/services/CategoryService'
-import { useCategoriesStore } from '@/stores/categories'
+import { useCategoryStore } from '@/stores/category'
 import { Options, Vue } from 'vue-class-component'
-import { useProductStore } from '@/stores/productStore'
+import { useProductStore } from '@/stores/product'
 import { ProductService } from '@/services/ProductService'
 import { useIdentityStore } from '@/stores/identity'
 import { ICategory } from '@/domain/ICategory'
 import { IProduct } from '@/domain/IProduct'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -65,8 +70,9 @@ import { IProduct } from '@/domain/IProduct'
     emits: [],
 })
 export default class CategoryDetails extends Vue {
+    private logger = new Logger(CategoryDetails.name)
     id!: string
-    categoriesStore = useCategoriesStore()
+    categoriesStore = useCategoryStore()
     categoryService = new CategoryService()
     productsStore = useProductStore()
     productService = new ProductService()
@@ -95,7 +101,7 @@ export default class CategoryDetails extends Vue {
     }
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         this.category =
             await this.categoryService.get(this.id).then(c => {
                 this.name = c.name

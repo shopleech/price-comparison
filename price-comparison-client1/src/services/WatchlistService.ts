@@ -1,19 +1,21 @@
-import type { IWish } from '@/domain/IWish'
+import type { IWatchlist } from '@/domain/IWatchlist'
 import httpCLient from '@/http-client'
 import { BaseService } from './BaseService'
 import { AxiosError } from 'axios'
 
-export class WishService extends BaseService<IWish> {
-    constructor() {
-        super("v1/Wishes");
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
+export class WatchlistService extends BaseService<IWatchlist> {
+    constructor () {
+        super('v1/watchlist')
     }
 
-    async addProductToWishlist (productId: string) {
-        console.log('add')
+    async addProductToWishlist () {
+        this.logger.info('add')
 
-        const entity: IWish = {
-            productId: productId,
-        }
+        const entity: IWatchlist = {}
 
         let response
         try {
@@ -22,10 +24,9 @@ export class WishService extends BaseService<IWish> {
             )
         } catch (e) {
             const res = {
-                status: (e as AxiosError).response!.status,
-                // errorMsg: (e as AxiosError).response!.data.error,
+                status: (e as AxiosError).response?.status,
+                errorMsg: (e as AxiosError).response?.data.error,
             }
-            console.log(res)
 
             return res
         }

@@ -24,9 +24,14 @@
 
 <script lang="ts">
 import { AlarmService } from '@/services/AlarmService'
-import { useAlarmsStore } from '@/stores/alarms'
+import { useAlarmStore } from '@/stores/alarm'
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -35,16 +40,17 @@ import { Options, Vue } from 'vue-class-component'
     emits: [],
 })
 export default class AlarmDelete extends Vue {
-    id!: string;
-    alarmsStore = useAlarmsStore()
+    private logger = new Logger(AlarmDelete.name)
+    id!: string
+    alarmsStore = useAlarmStore()
     alarmService = new AlarmService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
-        const res = await this.alarmService.delete(this.id);
+        await this.alarmService.delete(this.id)
 
         /*
         if (res.status >= 300) {

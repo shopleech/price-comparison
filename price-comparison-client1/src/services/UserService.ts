@@ -1,20 +1,21 @@
-import type { IRating } from '@/domain/IRating'
 import httpCLient from '@/http-client'
 import { BaseService } from './BaseService'
 import { AxiosError } from 'axios'
+import { IUser } from '@/domain/IUser'
 
-export class RatingService extends BaseService<IRating> {
-    constructor() {
-        super("v1/ratings");
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
+export class UserService extends BaseService<IUser> {
+    constructor () {
+        super('v1/user')
     }
 
     async addMerchandiseRating (merchandiseId: string) {
-        console.log('add')
+        this.logger.info('add')
 
-        const entity: IRating = {
-            merchandiseId: merchandiseId,
-            score: 5
-        }
+        const entity: IUser = {}
 
         let response
         try {
@@ -23,10 +24,9 @@ export class RatingService extends BaseService<IRating> {
             )
         } catch (e) {
             const res = {
-                status: (e as AxiosError).response!.status,
-                // errorMsg: (e as AxiosError).response!.data.error,
+                status: (e as AxiosError).response?.status,
+                errorMsg: (e as AxiosError).response?.data.error,
             }
-            console.log(res)
 
             return res
         }

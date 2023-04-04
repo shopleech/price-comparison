@@ -11,7 +11,12 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -20,6 +25,7 @@ import { Options, Vue } from 'vue-class-component'
     emits: [],
 })
 export default class ProductEdit extends Vue {
+    private logger = new Logger(ProductEdit.name)
     id!: string
 }
 </script>

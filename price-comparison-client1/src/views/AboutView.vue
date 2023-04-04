@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2> Cheat Sheet Samples </h2>
-        <div> {{result}} </div>
+        <div> {{ result }}</div>
         <form v-on:submit.prevent="submitForm">
             <div class="form-group">
                 <label for="name">Name</label>
@@ -13,7 +13,7 @@
                        v-model="form.email">
             </div>
             <div class="form-group">
-                <label for="formControlRange">Gender</label><br />
+                <label for="formControlRange">Gender</label><br/>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="gender" id="gender-male" value="male"
                            v-model="form.gender">
@@ -46,7 +46,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="formControlRange">Which of our service are you interested in?</label><br />
+                <label for="formControlRange">Which of our service are you interested in?</label><br/>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="online"
                            v-model="form.interested">
@@ -89,10 +89,14 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import HttpClient from '@/http-client'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
-    components: {
-    },
+    components: {},
     data () {
         return {
             result: null
@@ -110,6 +114,7 @@ import HttpClient from '@/http-client'
     }
 })
 export default class AboutView extends Vue {
+    private logger = new Logger(AboutView.name)
     form = {
         name: '',
         email: '',
@@ -124,17 +129,17 @@ export default class AboutView extends Vue {
 
     async submitForm () {
         await HttpClient.post('/about', this.form)
-            .then((res) => {
+            .then(() => {
                 // Perform Success Action
-                console.log(res)
+                this.logger.info('success')
             })
             .catch((error) => {
                 // error.response.status Check status code
-                console.log(error)
+                this.logger.info(error)
             }).finally(() => {
                 // Perform action in always
-                console.log("submit finished")
-            });
+                this.logger.info('submit finished')
+            })
     }
 }
 </script>

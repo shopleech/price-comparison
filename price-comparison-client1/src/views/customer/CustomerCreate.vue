@@ -24,30 +24,35 @@
 
 <script lang="ts">
 import { CustomerService } from '@/services/CustomerService'
-import { useCustomersStore } from '@/stores/customers'
+import { useCustomerStore } from '@/stores/customer'
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
 export default class CustomerCreate extends Vue {
-    customersStore = useCustomersStore()
+    private logger = new Logger(CustomerCreate.name)
+    customersStore = useCustomerStore()
     customerService = new CustomerService()
     // customerService = new CustomerService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
         const res = await this.customerService.add(
-            {
-            }
+            {}
         )
 
-        if (res.status >= 300) {
+        if (res.status == null || res.status >= 300) {
             this.errorMsg = res.status + ' ' + res.errorMsg
         } else {
             // this.customersStore.$state.customers =

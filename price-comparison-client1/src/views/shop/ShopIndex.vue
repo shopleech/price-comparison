@@ -20,7 +20,7 @@
                         <p>Score: {{ item.score }}</p>
                     </div>
                     <div class="col-3">
-                        <a href="#" @click="clickToRatingDelete(item.id)">
+                        <a href="#" @click="clickToShopDelete(item.id)">
                             Delete
                         </a>
                     </div>
@@ -31,25 +31,31 @@
 </template>
 
 <script lang="ts">
-import { RatingService } from '@/services/RatingService'
-import { MerchandiseService } from '@/services/MerchandiseService'
-import { useRatingsStore } from '@/stores/ratings'
+import { OfferService } from '@/services/OfferService'
 import { Options, Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
-import { IRating } from '@/domain/IRating'
+import { IReview } from '@/domain/IReview'
 import router from '@/router'
+import { useShopStore } from '@/stores/shop'
+import { ShopService } from '@/services/ShopService'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 31.03.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
-export default class RatingIndex extends Vue {
-    private ratingsStore = useRatingsStore()
-    private ratingService = new RatingService()
-    private merchandiseService = new MerchandiseService()
+export default class ShopIndex extends Vue {
+    private logger = new Logger(ShopIndex.name)
+    private shopStore = useShopStore()
+    private shopService = new ShopService()
+    private offerService = new OfferService()
     private identityStore = useIdentityStore()
-    public ratings: IRating[] = []
+    public ratings: IReview[] = []
 
     get isAuthenticated (): boolean {
         return this.identityStore.getJwt() !== null
@@ -60,23 +66,22 @@ export default class RatingIndex extends Vue {
     }
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         this.ratings =
-            await this.ratingService.getAll()
+            await this.shopService.getAll()
     }
 
     clickToProduct (merchandiseId: string): void {
-        this.merchandiseService.get(merchandiseId)
+        this.offerService.get(merchandiseId)
             .then(y => {
-                console.log(y)
                 router.push('/products/details/' + y.productId)
             })
     }
 
-    clickToRatingDelete(ratingId: string) : void {
-        this.ratingService.delete(ratingId)
-            .then(y => {
-                console.log(y)
+    clickToShopDelete (ratingId: string): void {
+        this.shopService.delete(ratingId)
+            .then(() => {
+                this.logger.log('success')
                 router.push('/ratings')
             })
     }

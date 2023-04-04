@@ -1,9 +1,12 @@
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 export interface IProduct {
-    id?: string;
-    categoryId?: string;
+    id?: number;
+    categoryId?: number;
     productTypeCode?: string;
     barcode?: string;
     name?: string;
     description?: string;
-    bestPrice?: number;
 }

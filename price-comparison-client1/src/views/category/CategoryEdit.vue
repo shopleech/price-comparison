@@ -8,7 +8,8 @@
             <div class="row">
                 <div class="col-md-12">
 
-                    <div v-if="errorMsg != null" class="text-danger validation-summary-errors" data-valmsg-summary="true">
+                    <div v-if="errorMsg != null" class="text-danger validation-summary-errors"
+                         data-valmsg-summary="true">
                         <ul>
                             <li>{{ errorMsg }}</li>
                         </ul>
@@ -31,9 +32,14 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { useCategoriesStore } from '@/stores/categories'
+import { useCategoryStore } from '@/stores/category'
 import { CategoryService } from '@/services/CategoryService'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -43,34 +49,35 @@ import { CategoryService } from '@/services/CategoryService'
     emits: [],
 })
 export default class CategoryCreate extends Vue {
-    id!: string;
+    private logger = new Logger(CategoryCreate.name)
+    id!: string
     categoryName!: string
     errorMsg: string | null = null
-    categoriesStore = useCategoriesStore()
+    categoriesStore = useCategoryStore()
     categoryService = new CategoryService()
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
         const x = await this.categoryService.get(this.id)
         x.name = this.categoryName
 
         const res = await this.categoryService.update(this.id, x)
 
-        if (res.status >= 300) {
+        if (res.status == null || res.status >= 300) {
             this.errorMsg = res.status + ' ' + res.errorMsg
         } else {
             this.categoriesStore.$state.category =
-                await this.categoryService.get(this.id);
+                await this.categoryService.get(this.id)
             this.$router.push(`/categories/details/${this.id}`)
         }
     }
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         const x = await this.categoryService.get(this.id)
-        this.categoryName = x.name ?? ""
-        this.categoriesStore.$state.category = x;
+        this.categoryName = x.name ?? ''
+        this.categoriesStore.$state.category = x
     }
 }
 </script>

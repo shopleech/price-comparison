@@ -34,18 +34,24 @@
 
 <script lang="ts">
 import { CategoryService } from '@/services/CategoryService'
-import { useCategoriesStore } from '@/stores/categories'
+import { useCategoryStore } from '@/stores/category'
 import { Options, Vue } from 'vue-class-component'
 import { ICategory } from '@/domain/ICategory'
 import router from '@/router'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
 export default class CategoryCreate extends Vue {
-    categoriesStore = useCategoriesStore()
+    private logger = new Logger(CategoryCreate.name)
+    categoriesStore = useCategoryStore()
     categoryService = new CategoryService()
 
     categories: ICategory[] = []
@@ -54,22 +60,22 @@ export default class CategoryCreate extends Vue {
     errorMsg: string | null = null
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         this.categories.push({
-            id: "",
-            name: "--- no parent category ---"
+            id: '',
+            name: '--- no parent category ---'
         })
         this.categories = await this.categoryService.getAll()
     }
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
         const category = {
             parentCategoryId: this.categoryParentCategoryId,
             name: this.categoryName,
         }
         await this.categoryService.add(category as ICategory).then(res => {
-            if (res.status >= 300) {
+            if (res.status == null || res.status >= 300) {
                 this.errorMsg = res.status + ' ' + res.errorMsg
             } else {
                 // this.categoriesStore.$state.categories =

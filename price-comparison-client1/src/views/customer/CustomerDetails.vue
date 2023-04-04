@@ -19,9 +19,14 @@
 
 <script lang="ts">
 import { CustomerService } from '@/services/CustomerService'
-import { useCustomersStore } from '@/stores/customers'
+import { useCustomerStore } from '@/stores/customer'
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -30,14 +35,15 @@ import { Options, Vue } from 'vue-class-component'
     emits: [],
 })
 export default class CustomerDetails extends Vue {
-    id!: string;
-    customersStore = useCustomersStore()
+    private logger = new Logger(CustomerDetails.name)
+    id!: string
+    customersStore = useCustomerStore()
     customerService = new CustomerService()
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         this.customersStore.$state.customer =
-            await this.customerService.get(this.id);
+            await this.customerService.get(this.id)
     }
 }
 

@@ -3,6 +3,10 @@ import httpCLient from '@/http-client'
 import { BaseService } from './BaseService'
 import { IPublicStats } from '@/domain/IPublicStats'
 
+/**
+ * @author Ahto Jalak
+ * @since 19.03.2023
+ */
 export class StatsService extends BaseService<IProduct> {
     constructor () {
         super('v1/stats')

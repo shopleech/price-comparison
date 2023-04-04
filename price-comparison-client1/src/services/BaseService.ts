@@ -2,9 +2,17 @@ import httpCLient from '@/http-client'
 import { useIdentityStore } from '@/stores/identity'
 import type { AxiosError } from 'axios'
 import type { IServiceResult } from './IServiceResult'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 export class BaseService<TEntity> {
+    protected logger = new Logger(BaseService.name)
+
     protected identityStore = useIdentityStore()
+
     protected _path: string
 
     constructor (path: string) {
@@ -12,7 +20,7 @@ export class BaseService<TEntity> {
     }
 
     async getAll (): Promise<TEntity[]> {
-        console.log('getAll')
+        this.logger.info('getAll')
         let response
         try {
             response = await httpCLient.get(`/${this._path}`, {
@@ -21,16 +29,15 @@ export class BaseService<TEntity> {
                 }
             })
         } catch (e) {
-            throw new TypeError("Something happened with get all")
+            throw new TypeError('Something happened with get all')
         }
-        console.log(response)
 
         const res = response.data as TEntity[]
         return res
     }
 
     async get (id: string): Promise<TEntity> {
-        console.log('get')
+        this.logger.info('get')
         let response
         try {
             response = await httpCLient.get(
@@ -38,15 +45,14 @@ export class BaseService<TEntity> {
                 { headers: { Authorization: 'bearer ' + this.identityStore.$state.jwt?.token } }
             )
         } catch (e) {
-            throw new TypeError("Something happened with get")
+            throw new TypeError('Something happened with get')
         }
-        console.log(response)
         const res = response.data as TEntity
         return res
     }
 
     async add (entity: TEntity): Promise<IServiceResult<void>> {
-        console.log('add')
+        this.logger.info('add')
 
         let response
         try {
@@ -55,21 +61,20 @@ export class BaseService<TEntity> {
             )
         } catch (e) {
             const res = {
-                status: (e as AxiosError).response!.status,
-                // errorMsg: (e as AxiosError).response!.data.error,
+                status: (e as AxiosError).response?.status,
+                errorMsg: (e as AxiosError).response?.data.error,
             }
-            console.log(res)
 
             // try token refresh
             if (res.status === 401 && this.identityStore.jwt) {
                 await this.identityStore.refreshUser().then(async value => {
                     if (value) {
-                        console.log('token refresh')
+                        this.logger.info('token refresh')
                     }
                 })
                 // retry
                 const retry = await this.extracted(entity)
-                return retry;
+                return retry
             }
 
             return res
@@ -86,17 +91,16 @@ export class BaseService<TEntity> {
             )
         } catch (e) {
             const res = {
-                status: (e as AxiosError).response!.status,
-                // errorMsg: (e as AxiosError).response!.data.error,
+                status: (e as AxiosError).response?.status,
+                errorMsg: (e as AxiosError).response?.data.error,
             }
-            console.log(res)
             return res
         }
         return { status: response.status }
     }
 
     async update (id: string, entity: TEntity): Promise<IServiceResult<void>> {
-        console.log('add')
+        this.logger.info('add')
 
         let response
         try {
@@ -109,10 +113,9 @@ export class BaseService<TEntity> {
             )
         } catch (e) {
             const res = {
-                status: (e as AxiosError).response!.status,
-                // errorMsg: (e as AxiosError).response!.data.error,
+                status: (e as AxiosError).response?.status,
+                errorMsg: (e as AxiosError).response?.data.error,
             }
-            console.log(res)
             return res
         }
 
@@ -120,12 +123,11 @@ export class BaseService<TEntity> {
     }
 
     async delete (id: string): Promise<TEntity> {
-        console.log('delete')
+        this.logger.info('delete')
         const response = await httpCLient.delete(
             `/${this._path}/${id}`,
             { headers: { Authorization: 'bearer ' + this.identityStore.$state.jwt?.token } }
         )
-        console.log(response)
         const res = response.data as TEntity
         return res
     }

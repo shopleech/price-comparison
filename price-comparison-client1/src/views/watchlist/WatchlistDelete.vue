@@ -1,5 +1,5 @@
 <template>
-    <h4>Delete wish {{ id }}</h4>
+    <h4>Delete watchlist {{ id }}</h4>
     <div class="row">
         <div class="col-md-12">
 
@@ -18,15 +18,20 @@
     </div>
 
     <div>
-        <RouterLink :to="{ name: 'wishes' }">Back to Wishes</RouterLink>
+        <RouterLink :to="{ name: 'watchlist' }">Back to Watchlistes</RouterLink>
     </div>
 </template>
 
 <script lang="ts">
-import { WishService } from '@/services/WishService'
-import { useWishesStore } from '@/stores/wishes'
 import { Options, Vue } from 'vue-class-component'
+import { useWatchlistStore } from '@/stores/watchlist'
+import { WatchlistService } from '@/services/WatchlistService'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -34,26 +39,27 @@ import { Options, Vue } from 'vue-class-component'
     },
     emits: [],
 })
-export default class WishDelete extends Vue {
-    id!: string;
-    wishesStore = useWishesStore()
-    wishService = new WishService()
+export default class WatchlistDelete extends Vue {
+    private logger = new Logger(WatchlistDelete.name)
+    id!: string
+    watchlistStore = useWatchlistStore()
+    watchlistService = new WatchlistService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
-        // const res = await this.wishService.delete(this.id);
+        // const res = await this.watchlistService.delete(this.id);
 
         /*
         if (res.status >= 300) {
             this.errorMsg = res.status + ' ' + res.errorMsg
         } else {
-            this.wishesStore.$state.wishes =
-                await this.wishService.getAll()
+            this.watchlistStore.$state.watchlists =
+                await this.watchlistService.getAll()
 
-            this.$router.push('/wishes')
+            this.$router.push('/watchlist')
         }
          */
     }

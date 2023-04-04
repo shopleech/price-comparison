@@ -12,7 +12,7 @@ import { Options, Vue } from 'vue-class-component'
     }
 })
 export default class Greeting extends Vue {
-    hello = "Greetings, " + this.name;
+    hello = 'Greetings, ' + this.name
 }
 </script>
 

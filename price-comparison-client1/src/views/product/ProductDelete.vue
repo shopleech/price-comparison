@@ -24,9 +24,14 @@
 
 <script lang="ts">
 import { ProductService } from '@/services/ProductService'
-import { useProductStore } from '@/stores/productStore'
+import { useProductStore } from '@/stores/product'
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -35,16 +40,17 @@ import { Options, Vue } from 'vue-class-component'
     emits: [],
 })
 export default class ProductDelete extends Vue {
-    id!: string;
+    private logger = new Logger(ProductDelete.name)
+    id!: string
     productsStore = useProductStore()
     productService = new ProductService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
-        const res = await this.productService.delete(this.id);
+        await this.productService.delete(this.id)
 
         /*
         if (res.status >= 300) {

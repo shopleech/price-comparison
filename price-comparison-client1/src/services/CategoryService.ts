@@ -1,11 +1,15 @@
 import type { ICategory } from '@/domain/ICategory'
 import { BaseService } from './BaseService'
-import { IDropdownItem } from '@/domain/IDropdownItem'
+import { IDropdownItem } from '@/domain/forms/IDropdownItem'
 import httpCLient from '@/http-client'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 export class CategoryService extends BaseService<ICategory> {
     constructor () {
-        super('v1/categories')
+        super('v1/category')
     }
 
     async getAllForDropdown (): Promise<IDropdownItem[]> {
@@ -20,7 +24,7 @@ export class CategoryService extends BaseService<ICategory> {
     }
 
     async getAllByCategoryId (categoryId: string | null): Promise<ICategory[]> {
-        console.log('getAll')
+        this.logger.info('getAll')
         let customHeaders
         let response
 
@@ -39,9 +43,9 @@ export class CategoryService extends BaseService<ICategory> {
             // TODO
             throw new TypeError('error with get all by category id')
         }
-        console.log(response)
 
         const res = response.data as ICategory[]
+
         return res
     }
 }

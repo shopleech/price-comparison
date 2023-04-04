@@ -59,16 +59,22 @@
 <script lang="ts">
 import { useIdentityStore } from '@/stores/identity'
 import { Options, Vue } from 'vue-class-component'
-import { IRegisterInfo } from '@/domain/ILoginInfo'
 import router from '@/router'
 import { IResponseMessage } from '@/domain/IResponseMessage'
+import { IRegisterInfo } from '@/domain/IRegisterInfo'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
 export default class Register extends Vue {
+    private logger = new Logger(Register.name)
     private identityStore = useIdentityStore()
     private loginWasOk: boolean | null = null
     private errorMsg: string | null = null
@@ -81,7 +87,7 @@ export default class Register extends Vue {
     private consent = false
 
     async registerClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
         const registerInfo: IRegisterInfo = {
             invitation: this.invitation,
             email: this.email,

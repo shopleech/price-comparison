@@ -1,7 +1,11 @@
 import { defineStore } from 'pinia'
 import { IAlarm } from '@/domain/IAlarm'
 
-export const useAlarmsStore = defineStore({
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
+export const useAlarmStore = defineStore({
     id: 'alarms',
     state: () => ({
         alarm: [] as IAlarm,

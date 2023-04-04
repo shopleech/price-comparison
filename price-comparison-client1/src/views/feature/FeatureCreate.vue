@@ -18,39 +18,42 @@
     </div>
 
     <div>
-        <RouterLink :to="{ name: 'wishes' }">Back to Wishes</RouterLink>
+        <RouterLink :to="{ name: 'wishes' }">Back to Featurees</RouterLink>
     </div>
 </template>
 
 <script lang="ts">
-import { WishService } from '@/services/WishService'
-import { useWishesStore } from '@/stores/wishes'
 import { Options, Vue } from 'vue-class-component'
 import { CustomerService } from '@/services/CustomerService'
+import { useFeatureStore } from '@/stores/feature'
+import { FeatureService } from '@/services/FeatureService'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
-export default class WishCreate extends Vue {
-    wishesStore = useWishesStore()
-    wishService = new WishService()
+export default class FeatureCreate extends Vue {
+    private logger = new Logger(FeatureCreate.name)
+    wishesStore = useFeatureStore()
+    wishService = new FeatureService()
     customerService = new CustomerService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
         const res = await this.wishService.add(
-            {
-                accountId: '123',
-                productId: '123'
-            }
+            {}
         )
 
-        if (res.status >= 300) {
+        if (res.status == null || res.status >= 300) {
             this.errorMsg = res.status + ' ' + res.errorMsg
         } else {
             // this.wishesStore.$state.wishes =

@@ -24,10 +24,15 @@
 
 <script lang="ts">
 import { CategoryService } from '@/services/CategoryService'
-import { useCategoriesStore } from '@/stores/categories'
+import { useCategoryStore } from '@/stores/category'
 import { Options, Vue } from 'vue-class-component'
 import router from '@/router'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -36,19 +41,19 @@ import router from '@/router'
     emits: [],
 })
 export default class CategoryDelete extends Vue {
-    id!: string;
-    categoriesStore = useCategoriesStore()
+    private logger = new Logger(CategoryDelete.name)
+    id!: string
+    categoriesStore = useCategoryStore()
     categoryService = new CategoryService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
-        await this.categoryService.delete(this.id).then(item => {
-            console.log(item)
+        await this.categoryService.delete(this.id).then(() => {
             router.push('/')
-        });
+        })
 
         /*
         if (res.status >= 300) {

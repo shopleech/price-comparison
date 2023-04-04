@@ -1,9 +1,14 @@
 import { defineStore } from 'pinia'
 import { IJwtResponse } from '@/domain/IJwtResponse'
-import { ILoginInfo, IRegisterInfo } from '@/domain/ILoginInfo'
+import { ILoginInfo } from '@/domain/ILoginInfo'
 import { IdentityService } from '@/services/IdentityService'
 import { IResponseMessage } from '@/domain/IResponseMessage'
+import { IRegisterInfo } from '@/domain/IRegisterInfo'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 export const useIdentityStore = defineStore({
     id: 'identity',
     state: () => ({
@@ -32,8 +37,8 @@ export const useIdentityStore = defineStore({
         async authenticateUser (loginInfo: ILoginInfo): Promise<IResponseMessage> {
             const identityService = new IdentityService()
             const serviceResult = await identityService.login(loginInfo)
-            if (serviceResult.status === 200) {
-                this.setJwt(serviceResult.data!)
+            if (serviceResult.status === 200 && serviceResult.data != null) {
+                this.setJwt(serviceResult.data)
                 return {
                     data: serviceResult.data,
                 }
@@ -45,8 +50,8 @@ export const useIdentityStore = defineStore({
         async registerUser (registerDTO: IRegisterInfo): Promise<IResponseMessage> {
             const identityService = new IdentityService()
             const jwt = await identityService.register(registerDTO)
-            if (jwt.status === 200) {
-                this.setJwt(jwt.data!)
+            if (jwt.status === 200 && jwt.data != null) {
+                this.setJwt(jwt.data)
                 return {
                     data: jwt.data
                 }
@@ -58,8 +63,8 @@ export const useIdentityStore = defineStore({
         async refreshUser (): Promise<boolean> {
             const identityService = new IdentityService()
             const res = await identityService.refreshIdentity()
-            if (res !== null) {
-                this.setJwt(res.data!)
+            if (res.status === 200 && res.data != null) {
+                this.setJwt(res.data)
                 return true
             }
             return false

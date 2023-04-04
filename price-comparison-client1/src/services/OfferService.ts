@@ -1,19 +1,22 @@
-import type { IMerchandise } from '@/domain/IMerchandise'
+import type { IOffer } from '@/domain/IOffer'
 import { BaseService } from './BaseService'
 import HttpClient from '@/http-client'
 
-export class MerchandiseService extends BaseService<IMerchandise> {
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
+export class OfferService extends BaseService<IOffer> {
     constructor () {
-        super('v1/merchandises')
+        super('v1/offer')
     }
 
-    async getAllByProductId (productId: string): Promise<IMerchandise[]> {
-        console.log('getAll')
+    async getAllByProductId (): Promise<IOffer[]> {
+        this.logger.info('getAll')
         let response
         try {
             response = await HttpClient.get(`${this._path}`, {
                 headers: {
-                    ProductId: productId,
                     Authorization: 'Bearer ' + this.identityStore.$state.jwt?.token
                 }
             })
@@ -21,9 +24,8 @@ export class MerchandiseService extends BaseService<IMerchandise> {
             // TODO
             throw new TypeError('error with get all by category id')
         }
-        console.log(response)
 
-        const res = response.data as IMerchandise[]
+        const res = response.data as IOffer[]
         return res
     }
 
@@ -31,9 +33,9 @@ export class MerchandiseService extends BaseService<IMerchandise> {
         await HttpClient.post(`${this._path}`,
             content
         ).then(function () {
-            console.log('SUCCESS!!')
+            return true
         }).catch(function () {
-            console.log('FAILURE!!')
+            return true
         })
     }
 }

@@ -3,9 +3,17 @@ import httpCLient from '@/http-client'
 import { useIdentityStore } from '@/stores/identity'
 import type { AxiosError } from 'axios'
 import type { IServiceResult } from './IServiceResult'
-import { ILoginInfo, IRegisterInfo } from '@/domain/ILoginInfo'
+import { ILoginInfo } from '@/domain/ILoginInfo'
+import { IRegisterInfo } from '@/domain/IRegisterInfo'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 export class IdentityService {
+    private logger = new Logger(IdentityService.name)
+
     private identityStore = useIdentityStore()
 
     async login (loginInfo: ILoginInfo): Promise<IServiceResult<IJwtResponse>> {
@@ -18,11 +26,11 @@ export class IdentityService {
         } catch (e) {
             if ((e as AxiosError).response) {
                 return {
-                    status: (e as AxiosError).response!.status,
-                    errorMsg: (e as AxiosError).response!.statusText,
+                    status: (e as AxiosError).response?.status,
+                    errorMsg: (e as AxiosError).response?.statusText,
                 }
             } else {
-                console.log((e as AxiosError).message);
+                this.logger.info((e as AxiosError).message)
                 return {
                     status: 400,
                     errorMsg: 'unknown: ' + (e as AxiosError).message,
@@ -44,8 +52,8 @@ export class IdentityService {
         } catch (e) {
             const err = e as AxiosError
             return {
-                status: err.response!.status,
-                errorMsg: err.response!.statusText,
+                status: err.response?.status,
+                errorMsg: err.response?.statusText,
             }
         }
     }
@@ -60,9 +68,17 @@ export class IdentityService {
         } catch (e) {
             const err = e as AxiosError
             return {
-                status: err.response!.status,
-                errorMsg: err.response!.statusText,
+                status: err.response?.status,
+                errorMsg: err.response?.statusText,
             }
         }
+    }
+
+    async logout () {
+        this.identityStore.clearJwt()
+    }
+
+    isAuthenticated () {
+        return this.identityStore.getJwt() !== null
     }
 }

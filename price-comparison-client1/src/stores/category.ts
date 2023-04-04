@@ -1,7 +1,11 @@
 import type { ICategory } from '@/domain/ICategory'
 import { defineStore } from 'pinia'
 
-export const useCategoriesStore = defineStore({
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
+export const useCategoryStore = defineStore({
     id: 'categories',
     state: () => ({
         category: [] as ICategory,

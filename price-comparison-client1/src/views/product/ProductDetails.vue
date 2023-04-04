@@ -37,9 +37,6 @@
                     </div>
                     <div class="col-md-5">
                         <a href="#" @click="clickToAddRating(item.id)">Add rating</a>
-                        <!-- /*
-                        <vue3-star-ratings v-model="rating" :starSize="'16'" :showControl="false" starColor="blue" class="p-0" />
-                        */ -->
                     </div>
                     <div class="col-md-2 p-2">
                         €{{ item.lastPrice }}
@@ -54,14 +51,19 @@
 import { Options, Vue } from 'vue-class-component'
 import vue3StarRatings from 'vue3-star-ratings'
 import { ProductService } from '@/services/ProductService'
-import { MerchandiseService } from '@/services/MerchandiseService'
-import { useProductStore } from '@/stores/productStore'
+import { OfferService } from '@/services/OfferService'
+import { useProductStore } from '@/stores/product'
 import { useIdentityStore } from '@/stores/identity'
 import { IProduct } from '@/domain/IProduct'
-import { IMerchandise } from '@/domain/IMerchandise'
-import { RatingService } from '@/services/RatingService'
-import { WishService } from '@/services/WishService'
+import { IOffer } from '@/domain/IOffer'
+import { ReviewService } from '@/services/ReviewService'
+import { WatchlistService } from '@/services/WatchlistService'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {
         vue3StarRatings
@@ -75,16 +77,18 @@ import { WishService } from '@/services/WishService'
     emits: [],
 })
 export default class ProductDetails extends Vue {
-    id!: string
+    id = ''
+
+    private logger = new Logger(ProductDetails.name)
 
     private productsStore = useProductStore()
     private productService = new ProductService()
-    private merchandiseService = new MerchandiseService()
-    private ratingService = new RatingService()
-    private wishService = new WishService()
+    private merchandiseService = new OfferService()
+    private ratingService = new ReviewService()
+    private wishService = new WatchlistService()
     private identityStore = useIdentityStore()
 
-    merchandises: IMerchandise[] = []
+    merchandises: IOffer[] = []
     product: IProduct = {
         barcode: '',
         name: '',
@@ -100,21 +104,22 @@ export default class ProductDetails extends Vue {
     }
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         this.product =
             await this.productService.get(this.id)
         this.merchandises =
-            await this.merchandiseService.getAllByProductId(this.id)
+            await this.merchandiseService.getAllByProductId()
     }
 
     async clickToAddProductToWishlist (): Promise<void> {
-        const res = await this.wishService.addProductToWishlist(this.id)
-        console.log(res)
+        await this.wishService.addProductToWishlist()
     }
 
-    async clickToAddRating (id: string): Promise<void> {
+    async clickToAddRating (): Promise<void> {
+        /*
         const res = await this.ratingService.addMerchandiseRating(id)
-        console.log(res)
+        this.logger.info(res)
+        */
     }
 }
 

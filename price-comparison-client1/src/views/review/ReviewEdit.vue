@@ -5,13 +5,18 @@
     </div>
 
     <div>
-        <RouterLink :to="{ name: 'ratings' }">Back to Ratings</RouterLink>
+        <RouterLink :to="{ name: 'ratings' }">Back to Reviews</RouterLink>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -19,7 +24,8 @@ import { Options, Vue } from 'vue-class-component'
     },
     emits: [],
 })
-export default class RatingEdit extends Vue {
+export default class ReviewEdit extends Vue {
+    private logger = new Logger(ReviewEdit.name)
     id!: string
 }
 </script>

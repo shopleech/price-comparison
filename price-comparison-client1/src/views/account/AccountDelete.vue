@@ -24,9 +24,14 @@
 
 <script lang="ts">
 import { AccountService } from '@/services/AccountService'
-import { useAccountsStore } from '@/stores/accounts'
+import { useAccountStore } from '@/stores/account'
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -35,16 +40,17 @@ import { Options, Vue } from 'vue-class-component'
     emits: [],
 })
 export default class AccountDelete extends Vue {
-    id!: string;
-    accountsStore = useAccountsStore()
+    private logger = new Logger(AccountDelete.name)
+    id!: string
+    accountsStore = useAccountStore()
     accountService = new AccountService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
-        const res = await this.accountService.delete(this.id);
+        await this.accountService.delete(this.id)
 
         /*
         if (res.status >= 300) {

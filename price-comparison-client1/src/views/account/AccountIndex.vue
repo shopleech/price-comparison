@@ -29,20 +29,26 @@
 
 <script lang="ts">
 import { AccountService } from '@/services/AccountService'
-import { useAccountsStore } from '@/stores/accounts'
+import { useAccountStore } from '@/stores/account'
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
 export default class AccountIndex extends Vue {
-    accountsStore = useAccountsStore()
+    private logger = new Logger(AccountIndex.name)
+    accountsStore = useAccountStore()
     accountService = new AccountService()
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         this.accountsStore.$state.accounts =
             await this.accountService.getAll()
     }

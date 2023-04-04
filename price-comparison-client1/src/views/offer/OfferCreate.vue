@@ -1,9 +1,9 @@
-š<template>
+<template>
     <div class="row">
         <div class="col-md-2 p-4">
         </div>
         <div class="col-md-10 p-4">
-            <h4>Create merchandise</h4>
+            <h4>Create offer</h4>
 
             <div v-if="errorMsg != null" class="text-danger validation-summary-errors" data-valmsg-summary="true">
                 <ul>
@@ -16,7 +16,8 @@
                     <form method="post" enctype="multipart/form-data">
                         <div class="input-group mb-3">
                             <label class="input-group-text" for="inputGroupFile01">Upload</label>
-                            <input type="file" accept=".csv" class="form-control" id="inputGroupFile01" @change="handleFileUpload( $event )">
+                            <input type="file" accept=".csv" class="form-control" id="inputGroupFile01"
+                                   @change="handleFileUpload( $event )">
                         </div>
                     </form>
                 </div>
@@ -52,20 +53,26 @@
 </template>
 
 <script lang="ts">
-import { useMerchandisesStore } from '@/stores/merchandises'
 import { Options, Vue } from 'vue-class-component'
 import HttpClient from '@/http-client'
 import Papa from 'papaparse'
-import { MerchandiseService } from '@/services/MerchandiseService'
+import { OfferService } from '@/services/OfferService'
+import { useOfferStore } from '@/stores/offer'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
-export default class MerchandiseCreate extends Vue {
-    merchandisesStore = useMerchandisesStore()
-    merchandiseService = new MerchandiseService()
+export default class OfferCreate extends Vue {
+    private logger = new Logger(OfferCreate.name)
+    offerStore = useOfferStore()
+    offerService = new OfferService()
 
     errorMsg: string | null = null
     uploadFile = ''
@@ -73,7 +80,7 @@ export default class MerchandiseCreate extends Vue {
     parsed = false
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
     }
 
     handleFileUpload (event: any) {
@@ -104,16 +111,11 @@ export default class MerchandiseCreate extends Vue {
                     'Content-Type': 'multipart/form-data'
                 }
             }
-        ).then(function () {
-            console.log('SUCCESS!!')
-        })
-            .catch(function () {
-                console.log('FAILURE!!')
-            })
+        )
     }
 
     async submitUpdates () {
-        this.merchandiseService.upload(this.content)
+        this.offerService.upload(this.content)
     }
 }
 </script>

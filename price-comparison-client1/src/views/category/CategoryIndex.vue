@@ -30,18 +30,24 @@
 
 <script lang="ts">
 import { CategoryService } from '@/services/CategoryService'
-import { useCategoriesStore } from '@/stores/categories'
+import { useCategoryStore } from '@/stores/category'
 import { Options, Vue } from 'vue-class-component'
 import { ICategory } from '@/domain/ICategory'
 import { useIdentityStore } from '@/stores/identity'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
 export default class CategoryIndex extends Vue {
-    categoriesStore = useCategoriesStore()
+    private logger = new Logger(CategoryIndex.name)
+    categoriesStore = useCategoryStore()
     categoryService = new CategoryService()
     private identityStore = useIdentityStore()
 
@@ -54,6 +60,7 @@ export default class CategoryIndex extends Vue {
     }
 
     categories: ICategory[] | null = null
+
     /*
     limitArray (length = 3) {
         if (length === -1) {

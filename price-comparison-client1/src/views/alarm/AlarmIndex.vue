@@ -29,20 +29,26 @@
 
 <script lang="ts">
 import { AlarmService } from '@/services/AlarmService'
-import { useAlarmsStore } from '@/stores/alarms'
+import { useAlarmStore } from '@/stores/alarm'
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
 export default class AlarmIndex extends Vue {
-    alarmsStore = useAlarmsStore()
+    private logger = new Logger(AlarmIndex.name)
+    alarmsStore = useAlarmStore()
     alarmService = new AlarmService()
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         this.alarmsStore.$state.alarms =
             await this.alarmService.getAll()
     }

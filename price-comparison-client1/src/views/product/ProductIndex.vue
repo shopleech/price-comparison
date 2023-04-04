@@ -4,7 +4,9 @@
         <RouterLink :to="{ name: 'products-create' }">Create new</RouterLink>
     </p>
     <div v-for="item of productsStore.products" :key="item.id">
-        <h3><RouterLink :to="{ name: 'products-details', params: { id: item.id } }">{{ item.name }}</RouterLink></h3>
+        <h3>
+            <RouterLink :to="{ name: 'products-details', params: { id: item.id } }">{{ item.name }}</RouterLink>
+        </h3>
         <div v-if="isAuthenticated">
             <a href="#">Add rating</a> | <a href="#">Add alarm</a>
         </div>
@@ -21,31 +23,37 @@
 
 <script lang="ts">
 import { ProductService } from '@/services/ProductService'
-import { useProductStore } from '@/stores/productStore'
+import { useProductStore } from '@/stores/product'
 import { Options, Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
 export default class ProductIndex extends Vue {
-    categoryId = "asd"
+    private logger = new Logger(ProductIndex.name)
+    categoryId = 'asd'
     productsStore = useProductStore()
     productService = new ProductService()
-    private identityStore = useIdentityStore();
+    private identityStore = useIdentityStore()
 
-    get isAuthenticated(): boolean {
+    get isAuthenticated (): boolean {
         return this.identityStore.getJwt() !== null
     }
 
-    get isAdmin(): boolean {
+    get isAdmin (): boolean {
         return this.identityStore.isAdmin()
     }
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         // this.productsStore.$state.products =
         //    await this.productService.getAll(this.categoryId)
     }

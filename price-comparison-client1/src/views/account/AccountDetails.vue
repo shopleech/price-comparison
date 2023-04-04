@@ -19,9 +19,14 @@
 
 <script lang="ts">
 import { AccountService } from '@/services/AccountService'
-import { useAccountsStore } from '@/stores/accounts'
+import { useAccountStore } from '@/stores/account'
 import { Options, Vue } from 'vue-class-component'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -30,14 +35,15 @@ import { Options, Vue } from 'vue-class-component'
     emits: [],
 })
 export default class AccountDetails extends Vue {
-    id!: string;
-    accountsStore = useAccountsStore()
+    private logger = new Logger(AccountDetails.name)
+    id!: string
+    accountsStore = useAccountStore()
     accountService = new AccountService()
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         this.accountsStore.$state.account =
-            await this.accountService.get(this.id);
+            await this.accountService.get(this.id)
     }
 }
 

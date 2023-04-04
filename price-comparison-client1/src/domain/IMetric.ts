@@ -1,8 +1,12 @@
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 export interface IMetric {
-    id?: string;
-    merchandiseId?: string;
-    productId?: string;
-    categoryId?: string;
+    id?: number;
+    offerId?: number;
+    productId?: number;
+    categoryId?: number;
     metricTypeCode?: string;
-    quantity?: string;
+    quantity?: number;
 }

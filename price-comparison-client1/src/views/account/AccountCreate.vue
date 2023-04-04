@@ -24,24 +24,30 @@
 
 <script lang="ts">
 import { AccountService } from '@/services/AccountService'
-import { useAccountsStore } from '@/stores/accounts'
+import { useAccountStore } from '@/stores/account'
 import { Options, Vue } from 'vue-class-component'
 import { CustomerService } from '@/services/CustomerService'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
 export default class AccountCreate extends Vue {
-    accountsStore = useAccountsStore()
+    private logger = new Logger(AccountCreate.name)
+    accountsStore = useAccountStore()
     accountService = new AccountService()
     customerService = new CustomerService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
         const res = await this.accountService.add(
             {
@@ -49,7 +55,7 @@ export default class AccountCreate extends Vue {
             }
         )
 
-        if (res.status >= 300) {
+        if (res.status == null || res.status >= 300) {
             this.errorMsg = res.status + ' ' + res.errorMsg
         } else {
             // this.accountsStore.$state.accounts =

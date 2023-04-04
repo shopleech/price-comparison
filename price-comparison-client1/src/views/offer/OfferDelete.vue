@@ -18,15 +18,20 @@
     </div>
 
     <div>
-        <RouterLink :to="{ name: 'merchandises' }">Back to Merchandises</RouterLink>
+        <RouterLink :to="{ name: 'merchandises' }">Back to Offers</RouterLink>
     </div>
 </template>
 
 <script lang="ts">
-import { MerchandiseService } from '@/services/MerchandiseService'
-import { useMerchandisesStore } from '@/stores/merchandises'
+import { OfferService } from '@/services/OfferService'
 import { Options, Vue } from 'vue-class-component'
+import { useOfferStore } from '@/stores/offer'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {
@@ -34,17 +39,18 @@ import { Options, Vue } from 'vue-class-component'
     },
     emits: [],
 })
-export default class MerchandiseDelete extends Vue {
-    id!: string;
-    merchandisesStore = useMerchandisesStore()
-    merchandiseService = new MerchandiseService()
+export default class OfferDelete extends Vue {
+    private logger = new Logger(OfferDelete.name)
+    id!: string
+    merchandisesStore = useOfferStore()
+    merchandiseService = new OfferService()
 
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
-        const res = await this.merchandiseService.delete(this.id);
+        await this.merchandiseService.delete(this.id)
 
         /*
         if (res.status >= 300) {

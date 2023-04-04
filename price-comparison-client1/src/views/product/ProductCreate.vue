@@ -45,17 +45,23 @@
 import { CategoryService } from '@/services/CategoryService'
 import { CustomerService } from '@/services/CustomerService'
 import { ProductService } from '@/services/ProductService'
-import { useProductStore } from '@/stores/productStore'
+import { useProductStore } from '@/stores/product'
 import { Options, Vue } from 'vue-class-component'
 import { IProduct } from '@/domain/IProduct'
 import { ICategory } from '@/domain/ICategory'
+import Logger from '@/logger'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
     components: {},
     props: {},
     emits: [],
 })
 export default class ProductCreate extends Vue {
+    private logger = new Logger(ProductCreate.name)
     productsStore = useProductStore()
     productService = new ProductService()
     customerService = new CustomerService()
@@ -68,16 +74,13 @@ export default class ProductCreate extends Vue {
     private categoryOptions: ICategory[] | null = null
 
     async submitClicked (): Promise<void> {
-        console.log('submitClicked')
+        this.logger.info('submitClicked')
 
-        const obj : IProduct = {
-            categoryId: this.categoryOptions?.find(element => element.name === this.category)?.id ?? "",
-            name: this.name
-        }
+        const obj: IProduct = {}
 
         const res = await this.productService.add(obj)
 
-        if (res.status >= 300) {
+        if (res.status == null || res.status >= 300) {
             this.errorMsg = res.status + ' ' + res.errorMsg
         } else {
             // this.productsStore.$state.products =
@@ -88,7 +91,7 @@ export default class ProductCreate extends Vue {
     }
 
     async mounted (): Promise<void> {
-        console.log('mounted')
+        this.logger.info('mounted')
         this.categoryOptions = await this.categoryService.getAll()
     }
 }
