@@ -1,9 +1,10 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.dto.CategoryBLLDTO;
-import com.shopleech.publicapi.bll.mapper.CategoryBLLMapper;
 import com.shopleech.publicapi.dal.repository.CategoryRepository;
-import lombok.RequiredArgsConstructor;
+import com.shopleech.publicapi.domain.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,22 +14,24 @@ import java.util.List;
  * @since 24.01.2023
  */
 @Service
-@RequiredArgsConstructor
 public class CategoryService {
+    Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
+    @Autowired
     protected CategoryRepository categoryRepository;
 
-    protected CategoryBLLMapper categoryMapper;
+//    @Autowired
+//    protected CategoryBLLMapper categoryMapper;
 
-    public void createCategory(CategoryBLLDTO data) {
-        categoryRepository.addCategory(categoryMapper.mapToEntity(data));
+    public void createCategory(Category data) {
+        categoryRepository.save(data);
     }
 
-    public CategoryBLLDTO get(int id) {
-        return categoryMapper.mapToDto(categoryRepository.getCategoryById(id));
+    public Category get(int id) {
+        return categoryRepository.getCategoryById(id);
     }
 
-    public List<CategoryBLLDTO> getAll() {
-        return categoryMapper.mapToDto(categoryRepository.getAllCategories());
+    public List<Category> getAll() {
+        return categoryRepository.findAll();
     }
 }

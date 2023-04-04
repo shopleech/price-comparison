@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,18 +27,20 @@ import java.util.Map;
 public class ProductController {
     Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    private final ProductService productService;
-    private final ProductMapper mapper;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private ProductMapper productMapper;
 
-    @GetMapping("/mylist")
-    public ResponseEntity<?> demo() {
+    @GetMapping
+    public ResponseEntity<?> getAllProducts() {
         logger.info("demo request");
 
         Map<String, Object> responseMap = new HashMap<>();
         try {
             var serviceAll = productService.getAll();
             responseMap.put("error", false);
-            responseMap.put("details", mapper.mapToDto(serviceAll));
+            responseMap.put("details", productMapper.mapToDto(serviceAll));
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);
@@ -46,18 +49,21 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/something")
-    public ResponseEntity<?> something() {
-        Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("something", true);
-        return ResponseEntity.ok(responseMap);
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<ProductDTO> add(@RequestBody ProductDTO request) {
+    @PostMapping
+    public ResponseEntity<?> add(@RequestBody ProductDTO request) {
         logger.info("add request");
-        productService.createProduct(mapper.mapToEntity(request));
-        return ResponseEntity.ok(request);
+
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var serviceAll = productService.createProduct(productMapper.mapToEntity(request));
+            responseMap.put("error", false);
+            responseMap.put("details", productMapper.mapToDto(serviceAll));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
     }
 
     @PostMapping("/search")
@@ -66,7 +72,7 @@ public class ProductController {
         try {
             var serviceAll = productService.getAllByKeyword(request.getKeyword());
             responseMap.put("error", false);
-            responseMap.put("details", mapper.mapToDto(serviceAll));
+            responseMap.put("details", productMapper.mapToDto(serviceAll));
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);

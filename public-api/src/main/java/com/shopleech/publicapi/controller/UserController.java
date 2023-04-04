@@ -12,7 +12,6 @@ import com.shopleech.publicapi.dto.v1.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/v1/auth")
-@RequiredArgsConstructor
 @Tag(name = "User Controller", description = "Endpoint for user access")
 public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -158,8 +156,7 @@ public class UserController {
             summary = "User refresh token",
             responses = @ApiResponse(responseCode = "200", description = "Access token returned"))
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshToken(
-            @RequestBody UserRefreshDTO request) throws Exception {
+    public ResponseEntity<?> refreshToken(@RequestBody UserRefreshDTO request) {
         logger.info("refresh token request");
         logger.info(request.toString());
 

@@ -6,8 +6,9 @@ import com.shopleech.publicapi.bll.util.JwtTokenUtil;
 import com.shopleech.publicapi.dal.repository.OfferRepository;
 import com.shopleech.publicapi.dal.repository.ProductRepository;
 import com.shopleech.publicapi.domain.Offer;
+import com.shopleech.publicapi.domain.Product;
+import com.shopleech.publicapi.dto.v1.ProductDTO;
 import com.shopleech.publicapi.dto.v1.ProductImportItemDTO;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,7 @@ import java.util.List;
  * @since 04.02.2023
  */
 @Service
-@RequiredArgsConstructor
 public class ProductService implements IProductService {
-
     Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     @Autowired
@@ -42,22 +41,22 @@ public class ProductService implements IProductService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    public void createProduct(ProductBLLDTO data) {
-        productRepository.addProduct(productMapper.mapToEntity(data));
+    public Product createProduct(Product data) {
+        return productRepository.save(data);
     }
 
-    public ProductBLLDTO get(Integer id) {
-        return productMapper.mapToDto(productRepository.getProductById(id));
-    }
-
-    @Override
-    public List<ProductBLLDTO> getAll() {
-        return productMapper.mapToDto(productRepository.getAllProducts());
+    public Product get(Integer id) {
+        return productRepository.getProductById(id);
     }
 
     @Override
-    public List<ProductBLLDTO> getAllByKeyword(String keyword) {
-        return productMapper.mapToDto(productRepository.getAllProductsByKeyword(keyword));
+    public List<Product> getAll() {
+        return productRepository.findAll();
+    }
+
+    @Override
+    public List<Product> getAllByKeyword(String keyword) {
+        return productRepository.getAllProductsByKeyword(keyword);
     }
 
     @Override

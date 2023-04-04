@@ -1,6 +1,7 @@
 package com.shopleech.publicapi.bll.service;
 
 import com.shopleech.publicapi.bll.dto.ProductBLLDTO;
+import com.shopleech.publicapi.domain.Product;
 import com.shopleech.publicapi.dto.v1.ProductImportItemDTO;
 
 import java.util.List;
@@ -11,9 +12,9 @@ import java.util.List;
  */
 public interface IProductService {
 
-    List<ProductBLLDTO> getAll();
+    List<Product> getAll();
 
-    List<ProductBLLDTO> getAllByKeyword(String keyword);
+    List<Product> getAllByKeyword(String keyword);
 
     String importProducts(String token, List<ProductImportItemDTO> productImportItems);
 

@@ -2,6 +2,8 @@ package com.shopleech.publicapi.dto.v1.mapper;
 
 import com.shopleech.publicapi.bll.dto.AccountBLLDTO;
 import com.shopleech.publicapi.dto.v1.AccountDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
  */
 @Component
 public class AccountMapper {
+    Logger logger = LoggerFactory.getLogger(AccountMapper.class);
 
     public List<AccountDTO> mapToDto(List<AccountBLLDTO> accounts) {
         return accounts.stream()

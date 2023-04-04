@@ -2,6 +2,8 @@ package com.shopleech.publicapi.dto.v1.mapper;
 
 import com.shopleech.publicapi.bll.dto.AlarmBLLDTO;
 import com.shopleech.publicapi.dto.v1.AlarmDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
  */
 @Component
 public class AlarmMapper {
+    Logger logger = LoggerFactory.getLogger(AlarmMapper.class);
 
     public List<AlarmDTO> mapToDto(List<AlarmBLLDTO> alarms) {
         return alarms.stream()

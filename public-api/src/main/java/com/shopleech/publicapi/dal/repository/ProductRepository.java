@@ -2,7 +2,10 @@ package com.shopleech.publicapi.dal.repository;
 
 import com.shopleech.publicapi.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Ahto Jalak
@@ -10,6 +13,13 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer>, ProductRepositoryCustom {
+    @Query(value = "SELECT * FROM product where id = :id", nativeQuery = true)
+    Product getProductById(Integer id);
 
-//   void add(Product product);
+    @Query(value = "SELECT * FROM product where name like '%'||:keyword||'%' " +
+            "or barcode like '%'||:keyword||'%'", nativeQuery = true)
+    List<Product> getAllProductsByKeyword(String keyword);
+
+    @Query(value = "SELECT COUNT(*) FROM product", nativeQuery = true)
+    int getProductCount();
 }

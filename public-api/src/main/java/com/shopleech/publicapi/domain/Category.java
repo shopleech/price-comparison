@@ -12,14 +12,13 @@ import java.util.Set;
  * @author Ahto Jalak
  * @since 06.02.2023
  */
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
 @Table(name = "category")
 public class Category {
-
     @Id
     @GeneratedValue
     private Integer id;

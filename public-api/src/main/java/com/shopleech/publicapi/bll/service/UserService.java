@@ -106,9 +106,10 @@ public class UserService implements IUserService {
             throw new Exception("user exists");
         }
 
-        if (loadUserByUsername(request.getEmail()).isEnabled()) {
-            throw new Exception("user is enabled");
-        }
+
+//        if (loadUserByUsername(request.getEmail()).isEnabled()) {
+//            throw new Exception("user is enabled");
+//        }
 
         var user = new User();
         user.setFirstname(request.getFirstname());

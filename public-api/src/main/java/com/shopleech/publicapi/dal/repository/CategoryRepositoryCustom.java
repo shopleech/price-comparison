@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.dal.repository;
 
-import com.shopleech.publicapi.dal.dto.CategoryDALDTO;
+import com.shopleech.publicapi.domain.Category;
 
 import java.util.List;
 
@@ -9,10 +9,4 @@ import java.util.List;
  * @since 06.02.2023
  */
 public interface CategoryRepositoryCustom {
-
-    void addCategory(CategoryDALDTO mapToEntity);
-
-    CategoryDALDTO getCategoryById(Integer id);
-
-    List<CategoryDALDTO> getAllCategories();
 }

@@ -2,6 +2,8 @@ package com.shopleech.publicapi.dto.v1.mapper;
 
 import com.shopleech.publicapi.bll.dto.UserBLLDTO;
 import com.shopleech.publicapi.dto.v1.UserDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
  */
 @Component
 public class UserMapper {
+    Logger logger = LoggerFactory.getLogger(UserMapper.class);
 
     public List<UserDTO> mapToDto(List<UserBLLDTO> users) {
         return users.stream()
