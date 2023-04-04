@@ -1,16 +1,21 @@
 <template>
+    <RouterLink :to="{ name: 'home' }">
+        <img src="https://via.placeholder.com/200x40.png?text=" alt=""/>
+    </RouterLink>
+
+    <h2>Price comparison app</h2>
     <div class="row" v-if="isAuthenticated">
         <div class="col-12 p-3">
-            <h3>Price comparison app</h3>
-            <hr/>
             <div class="row">
-                <div class="col-6">
+                <div class="col-12">
                     <RouterLink :to="{ name: 'shop-create' }" class="text-dark">
                         Add store
                     </RouterLink>
                 </div>
-                <div>
-                    Import prices in bulk
+                <div class="col-12">
+                    <RouterLink :to="{ name: 'product-create' }" class="text-dark">
+                        Add product
+                    </RouterLink>
                 </div>
             </div>
             <div class="row">

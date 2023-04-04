@@ -4,7 +4,8 @@ import com.shopleech.publicapi.bll.dto.CustomerBLLDTO;
 import com.shopleech.publicapi.bll.mapper.CustomerBLLMapper;
 import com.shopleech.publicapi.dal.mapper.CustomerDALMapper;
 import com.shopleech.publicapi.dal.repository.CustomerRepository;
-import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +14,13 @@ import org.springframework.stereotype.Service;
  * @since 27.03.2023
  */
 @Service
-@RequiredArgsConstructor
 public class CustomerService implements ICustomerService {
+    Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
     @Autowired
     protected CustomerRepository customerRepository;
-
     @Autowired
     protected CustomerBLLMapper customerMapper;
-
     @Autowired
     protected CustomerDALMapper customerDALMapper;
 

@@ -15,12 +15,8 @@ import java.util.List;
 @Getter
 @Setter
 public class AccountDALDTO {
-
     private Integer id;
-
     private StatusTypeCode status;
-
     private List<CustomerAccountDALDTO> customerAccounts;
-
     private List<OfferDALDTO> offers;
 }

@@ -13,7 +13,6 @@ import lombok.*;
 @Getter
 @Setter
 public class AlarmBLLDTO {
-
     private Integer id;
 
     private CustomerBLLDTO customer;

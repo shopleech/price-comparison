@@ -19,36 +19,4 @@ import java.util.List;
  */
 @Component
 public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
-
-    @Autowired
-    private CustomerDALMapper customerDALMapper;
-
-    @PersistenceContext
-    EntityManager em;
-
-    @Transactional
-    @Override
-    public CustomerDALDTO addCustomer(CustomerDALDTO customer) {
-
-        Session session = em.unwrap(Session.class);
-
-        Customer customer1 = customerDALMapper.mapToEntity(customer);
-        session.persist(customer1);
-
-        return customer;
-    }
-
-    @Override
-    public CustomerDALDTO getCustomerById(Integer id) {
-        return null;
-    }
-
-    @Override
-    public List<CustomerDALDTO> getAllCustomers() {
-
-        TypedQuery<Customer> query = em.createQuery("select p from Customer p", Customer.class);
-        List<Customer> customers = query.getResultList();
-
-        return customerDALMapper.mapToDto(customers);
-    }
 }

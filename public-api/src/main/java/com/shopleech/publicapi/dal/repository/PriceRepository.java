@@ -2,6 +2,7 @@ package com.shopleech.publicapi.dal.repository;
 
 import com.shopleech.publicapi.domain.Price;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,4 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PriceRepository extends JpaRepository<Price, Integer>, PriceRepositoryCustom {
+    @Query(value = "SELECT COUNT(*) FROM price", nativeQuery = true)
+    int getPriceUpdateCount();
 }

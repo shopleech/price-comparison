@@ -18,7 +18,6 @@ import java.util.Set;
 @Setter
 @Table(name = "_user")
 public class User {
-
     @Id
     @GeneratedValue
     private Integer id;

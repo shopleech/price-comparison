@@ -13,7 +13,6 @@ import lombok.*;
 @Getter
 @Setter
 public class FeatureBLLDTO {
-
     private Integer id;
 
     private OfferBLLDTO offer;

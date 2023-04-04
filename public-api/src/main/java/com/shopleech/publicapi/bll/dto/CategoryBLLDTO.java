@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 public class CategoryBLLDTO {
-
     private Integer id;
 
     private CategoryBLLDTO parentCategory;

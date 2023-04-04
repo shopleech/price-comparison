@@ -13,7 +13,6 @@ import lombok.*;
 @Getter
 @Setter
 public class AccountBLLDTO {
-
     public Integer id;
 
     public StatusTypeCode status;

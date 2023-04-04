@@ -1,9 +1,10 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.dto.WatchlistBLLDTO;
-import com.shopleech.publicapi.bll.mapper.WatchlistBLLMapper;
 import com.shopleech.publicapi.dal.repository.WatchlistRepository;
-import lombok.RequiredArgsConstructor;
+import com.shopleech.publicapi.domain.Watchlist;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,22 +14,27 @@ import java.util.List;
  * @since 24.01.2023
  */
 @Service
-@RequiredArgsConstructor
 public class WatchlistService {
+    Logger logger = LoggerFactory.getLogger(WatchlistService.class);
 
+    @Autowired
     protected WatchlistRepository watchlistRepository;
 
-    protected WatchlistBLLMapper watchlistMapper;
-
-    public void createWatchlist(WatchlistBLLDTO data) {
-        watchlistRepository.addWatchlist(watchlistMapper.mapToEntity(data));
+    public Watchlist add(Watchlist data) {
+        return watchlistRepository.save(data);
     }
 
-    public WatchlistBLLDTO get(Integer id) {
-        return watchlistMapper.mapToDto(watchlistRepository.getWatchlistById(id));
+    public Watchlist get(Integer id) throws Exception {
+        var item = watchlistRepository.findById(id);
+
+        if (item.isEmpty()) {
+            throw new Exception("alarm not found");
+        }
+
+        return item.get();
     }
 
-    public List<WatchlistBLLDTO> getAll() {
-        return watchlistMapper.mapToDto(watchlistRepository.getAllWatchlists());
+    public List<Watchlist> getAll() {
+        return watchlistRepository.findAll();
     }
 }

@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 public class CustomerBLLDTO {
-
     private Integer id;
 
     private String personalCode;

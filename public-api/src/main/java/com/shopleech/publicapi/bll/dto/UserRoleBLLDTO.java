@@ -12,7 +12,6 @@ import lombok.*;
 @Getter
 @Setter
 public class UserRoleBLLDTO {
-
     private Integer id;
 
     private UserBLLDTO user;

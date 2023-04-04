@@ -1,11 +1,9 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.dto.CustomerAccountBLLDTO;
-import com.shopleech.publicapi.bll.mapper.CustomerAccountBLLMapper;
-import com.shopleech.publicapi.bll.mapper.CustomerBLLMapper;
 import com.shopleech.publicapi.dal.repository.CustomerAccountRepository;
-import com.shopleech.publicapi.dal.repository.CustomerRepository;
-import lombok.RequiredArgsConstructor;
+import com.shopleech.publicapi.domain.CustomerAccount;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +12,13 @@ import org.springframework.stereotype.Service;
  * @since 27.03.2023
  */
 @Service
-@RequiredArgsConstructor
 public class CustomerAccountService {
+    Logger logger = LoggerFactory.getLogger(CustomerAccountService.class);
 
     @Autowired
     protected CustomerAccountRepository customerAccountRepository;
 
-    @Autowired
-    protected CustomerAccountBLLMapper customerAccountMapper;
-
-    public CustomerAccountBLLDTO createCustomerAccount(CustomerAccountBLLDTO relation) {
-        return customerAccountMapper.mapToDto(
-                customerAccountRepository.createCustomerAccount(customerAccountMapper.mapToEntity(relation))
-        );
+    public CustomerAccount add(CustomerAccount relation) {
+        return customerAccountRepository.save(relation);
     }
 }

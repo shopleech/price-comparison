@@ -16,7 +16,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ProductBLLDTO {
-
     private Integer id;
 
     private CategoryBLLDTO category;

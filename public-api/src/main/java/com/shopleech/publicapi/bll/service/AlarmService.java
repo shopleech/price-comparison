@@ -1,9 +1,10 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.dto.AlarmBLLDTO;
-import com.shopleech.publicapi.bll.mapper.AlarmBLLMapper;
 import com.shopleech.publicapi.dal.repository.AlarmRepository;
-import lombok.RequiredArgsConstructor;
+import com.shopleech.publicapi.domain.Alarm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,26 +14,27 @@ import java.util.List;
  * @since 24.01.2023
  */
 @Service
-@RequiredArgsConstructor
 public class AlarmService {
+    Logger logger = LoggerFactory.getLogger(AlarmService.class);
 
+    @Autowired
     protected AlarmRepository alarmRepository;
 
-    protected AlarmBLLMapper alarmMapper;
-
-    public void createAlarm(AlarmBLLDTO data) {
-        alarmRepository.addAlarm(alarmMapper.mapToEntity(data));
+    public Alarm add(Alarm data) {
+        return alarmRepository.save(data);
     }
 
-    public AlarmBLLDTO get(int id) {
-        return alarmMapper.mapToDto(alarmRepository.getAlarmById(id));
+    public Alarm get(int id) throws Exception {
+        var item = alarmRepository.findById(id);
+
+        if (item.isEmpty()) {
+            throw new Exception("alarm not found");
+        }
+
+        return item.get();
     }
 
-    public AlarmBLLDTO getByName(String name) {
-        return alarmMapper.mapToDto(alarmRepository.getAlarmByName(name));
-    }
-
-    public List<AlarmBLLDTO> getAll() {
-        return alarmMapper.mapToDto(alarmRepository.getAllAlarms());
+    public List<Alarm> getAll() {
+        return alarmRepository.findAll();
     }
 }

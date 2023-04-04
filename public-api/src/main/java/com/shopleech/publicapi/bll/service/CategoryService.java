@@ -20,18 +20,24 @@ public class CategoryService {
     @Autowired
     protected CategoryRepository categoryRepository;
 
-//    @Autowired
-//    protected CategoryBLLMapper categoryMapper;
-
-    public void createCategory(Category data) {
-        categoryRepository.save(data);
+    public Category add(Category data) {
+        logger.info("add category");
+        return categoryRepository.save(data);
     }
 
-    public Category get(int id) {
-        return categoryRepository.getCategoryById(id);
+    public Category get(int id) throws Exception {
+        logger.info("get category");
+        var item = categoryRepository.findById(id);
+
+        if (item.isEmpty()) {
+            throw new Exception("category not found");
+        }
+
+        return item.get();
     }
 
     public List<Category> getAll() {
+        logger.info("get all categories");
         return categoryRepository.findAll();
     }
 }

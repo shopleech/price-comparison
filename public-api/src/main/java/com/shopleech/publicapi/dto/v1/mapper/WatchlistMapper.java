@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.dto.v1.mapper;
 
-import com.shopleech.publicapi.bll.dto.WatchlistBLLDTO;
+import com.shopleech.publicapi.domain.Watchlist;
 import com.shopleech.publicapi.dto.v1.WatchlistDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,20 +17,20 @@ import java.util.stream.Collectors;
 public class WatchlistMapper {
     Logger logger = LoggerFactory.getLogger(WatchlistMapper.class);
 
-    public List<WatchlistDTO> mapToDto(List<WatchlistBLLDTO> watchlists) {
+    public List<WatchlistDTO> mapToDto(List<Watchlist> watchlists) {
         return watchlists.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
     }
 
-    public WatchlistDTO mapToDto(WatchlistBLLDTO c) {
+    public WatchlistDTO mapToDto(Watchlist c) {
         return new WatchlistDTO(
                 c.getId(),
                 c.getWatchlistTypeCode()
         );
     }
 
-    public WatchlistBLLDTO mapToEntity(WatchlistDTO newWatchlist) {
-        WatchlistBLLDTO entity = new WatchlistBLLDTO();
+    public Watchlist mapToEntity(WatchlistDTO newWatchlist) {
+        Watchlist entity = new Watchlist();
         entity.setId(newWatchlist.getId());
         entity.setWatchlistTypeCode(newWatchlist.getWatchlistTypeCode());
         return entity;

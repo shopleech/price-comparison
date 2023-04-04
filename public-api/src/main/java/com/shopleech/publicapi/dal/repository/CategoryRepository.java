@@ -13,6 +13,4 @@ import java.util.List;
  */
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer>, CategoryRepositoryCustom {
-    @Query(value = "SELECT COUNT(*) FROM category where id = ?1", nativeQuery = true)
-    Category getCategoryById(int id);
 }

@@ -1,6 +1,5 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.dto.ProductBLLDTO;
 import com.shopleech.publicapi.domain.Product;
 import com.shopleech.publicapi.dto.v1.ProductImportItemDTO;
 

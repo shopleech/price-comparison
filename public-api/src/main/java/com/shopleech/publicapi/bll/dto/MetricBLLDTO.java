@@ -13,7 +13,6 @@ import lombok.*;
 @Getter
 @Setter
 public class MetricBLLDTO {
-
     private Integer id;
 
     private ProductBLLDTO product;

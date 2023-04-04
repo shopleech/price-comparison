@@ -15,15 +15,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class StatsService implements IStatsService {
-
     Logger logger = LoggerFactory.getLogger(StatsService.class);
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private ProductRepository productRepository;
-
     @Autowired
     private PriceRepository priceRepository;
 

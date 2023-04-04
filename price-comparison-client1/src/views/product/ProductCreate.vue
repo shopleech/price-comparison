@@ -1,5 +1,9 @@
 <template>
-    <h4>Create product</h4>
+    <RouterLink :to="{ name: 'home' }">
+        <img src="https://via.placeholder.com/40x40.png?text=back" alt="back"/>
+    </RouterLink>
+
+    <h2>Products</h2>
     <div class="row">
         <div class="col-md-12">
 

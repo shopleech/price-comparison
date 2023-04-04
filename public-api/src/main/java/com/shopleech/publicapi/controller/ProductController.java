@@ -6,7 +6,6 @@ import com.shopleech.publicapi.dto.v1.ProductImportDTO;
 import com.shopleech.publicapi.dto.v1.ProductSearchDTO;
 import com.shopleech.publicapi.dto.v1.mapper.ProductMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/v1/product")
-@RequiredArgsConstructor
 @Tag(name = "Product controller", description = "Endpoint")
 public class ProductController {
     Logger logger = LoggerFactory.getLogger(ProductController.class);

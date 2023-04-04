@@ -12,23 +12,4 @@ import java.util.List;
  */
 @Component
 public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
-
-    private ReviewRepository reviewRepository;
-
-    private ReviewDALMapper reviewDALMapper;
-
-    @Override
-    public void addReview(ReviewDALDTO review) {
-        //reviewRepository.add(reviewDALMapper.mapToEntity(review));
-    }
-
-    @Override
-    public ReviewDALDTO getReviewById(Integer id) {
-        return reviewDALMapper.mapToDto(reviewRepository.getReferenceById(id));
-    }
-
-    @Override
-    public List<ReviewDALDTO> getAllReviews() {
-        return reviewDALMapper.mapToDto(reviewRepository.findAll());
-    }
 }

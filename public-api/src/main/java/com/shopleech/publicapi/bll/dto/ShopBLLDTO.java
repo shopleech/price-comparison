@@ -12,7 +12,6 @@ import lombok.*;
 @Getter
 @Setter
 public class ShopBLLDTO {
-
     private Integer id;
 
     private String name;

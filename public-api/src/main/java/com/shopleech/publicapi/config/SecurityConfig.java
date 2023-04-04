@@ -2,7 +2,6 @@ package com.shopleech.publicapi.config;
 
 import com.shopleech.publicapi.bll.filter.JwtAuthenticationFilter;
 import com.shopleech.publicapi.bll.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +26,6 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Autowired

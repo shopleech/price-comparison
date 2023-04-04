@@ -12,7 +12,6 @@ import lombok.*;
 @Getter
 @Setter
 public class StatsBLLDTO {
-
     private int numOfProducts;
     private int numOfPriceUpdates;
     private int numOfUsers;

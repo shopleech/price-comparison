@@ -36,30 +36,22 @@ import java.util.List;
  */
 @Service
 public class UserService implements IUserService {
-
     Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     UserRepository roleRepository;
-
     @Autowired
     CustomerRepository customerRepository;
-
     @Autowired
     AccountRepository accountRepository;
-
     @Autowired
     CustomerAccountRepository customerAccountRepository;
-
     @Autowired
     private UserBLLMapper userBLLMapper;
-
     @Autowired
     private UserDALMapper userDALMapper;
-
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
@@ -75,7 +67,6 @@ public class UserService implements IUserService {
 
     @Override
     public UserBLLDTO updateUser(UserBLLDTO userBLLDTO) {
-
         return userBLLMapper.mapToDto(userDALMapper.mapToDto(
                 userRepository.save(userDALMapper.mapToEntity(
                         userBLLMapper.mapToEntity(userBLLDTO)))
@@ -84,7 +75,6 @@ public class UserService implements IUserService {
 
     @Override
     public void deleteUser(String userId) {
-
     }
 
     @Override

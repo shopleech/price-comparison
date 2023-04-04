@@ -7,5 +7,4 @@ import com.shopleech.publicapi.dal.dto.CustomerAccountDALDTO;
  * @since 28.03.2023
  */
 public interface CustomerAccountRepositoryCustom {
-    CustomerAccountDALDTO createCustomerAccount(CustomerAccountDALDTO mapToEntity);
 }

@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductImportItemDTO {
-
     private String productNo;
     private String name;
     private String price;

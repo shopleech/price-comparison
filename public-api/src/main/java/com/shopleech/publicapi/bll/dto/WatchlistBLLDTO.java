@@ -13,7 +13,6 @@ import lombok.*;
 @Getter
 @Setter
 public class WatchlistBLLDTO {
-
     private Integer id;
 
     private CustomerBLLDTO customer;

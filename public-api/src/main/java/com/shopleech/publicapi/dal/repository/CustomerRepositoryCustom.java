@@ -9,10 +9,4 @@ import java.util.List;
  * @since 07.02.2023
  */
 public interface CustomerRepositoryCustom {
-
-    CustomerDALDTO addCustomer(CustomerDALDTO mapToEntity);
-
-    CustomerDALDTO getCustomerById(Integer id);
-
-    List<CustomerDALDTO> getAllCustomers();
 }

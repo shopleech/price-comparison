@@ -1,6 +1,4 @@
-import httpCLient from '@/http-client'
 import { BaseService } from './BaseService'
-import { AxiosError } from 'axios'
 import { IShop } from '@/domain/IShop'
 import { useShopStore } from '@/stores/shop'
 

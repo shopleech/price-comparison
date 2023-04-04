@@ -1,9 +1,10 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.dto.AccountBLLDTO;
-import com.shopleech.publicapi.bll.mapper.AccountBLLMapper;
 import com.shopleech.publicapi.dal.repository.AccountRepository;
-import lombok.RequiredArgsConstructor;
+import com.shopleech.publicapi.domain.Account;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,22 +14,27 @@ import java.util.List;
  * @since 24.01.2023
  */
 @Service
-@RequiredArgsConstructor
 public class AccountService {
+    Logger logger = LoggerFactory.getLogger(AccountService.class);
 
+    @Autowired
     protected AccountRepository accountRepository;
 
-    protected AccountBLLMapper accountMapper;
-
-    public AccountBLLDTO createAccount(AccountBLLDTO data) {
-        return accountMapper.mapToDto(accountRepository.addAccount(accountMapper.mapToEntity(data)));
+    public Account createAccount(Account data) {
+        return accountRepository.save(data);
     }
 
-    public AccountBLLDTO get(int id) {
-        return accountMapper.mapToDto(accountRepository.getAccountById(id));
+    public Account get(int id) throws Exception {
+        var item = accountRepository.findById(id);
+
+        if (item.isEmpty()) {
+            throw new Exception("account not found");
+        }
+
+        return item.get();
     }
 
-    public List<AccountBLLDTO> getAll() {
-        return accountMapper.mapToDto(accountRepository.getAllAccounts());
+    public List<Account> getAll() {
+        return accountRepository.findAll();
     }
 }

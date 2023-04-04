@@ -12,7 +12,6 @@ import lombok.*;
 @Getter
 @Setter
 public class CustomerAccountBLLDTO {
-
     private Integer id;
 
     private CustomerBLLDTO customer;

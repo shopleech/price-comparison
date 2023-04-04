@@ -14,7 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 public class RoleBLLDTO {
-
     private Integer id;
 
     private String name;

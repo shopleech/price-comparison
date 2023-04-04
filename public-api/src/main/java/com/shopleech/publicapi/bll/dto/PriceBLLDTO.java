@@ -14,7 +14,6 @@ import lombok.*;
 @Getter
 @Setter
 public class PriceBLLDTO {
-
     private Integer id;
 
     private OfferBLLDTO offer;

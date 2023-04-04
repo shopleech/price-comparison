@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.dto.v1.mapper;
 
-import com.shopleech.publicapi.bll.dto.AlarmBLLDTO;
+import com.shopleech.publicapi.domain.Alarm;
 import com.shopleech.publicapi.dto.v1.AlarmDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 public class AlarmMapper {
     Logger logger = LoggerFactory.getLogger(AlarmMapper.class);
 
-    public List<AlarmDTO> mapToDto(List<AlarmBLLDTO> alarms) {
+    public List<AlarmDTO> mapToDto(List<Alarm> alarms) {
         return alarms.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
     }
 
-    public AlarmDTO mapToDto(AlarmBLLDTO c) {
+    public AlarmDTO mapToDto(Alarm c) {
         return new AlarmDTO(
                 c.getId(),
                 c.getAlarmTypeCode(),
@@ -32,8 +32,8 @@ public class AlarmMapper {
         );
     }
 
-    public AlarmBLLDTO mapToEntity(AlarmDTO newAlarm) {
-        AlarmBLLDTO entity = new AlarmBLLDTO();
+    public Alarm mapToEntity(AlarmDTO newAlarm) {
+        Alarm entity = new Alarm();
         entity.setId(newAlarm.getId());
         entity.setAlarmTypeCode(newAlarm.getAlarmTypeCode());
         entity.setMinValue(newAlarm.getMinValue());

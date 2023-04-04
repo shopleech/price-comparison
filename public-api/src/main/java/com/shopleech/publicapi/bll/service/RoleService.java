@@ -2,6 +2,8 @@ package com.shopleech.publicapi.bll.service;
 
 import com.shopleech.publicapi.dal.repository.RoleRepository;
 import com.shopleech.publicapi.domain.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RoleService {
+    Logger logger = LoggerFactory.getLogger(RoleService.class);
 
     @Autowired
     private RoleRepository roleRepository;

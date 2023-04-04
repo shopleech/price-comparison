@@ -16,20 +16,4 @@ import org.springframework.stereotype.Repository;
  */
 @Component
 public class CustomerAccountRepositoryImpl implements CustomerAccountRepositoryCustom {
-
-    @PersistenceContext
-    EntityManager em;
-
-    @Autowired
-    private CustomerAccountDALMapper customerAccountDALMapper;
-
-    @Override
-    public CustomerAccountDALDTO createCustomerAccount(CustomerAccountDALDTO mapToEntity) {
-        Session session = em.unwrap(Session.class);
-
-        CustomerAccount customerAccount = customerAccountDALMapper.mapToEntity(mapToEntity);
-        session.persist(customerAccount);
-
-        return mapToEntity;
-    }
 }

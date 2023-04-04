@@ -5,5 +5,4 @@ package com.shopleech.publicapi.dal.repository;
  * @since 29.03.2023
  */
 public interface OfferRepositoryCustom {
-
 }

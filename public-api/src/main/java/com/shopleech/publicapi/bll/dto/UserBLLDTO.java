@@ -15,7 +15,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class UserBLLDTO {
-
     private Integer id;
 
     private CustomerBLLDTO customer;

@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "watchlist")
 public class Watchlist {
-
     @Id
     @GeneratedValue
     private Integer id;

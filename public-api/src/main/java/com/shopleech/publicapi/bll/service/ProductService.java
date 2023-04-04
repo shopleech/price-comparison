@@ -1,13 +1,11 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.dto.ProductBLLDTO;
 import com.shopleech.publicapi.bll.mapper.ProductBLLMapper;
 import com.shopleech.publicapi.bll.util.JwtTokenUtil;
 import com.shopleech.publicapi.dal.repository.OfferRepository;
 import com.shopleech.publicapi.dal.repository.ProductRepository;
 import com.shopleech.publicapi.domain.Offer;
 import com.shopleech.publicapi.domain.Product;
-import com.shopleech.publicapi.dto.v1.ProductDTO;
 import com.shopleech.publicapi.dto.v1.ProductImportItemDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

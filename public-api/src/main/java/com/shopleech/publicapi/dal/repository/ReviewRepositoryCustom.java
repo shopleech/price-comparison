@@ -9,10 +9,4 @@ import java.util.List;
  * @since 06.02.2023
  */
 public interface ReviewRepositoryCustom {
-
-    void addReview(ReviewDALDTO mapToEntity);
-
-    ReviewDALDTO getReviewById(Integer id);
-
-    List<ReviewDALDTO> getAllReviews();
 }

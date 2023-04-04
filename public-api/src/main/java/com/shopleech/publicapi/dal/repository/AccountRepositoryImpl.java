@@ -18,33 +18,4 @@ import java.util.List;
  */
 @Component
 public class AccountRepositoryImpl implements AccountRepositoryCustom {
-
-    @Autowired
-    private AccountDALMapper accountDALMapper;
-
-    @PersistenceContext
-    EntityManager em;
-
-    @Override
-    public AccountDALDTO addAccount(AccountDALDTO account) {
-        return null;
-    }
-
-    @Override
-    public AccountDALDTO getAccountById(Integer id) {
-        return null;
-    }
-
-    @Override
-    public List<AccountDALDTO> getAllAccounts() {
-        TypedQuery<Account> query = em.createQuery("select p from Account p", Account.class);
-        List<Account> accounts = query.getResultList();
-
-        return accountDALMapper.mapToDto(accounts);
-    }
-
-    @Override
-    public Account createAccount(AccountDALDTO account) {
-        return null;
-    }
 }

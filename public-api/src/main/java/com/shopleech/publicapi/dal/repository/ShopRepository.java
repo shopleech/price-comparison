@@ -13,6 +13,6 @@ import java.util.List;
  */
 @Repository
 public interface ShopRepository extends JpaRepository<Shop, Integer>, ShopRepositoryCustom {
-    @Query(value = "SELECT * FROM shop", nativeQuery = true)
-    List<Shop> getAll();
+    @Query(value = "SELECT COUNT(*) FROM shop", nativeQuery = true)
+    int countAll();
 }

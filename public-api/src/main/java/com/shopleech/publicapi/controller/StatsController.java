@@ -28,7 +28,6 @@ public class StatsController {
 
     @Autowired
     private StatsMapper statsMapper;
-
     @Autowired
     private StatsService statsService;
 

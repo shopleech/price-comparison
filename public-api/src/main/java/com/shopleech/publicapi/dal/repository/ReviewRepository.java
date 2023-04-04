@@ -10,6 +10,4 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer>, ReviewRepositoryCustom {
-
-//   void add(Review review);
 }

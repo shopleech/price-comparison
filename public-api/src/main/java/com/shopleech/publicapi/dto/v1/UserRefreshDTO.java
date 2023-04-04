@@ -1,7 +1,6 @@
 package com.shopleech.publicapi.dto.v1;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
