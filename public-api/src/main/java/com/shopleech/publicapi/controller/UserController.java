@@ -1,13 +1,13 @@
 package com.shopleech.publicapi.controller;
 
 import com.shopleech.publicapi.bll.service.AccountService;
-import com.shopleech.publicapi.bll.service.CustomerAccountService;
 import com.shopleech.publicapi.bll.service.CustomerService;
 import com.shopleech.publicapi.bll.service.UserService;
 import com.shopleech.publicapi.bll.util.JwtTokenUtil;
 import com.shopleech.publicapi.dto.v1.UserLoginDTO;
 import com.shopleech.publicapi.dto.v1.UserRefreshDTO;
 import com.shopleech.publicapi.dto.v1.UserRegisterDTO;
+import com.shopleech.publicapi.dto.v1.UserDTO;
 import com.shopleech.publicapi.dto.v1.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,23 +38,15 @@ public class UserController {
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private UserMapper mapper;
-
+    private UserMapper userMapper;
     @Autowired
-    private UserService userDetailsService;
-
+    private UserService userService;
     @Autowired
     private CustomerService customerService;
-
     @Autowired
     private AccountService accountService;
-
-    @Autowired
-    private CustomerAccountService customerAccountService;
-
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -67,7 +59,7 @@ public class UserController {
 
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var register = userDetailsService.register(request);
+            var register = userService.register(request);
             if (register != null) {
                 responseMap.put("error", false);
                 responseMap.put("message", "registration_success");
@@ -118,7 +110,7 @@ public class UserController {
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
             if (auth.isAuthenticated()) {
                 logger.info("Logged In");
-                UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+                UserDetails userDetails = userService.loadUserByUsername(request.getEmail());
                 String token = jwtTokenUtil.generateToken(userDetails);
 
                 responseMap.put("error", false);
@@ -162,7 +154,7 @@ public class UserController {
 
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(
+            UserDetails userDetails = userService.loadUserByUsername(
                     jwtTokenUtil.getUsernameFromToken(request.getToken()));
 
             if (!userDetails.getUsername().isEmpty()) {
@@ -207,9 +199,84 @@ public class UserController {
 
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var users = userDetailsService.findUsers();
+            var users = userService.getAll();
             responseMap.put("details", users);
             responseMap.put("error", false);
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAll() {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = userService.getAll();
+            responseMap.put("error", false);
+            responseMap.put("details", userMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable(value = "id") Integer id) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = userService.get(id);
+            responseMap.put("error", false);
+            responseMap.put("details", userMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> add(@RequestBody UserDTO userDTO) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = userService.add(userMapper.mapToEntity(userDTO));
+            responseMap.put("error", false);
+            responseMap.put("details", userMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable(value = "id") Integer id, @RequestBody UserDTO userDTO) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = userService.update(id, userMapper.mapToEntity(userDTO));
+            responseMap.put("error", false);
+            responseMap.put("details", userMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> remove(@PathVariable(value = "id") Integer id) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = userService.remove(id);
+            responseMap.put("error", false);
+            responseMap.put("details", item);
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);

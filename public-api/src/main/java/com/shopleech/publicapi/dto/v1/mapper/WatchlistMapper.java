@@ -25,7 +25,8 @@ public class WatchlistMapper {
     public WatchlistDTO mapToDto(Watchlist c) {
         return new WatchlistDTO(
                 c.getId(),
-                c.getWatchlistTypeCode()
+                c.getWatchlistTypeCode(),
+                c.getProduct().getId()
         );
     }
 
@@ -33,7 +34,7 @@ public class WatchlistMapper {
         Watchlist entity = new Watchlist();
         entity.setId(newWatchlist.getId());
         entity.setWatchlistTypeCode(newWatchlist.getWatchlistTypeCode());
+
         return entity;
     }
-
 }

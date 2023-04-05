@@ -16,7 +16,6 @@ import java.sql.Timestamp;
 @Setter
 @Table(name = "user_role")
 public class UserRole {
-
     @Id
     @GeneratedValue
     private Integer id;

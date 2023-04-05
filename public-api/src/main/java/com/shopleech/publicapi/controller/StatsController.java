@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/v1/stats")
-@Tag(name = "Stats Controller", description = "Endpoint for user access")
+@Tag(name = "Stats Controller", description = "Endpoint")
 public class StatsController {
     Logger logger = LoggerFactory.getLogger(StatsController.class);
 

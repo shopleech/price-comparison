@@ -1,4 +1,4 @@
-package com.shopleech.publicapi.bll.service;
+package com.shopleech.publicapi.bll.service.model;
 
 import com.shopleech.publicapi.bll.dto.StatsBLLDTO;
 
@@ -7,6 +7,5 @@ import com.shopleech.publicapi.bll.dto.StatsBLLDTO;
  * @since 22.03.2023
  */
 public interface IStatsService {
-
     StatsBLLDTO getPublicStats();
 }

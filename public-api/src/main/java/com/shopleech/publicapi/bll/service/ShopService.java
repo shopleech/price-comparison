@@ -1,5 +1,6 @@
 package com.shopleech.publicapi.bll.service;
 
+import com.shopleech.publicapi.bll.service.model.IShopService;
 import com.shopleech.publicapi.dal.repository.ShopRepository;
 import com.shopleech.publicapi.domain.Shop;
 import org.slf4j.Logger;
@@ -14,7 +15,7 @@ import java.util.List;
  * @since 02.04.2023
  */
 @Service
-public class ShopService {
+public class ShopService implements IShopService {
     Logger logger = LoggerFactory.getLogger(ShopService.class);
 
     @Autowired
@@ -25,7 +26,34 @@ public class ShopService {
         return shopRepository.save(shop);
     }
 
-    public List<Shop> findShops() {
+    @Override
+    public List<Shop> getAll() {
         return shopRepository.findAll();
+    }
+
+    @Override
+    public Shop get(Integer id) throws Exception {
+        var item = shopRepository.findById(id);
+
+        if (item.isEmpty()) {
+            throw new Exception("shop not found");
+        }
+
+        return item.get();
+    }
+
+    @Override
+    public Shop add(Shop shop) {
+        return shop;
+    }
+
+    @Override
+    public Shop update(Integer id, Shop shop) {
+        return shop;
+    }
+
+    @Override
+    public Integer remove(Integer id) {
+        return id;
     }
 }

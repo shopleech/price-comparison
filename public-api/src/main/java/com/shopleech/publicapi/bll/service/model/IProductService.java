@@ -1,4 +1,4 @@
-package com.shopleech.publicapi.bll.service;
+package com.shopleech.publicapi.bll.service.model;
 
 import com.shopleech.publicapi.domain.Product;
 import com.shopleech.publicapi.dto.v1.ProductImportItemDTO;
@@ -10,6 +10,7 @@ import java.util.List;
  * @since 04.03.2023
  */
 public interface IProductService {
+    Product get(Integer id) throws Exception;
 
     List<Product> getAll();
 
@@ -17,5 +18,9 @@ public interface IProductService {
 
     String importProducts(String token, List<ProductImportItemDTO> productImportItems);
 
+    Product add(Product product);
 
+    Product update(Integer id, Product product);
+
+    Integer remove(Integer id);
 }

@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.mapper.ProductBLLMapper;
+import com.shopleech.publicapi.bll.service.model.IProductService;
 import com.shopleech.publicapi.bll.util.JwtTokenUtil;
 import com.shopleech.publicapi.dal.repository.OfferRepository;
 import com.shopleech.publicapi.dal.repository.ProductRepository;
@@ -33,18 +33,20 @@ public class ProductService implements IProductService {
     @Autowired
     protected OfferRepository offerRepository;
     @Autowired
-    protected ProductBLLMapper productMapper;
-    @Autowired
     protected UserService userService;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    public Product createProduct(Product data) {
-        return productRepository.save(data);
-    }
+    @Override
+    public Product get(Integer id) throws Exception {
+        logger.info("product" + id);
+        var item = productRepository.findById(id);
 
-    public Product get(Integer id) {
-        return productRepository.getProductById(id);
+        if (item.isEmpty()) {
+            throw new Exception("product not found");
+        }
+
+        return item.get();
     }
 
     @Override
@@ -90,6 +92,21 @@ public class ProductService implements IProductService {
         }
 
         return null;
+    }
+
+    @Override
+    public Product add(Product product) {
+        return productRepository.save(product);
+    }
+
+    @Override
+    public Product update(Integer id, Product product) {
+        return product;
+    }
+
+    @Override
+    public Integer remove(Integer id) {
+        return id;
     }
 
     public static UserDetails currentUserDetails() {

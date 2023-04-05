@@ -1,5 +1,6 @@
 package com.shopleech.publicapi.bll.service;
 
+import com.shopleech.publicapi.bll.service.model.ICategoryService;
 import com.shopleech.publicapi.dal.repository.CategoryRepository;
 import com.shopleech.publicapi.domain.Category;
 import org.slf4j.Logger;
@@ -14,17 +15,19 @@ import java.util.List;
  * @since 24.01.2023
  */
 @Service
-public class CategoryService {
+public class CategoryService implements ICategoryService {
     Logger logger = LoggerFactory.getLogger(CategoryService.class);
 
     @Autowired
     protected CategoryRepository categoryRepository;
 
+    @Override
     public Category add(Category data) {
         logger.info("add category");
         return categoryRepository.save(data);
     }
 
+    @Override
     public Category get(int id) throws Exception {
         logger.info("get category");
         var item = categoryRepository.findById(id);
@@ -36,8 +39,19 @@ public class CategoryService {
         return item.get();
     }
 
+    @Override
     public List<Category> getAll() {
         logger.info("get all categories");
         return categoryRepository.findAll();
+    }
+
+    @Override
+    public Category update(Integer id, Category category) {
+        return category;
+    }
+
+    @Override
+    public Integer remove(Integer id) {
+        return id;
     }
 }

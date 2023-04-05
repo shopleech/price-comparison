@@ -1,5 +1,6 @@
 package com.shopleech.publicapi.bll.service;
 
+import com.shopleech.publicapi.bll.service.model.IAlarmService;
 import com.shopleech.publicapi.dal.repository.AlarmRepository;
 import com.shopleech.publicapi.domain.Alarm;
 import org.slf4j.Logger;
@@ -14,16 +15,18 @@ import java.util.List;
  * @since 24.01.2023
  */
 @Service
-public class AlarmService {
+public class AlarmService implements IAlarmService {
     Logger logger = LoggerFactory.getLogger(AlarmService.class);
 
     @Autowired
     protected AlarmRepository alarmRepository;
 
+    @Override
     public Alarm add(Alarm data) {
         return alarmRepository.save(data);
     }
 
+    @Override
     public Alarm get(int id) throws Exception {
         var item = alarmRepository.findById(id);
 
@@ -34,7 +37,18 @@ public class AlarmService {
         return item.get();
     }
 
+    @Override
     public List<Alarm> getAll() {
         return alarmRepository.findAll();
+    }
+
+    @Override
+    public Alarm update(Integer id, Alarm alarm) {
+        return alarm;
+    }
+
+    @Override
+    public Integer remove(Integer id) {
+        return id;
     }
 }

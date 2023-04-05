@@ -30,40 +30,6 @@ public class ProductController {
     @Autowired
     private ProductMapper productMapper;
 
-    @GetMapping
-    public ResponseEntity<?> getAllProducts() {
-        logger.info("demo request");
-
-        Map<String, Object> responseMap = new HashMap<>();
-        try {
-            var serviceAll = productService.getAll();
-            responseMap.put("error", false);
-            responseMap.put("details", productMapper.mapToDto(serviceAll));
-            return ResponseEntity.ok(responseMap);
-        } catch (Exception e) {
-            responseMap.put("error", true);
-            responseMap.put("message", e.getMessage());
-            return ResponseEntity.status(500).body(responseMap);
-        }
-    }
-
-    @PostMapping
-    public ResponseEntity<?> add(@RequestBody ProductDTO request) {
-        logger.info("add request");
-
-        Map<String, Object> responseMap = new HashMap<>();
-        try {
-            var serviceAll = productService.createProduct(productMapper.mapToEntity(request));
-            responseMap.put("error", false);
-            responseMap.put("details", productMapper.mapToDto(serviceAll));
-            return ResponseEntity.ok(responseMap);
-        } catch (Exception e) {
-            responseMap.put("error", true);
-            responseMap.put("message", e.getMessage());
-            return ResponseEntity.status(500).body(responseMap);
-        }
-    }
-
     @PostMapping("/search")
     public ResponseEntity<?> search(@RequestBody ProductSearchDTO request) {
         Map<String, Object> responseMap = new HashMap<>();
@@ -108,7 +74,80 @@ public class ProductController {
             }
             return ResponseEntity.status(500).body(responseMap);
         }
+    }
 
+    @GetMapping
+    public ResponseEntity<?> getAll() {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = productService.getAll();
+            responseMap.put("error", false);
+            responseMap.put("details", productMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable(value = "id") Integer id) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = productService.get(id);
+            responseMap.put("error", false);
+            responseMap.put("details", productMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> add(@RequestBody ProductDTO productDTO) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = productService.add(productMapper.mapToEntity(productDTO));
+            responseMap.put("error", false);
+            responseMap.put("details", productMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable(value = "id") Integer id, @RequestBody ProductDTO productDTO) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = productService.update(id, productMapper.mapToEntity(productDTO));
+            responseMap.put("error", false);
+            responseMap.put("details", productMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> remove(@PathVariable(value = "id") Integer id) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = productService.remove(id);
+            responseMap.put("error", false);
+            responseMap.put("details", item);
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
     }
 }

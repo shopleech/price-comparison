@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.dto.v1.mapper;
 
-import com.shopleech.publicapi.bll.dto.UserBLLDTO;
+import com.shopleech.publicapi.domain.User;
 import com.shopleech.publicapi.dto.v1.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,21 +17,22 @@ import java.util.stream.Collectors;
 public class UserMapper {
     Logger logger = LoggerFactory.getLogger(UserMapper.class);
 
-    public List<UserDTO> mapToDto(List<UserBLLDTO> users) {
+    public List<UserDTO> mapToDto(List<User> users) {
         return users.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
     }
 
-    public UserDTO mapToDto(UserBLLDTO c) {
+    public UserDTO mapToDto(User c) {
         return new UserDTO(
+                c.getId(),
                 c.getFirstname(),
                 c.getLastname(),
                 c.getEmail()
         );
     }
 
-    public UserBLLDTO mapToEntity(UserDTO newUser) {
-        UserBLLDTO entity = new UserBLLDTO();
+    public User mapToEntity(UserDTO newUser) {
+        User entity = new User();
         entity.setFirstname(newUser.getFirstname());
         entity.setLastname(newUser.getLastname());
         entity.setEmail(newUser.getEmail());

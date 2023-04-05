@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author Ahto Jalak
@@ -32,40 +31,78 @@ public class ShopController {
     private ShopMapper shopMapper;
 
     @Operation(
-            summary = "Create shop",
-            responses = @ApiResponse(responseCode = "200", description = "Shop returned"))
-    @PostMapping
-    public ResponseEntity<?> createNewShop(@RequestBody ShopDTO payload) {
-        logger.info("asd" + Objects.requireNonNull(payload));
-
+            summary = "Shop list",
+            responses = @ApiResponse(responseCode = "200", description = "Success"))
+    @GetMapping
+    public ResponseEntity<?> getAll() {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var shop = shopService.createNewShop(
-                    shopMapper.mapToEntity(payload)
-            );
-            responseMap.put("details", shopMapper.mapToDto(shop));
+            var item = shopService.getAll();
             responseMap.put("error", false);
+            responseMap.put("details", shopMapper.mapToDto(item));
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);
             responseMap.put("message", e.getMessage());
             return ResponseEntity.status(500).body(responseMap);
         }
+    }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable(value = "id") Integer id) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = shopService.get(id);
+            responseMap.put("error", false);
+            responseMap.put("details", shopMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
     }
 
     @Operation(
-            summary = "Shop list",
-            responses = @ApiResponse(responseCode = "200", description = "Success"))
-    @GetMapping
-    public ResponseEntity<?> getShopList() {
-        logger.info("shop list request");
-
+            summary = "Create shop",
+            responses = @ApiResponse(responseCode = "200", description = "Shop returned"))
+    @PostMapping
+    public ResponseEntity<?> add(@RequestBody ShopDTO shopDTO) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var shops = shopMapper.mapToDto(shopService.findShops());
-            responseMap.put("details", shops);
+            var item = shopService.add(shopMapper.mapToEntity(shopDTO));
             responseMap.put("error", false);
+            responseMap.put("details", shopMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable(value = "id") Integer id, @RequestBody ShopDTO shopDTO) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = shopService.update(id, shopMapper.mapToEntity(shopDTO));
+            responseMap.put("error", false);
+            responseMap.put("details", shopMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> remove(@PathVariable(value = "id") Integer id) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = shopService.remove(id);
+            responseMap.put("error", false);
+            responseMap.put("details", item);
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);

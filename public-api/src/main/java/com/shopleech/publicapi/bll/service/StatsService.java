@@ -1,6 +1,7 @@
 package com.shopleech.publicapi.bll.service;
 
 import com.shopleech.publicapi.bll.dto.StatsBLLDTO;
+import com.shopleech.publicapi.bll.service.model.IStatsService;
 import com.shopleech.publicapi.dal.repository.PriceRepository;
 import com.shopleech.publicapi.dal.repository.ProductRepository;
 import com.shopleech.publicapi.dal.repository.UserRepository;
@@ -24,6 +25,7 @@ public class StatsService implements IStatsService {
     @Autowired
     private PriceRepository priceRepository;
 
+    @Override
     public StatsBLLDTO getPublicStats() {
         StatsBLLDTO stats = new StatsBLLDTO();
         stats.setNumOfProducts(productRepository.getProductCount());

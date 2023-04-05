@@ -1,6 +1,6 @@
 package com.shopleech.publicapi.dto.v1.mapper;
 
-import com.shopleech.publicapi.bll.dto.PriceBLLDTO;
+import com.shopleech.publicapi.domain.Price;
 import com.shopleech.publicapi.dto.v1.PriceDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 public class PriceMapper {
     Logger logger = LoggerFactory.getLogger(PriceMapper.class);
 
-    public List<PriceDTO> mapToDto(List<PriceBLLDTO> prices) {
+    public List<PriceDTO> mapToDto(List<Price> prices) {
         return prices.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
     }
 
-    public PriceDTO mapToDto(PriceBLLDTO c) {
+    public PriceDTO mapToDto(Price c) {
         return new PriceDTO(
                 c.getId(),
                 c.getPriceTypeCode(),
@@ -32,8 +32,8 @@ public class PriceMapper {
         );
     }
 
-    public PriceBLLDTO mapToEntity(PriceDTO newPrice) {
-        PriceBLLDTO entity = new PriceBLLDTO();
+    public Price mapToEntity(PriceDTO newPrice) {
+        Price entity = new Price();
         entity.setId(newPrice.getId());
         entity.setPriceTypeCode(newPrice.getPriceTypeCode());
         entity.setQuantity(newPrice.getQuantity());

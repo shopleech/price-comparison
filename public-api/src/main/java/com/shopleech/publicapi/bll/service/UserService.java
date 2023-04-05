@@ -1,10 +1,8 @@
 package com.shopleech.publicapi.bll.service;
 
 import com.shopleech.publicapi.bll.MyUserDetails;
-import com.shopleech.publicapi.bll.dto.UserBLLDTO;
-import com.shopleech.publicapi.bll.mapper.UserBLLMapper;
+import com.shopleech.publicapi.bll.service.model.IUserService;
 import com.shopleech.publicapi.bll.util.JwtTokenUtil;
-import com.shopleech.publicapi.dal.mapper.UserDALMapper;
 import com.shopleech.publicapi.dal.repository.AccountRepository;
 import com.shopleech.publicapi.dal.repository.CustomerAccountRepository;
 import com.shopleech.publicapi.dal.repository.CustomerRepository;
@@ -18,8 +16,6 @@ import com.shopleech.publicapi.dto.v1.UserTokenDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,38 +45,7 @@ public class UserService implements IUserService {
     @Autowired
     CustomerAccountRepository customerAccountRepository;
     @Autowired
-    private UserBLLMapper userBLLMapper;
-    @Autowired
-    private UserDALMapper userDALMapper;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Override
-    public UserBLLDTO getUser(String email) {
-        return null;
-    }
-
-    @Override
-    public UserBLLDTO getUserByUserId(String userId) {
-        return null;
-    }
-
-    @Override
-    public UserBLLDTO updateUser(UserBLLDTO userBLLDTO) {
-        return userBLLMapper.mapToDto(userDALMapper.mapToDto(
-                userRepository.save(userDALMapper.mapToEntity(
-                        userBLLMapper.mapToEntity(userBLLDTO)))
-        ));
-    }
-
-    @Override
-    public void deleteUser(String userId) {
-    }
-
-    @Override
-    public List<UserBLLDTO> getUsers(int page, int limit) {
-        return null;
-    }
+    JwtTokenUtil jwtTokenUtil;
 
     public UserTokenDTO register(UserRegisterDTO request) throws Exception {
 
@@ -145,23 +110,13 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User readUser(Long id) {
-        return null;
-    }
-
-    @Override
-    public List<UserBLLDTO> findUsers() {
-        return userBLLMapper.mapToDto(userRepository.getAllUsers());
-    }
-
-    @Override
-    public User post(User user) {
-        return null;
-    }
-
-    @Override
     public User getUserByUsername(String username) {
         return userRepository.getUserByUsername(username);
+    }
+
+    @Override
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
     @Override
@@ -172,12 +127,42 @@ public class UserService implements IUserService {
         return new MyUserDetails(userRepository.getUserByUsername(username));
     }
 
-    public static UserDetails currentUserDetails() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
+    @Override
+    public User get(Integer id) throws Exception {
+        var item = userRepository.findById(id);
+
+        if (item.isEmpty()) {
+            throw new Exception("user not found");
+        }
+
+        return item.get();
+    }
+
+    @Override
+    public User add(User user) {
+        return user;
+    }
+
+    @Override
+    public User update(Integer id, User user) throws Exception {
+        var item = get(id);
+        item.setFirstname(user.getFirstname());
+        return userRepository.save(item);
+    }
+
+    @Override
+    public Integer remove(Integer id) throws Exception {
+        userRepository.delete(get(id));
+        return id;
+    }
+
+    @Override
+    public User getCurrentUser() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
-            return principal instanceof UserDetails ? (UserDetails) principal : null;
+            var username = ((UserDetails) principal).getUsername();
+            return getUserByUsername(username);
         }
         return null;
     }
