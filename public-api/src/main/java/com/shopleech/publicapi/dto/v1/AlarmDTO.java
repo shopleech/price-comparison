@@ -1,6 +1,7 @@
 package com.shopleech.publicapi.dto.v1;
 
 import com.shopleech.base.config.type.AlarmTypeCode;
+import com.shopleech.publicapi.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AlarmDTO {
     private Integer id;
+    private Integer productId;
     private AlarmTypeCode alarmTypeCode;
     private Double minValue;
     private Double maxValue;

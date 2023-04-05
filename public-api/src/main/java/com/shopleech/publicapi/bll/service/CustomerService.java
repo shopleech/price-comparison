@@ -1,6 +1,5 @@
 package com.shopleech.publicapi.bll.service;
 
-import com.shopleech.publicapi.bll.dto.CustomerBLLDTO;
 import com.shopleech.publicapi.bll.mapper.CustomerBLLMapper;
 import com.shopleech.publicapi.bll.service.model.ICustomerService;
 import com.shopleech.publicapi.dal.mapper.CustomerDALMapper;

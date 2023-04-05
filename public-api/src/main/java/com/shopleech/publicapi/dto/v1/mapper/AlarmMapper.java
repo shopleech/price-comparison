@@ -25,6 +25,7 @@ public class AlarmMapper {
     public AlarmDTO mapToDto(Alarm c) {
         return new AlarmDTO(
                 c.getId(),
+                c.getProduct().getId(),
                 c.getAlarmTypeCode(),
                 c.getMinValue(),
                 c.getMaxValue(),

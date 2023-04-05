@@ -6,7 +6,6 @@ import com.shopleech.publicapi.dal.repository.ProductRepository;
 import com.shopleech.publicapi.dal.repository.UserRepository;
 import com.shopleech.publicapi.dal.repository.WatchlistRepository;
 import com.shopleech.publicapi.domain.Watchlist;
-import com.shopleech.publicapi.dto.v1.WatchlistDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

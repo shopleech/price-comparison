@@ -1,7 +1,6 @@
 package com.shopleech.publicapi.bll.service.model;
 
 import com.shopleech.publicapi.domain.Watchlist;
-import com.shopleech.publicapi.dto.v1.WatchlistDTO;
 
 import java.util.List;
 

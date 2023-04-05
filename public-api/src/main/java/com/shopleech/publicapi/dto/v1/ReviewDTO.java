@@ -18,11 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReviewDTO {
     private Integer id;
-
-    private Customer customer;
-
-    private Product product;
-
+    private Integer productId;
     private ReviewTypeCode reviewTypeCode;
     private Integer score;
     private String description;

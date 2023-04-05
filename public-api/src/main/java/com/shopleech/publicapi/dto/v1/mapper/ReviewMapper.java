@@ -25,9 +25,10 @@ public class ReviewMapper {
     public ReviewDTO mapToDto(Review c) {
         ReviewDTO dto = new ReviewDTO();
         dto.setId(c.getId());
-        // dto.setParentReview();
-        //dto.setName(c.getName());
-        // dto.setReviewTypeCode();
+        dto.setProductId(c.getProduct().getId());
+        dto.setReviewTypeCode(c.getReviewTypeCode());
+        dto.setScore(c.getScore());
+        dto.setDescription(c.getDescription());
 
         return dto;
     }
@@ -41,9 +42,9 @@ public class ReviewMapper {
 
         Review c = new Review();
         c.setId(entity.getId());
-        // c.setParentReview();
-        //c.setName(entity.getName());
-        // c.setReviewTypeCode();
+        c.setReviewTypeCode(entity.getReviewTypeCode());
+        c.setScore(entity.getScore());
+        c.setDescription(entity.getDescription());
 
         return c;
     }

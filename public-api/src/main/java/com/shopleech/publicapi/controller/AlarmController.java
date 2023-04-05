@@ -1,6 +1,9 @@
 package com.shopleech.publicapi.controller;
 
 import com.shopleech.publicapi.bll.service.AlarmService;
+import com.shopleech.publicapi.bll.service.ProductService;
+import com.shopleech.publicapi.bll.service.UserService;
+import com.shopleech.publicapi.domain.Alarm;
 import com.shopleech.publicapi.dto.v1.AlarmDTO;
 import com.shopleech.publicapi.dto.v1.mapper.AlarmMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +28,10 @@ public class AlarmController {
 
     @Autowired
     private AlarmService alarmService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ProductService productService;
     @Autowired
     private AlarmMapper alarmMapper;
 
@@ -62,9 +69,14 @@ public class AlarmController {
     public ResponseEntity<?> add(@RequestBody AlarmDTO alarmDTO) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var item = alarmService.add(alarmMapper.mapToEntity(alarmDTO));
+            var user = userService.getCurrentUser();
+            var item = new Alarm();
+            item.setAlarmTypeCode(alarmDTO.getAlarmTypeCode());
+            item.setCustomer(user.getCustomer());
+            item.setProduct(productService.get(alarmDTO.getProductId()));
+
             responseMap.put("error", false);
-            responseMap.put("details", alarmMapper.mapToDto(item));
+            responseMap.put("details", alarmMapper.mapToDto(alarmService.add(item)));
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);

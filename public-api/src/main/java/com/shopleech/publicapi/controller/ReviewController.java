@@ -1,6 +1,9 @@
 package com.shopleech.publicapi.controller;
 
+import com.shopleech.publicapi.bll.service.ProductService;
 import com.shopleech.publicapi.bll.service.ReviewService;
+import com.shopleech.publicapi.bll.service.UserService;
+import com.shopleech.publicapi.domain.Review;
 import com.shopleech.publicapi.dto.v1.ReviewDTO;
 import com.shopleech.publicapi.dto.v1.mapper.ReviewMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +28,10 @@ public class ReviewController {
 
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ProductService productService;
     @Autowired
     private ReviewMapper reviewMapper;
 
@@ -62,9 +69,16 @@ public class ReviewController {
     public ResponseEntity<?> add(@RequestBody ReviewDTO reviewDTO) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var item = reviewService.add(reviewMapper.mapToEntity(reviewDTO));
+            var user = userService.getCurrentUser();
+            var item = new Review();
+            item.setReviewTypeCode(reviewDTO.getReviewTypeCode());
+            item.setCustomer(user.getCustomer());
+            item.setProduct(productService.get(reviewDTO.getProductId()));
+            item.setScore(reviewDTO.getScore());
+            item.setDescription(reviewDTO.getDescription());
+
             responseMap.put("error", false);
-            responseMap.put("details", reviewMapper.mapToDto(item));
+            responseMap.put("details", reviewMapper.mapToDto(reviewService.add(item)));
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);

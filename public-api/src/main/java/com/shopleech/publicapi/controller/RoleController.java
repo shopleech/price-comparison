@@ -1,11 +1,8 @@
 package com.shopleech.publicapi.controller;
 
 import com.shopleech.publicapi.bll.service.RoleService;
-import com.shopleech.publicapi.bll.service.ShopService;
-import com.shopleech.publicapi.domain.Role;
 import com.shopleech.publicapi.dto.v1.RoleDTO;
 import com.shopleech.publicapi.dto.v1.mapper.RoleMapper;
-import com.shopleech.publicapi.dto.v1.mapper.ShopMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
