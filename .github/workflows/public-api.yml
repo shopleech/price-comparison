@@ -45,6 +45,34 @@ jobs:
         with:
           gradle-version: 7.4
 
+      - name: Write value to Properties-file
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: "${{ env.WORK_DIR }}/src/main/resources/application.properties"
+          property: 'spring.datasource.url'
+          value: ${{ secrets.DB_URL }}
+
+      - name: Write value to Properties-file
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: "${{ env.WORK_DIR }}/src/main/resources/application.properties"
+          property: 'spring.datasource.username'
+          value: ${{ secrets.DB_USERNAME }}
+
+      - name: Write value to Properties-file
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: "${{ env.WORK_DIR }}/src/main/resources/application.properties"
+          property: 'spring.datasource.password'
+          value: ${{ secrets.DB_PASSWORD }}
+
+      - name: Write value to Properties-file
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: "${{ env.WORK_DIR }}/src/main/resources/application.properties"
+          property: 'spring.datasource.hikari.schema'
+          value: ${{ secrets.DB_SCHEMA }}
+
       - name: Run build with Gradle Wrapper
         working-directory: ${{ env.WORK_DIR }}
         run: ./gradlew build
