@@ -91,8 +91,8 @@ class ContainerServiceStack(Stack):
                 tag=main_tag,
             ),
             logging=ecs.LogDrivers.aws_logs(stream_prefix=id),
-            memory_limit_mib=750,
-            cpu=1000,
+            memory_limit_mib=640,
+            cpu=1024,
             environment={},
             linux_parameters=ecs.LinuxParameters(
                 self, f"{id}_linux_parameters",
@@ -114,8 +114,11 @@ class ContainerServiceStack(Stack):
 
         ecs_service = ecs.Ec2Service(
             self, f"{id}_public-api-service",
+            service_name=f"{id}_public-api-service",
             cluster=cluster,
             task_definition=task_definition,
+            min_healthy_percent=0,  # TODO: should be at least 50 for ZDT
+            max_healthy_percent=200,
             # assign_public_ip=True,
             # vpc_subnets=subnets,
             # desired_count=1,
@@ -152,8 +155,8 @@ class ContainerServiceStack(Stack):
                 tag=main_tag,
             ),
             logging=ecs.LogDrivers.aws_logs(stream_prefix=f"{id}3"),
-            memory_limit_mib=200,
-            cpu=500,
+            memory_limit_mib=256,
+            cpu=512,
             environment={},
             linux_parameters=ecs.LinuxParameters(
                 self, f"{id}_linux_parameters3",
@@ -176,8 +179,11 @@ class ContainerServiceStack(Stack):
         # backend
         ecs_service3 = ecs.Ec2Service(
             self, f"{id}_client-service",
+            service_name=f"{id}_client-service",
             cluster=cluster,
             task_definition=task_definition3,
+            min_healthy_percent=0,  # TODO: should be at least 50 for ZDT
+            max_healthy_percent=200,
             # assign_public_ip=True,
             # vpc_subnets=subnets,
             # desired_count=1,
