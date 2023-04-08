@@ -22,7 +22,7 @@ env:
   ECS_CLUSTER: sl-ecs-dev                     # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: sl-ecs-dev_public-api  # set this to the path to your Amazon ECS task definition
                                               # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: sl-ecs-dev_task_container3  # set this to the name of the container in the
+  CONTAINER_NAME: sl-ecs-dev_task_container2  # set this to the name of the container in the
                                               # containerDefinitions section of your task definition
 
 jobs:
