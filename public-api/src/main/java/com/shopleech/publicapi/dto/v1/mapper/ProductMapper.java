@@ -1,5 +1,6 @@
 package com.shopleech.publicapi.dto.v1.mapper;
 
+import com.shopleech.base.config.type.ProductTypeCode;
 import com.shopleech.publicapi.domain.Product;
 import com.shopleech.publicapi.dto.v1.ProductDTO;
 import org.slf4j.Logger;
@@ -25,9 +26,10 @@ public class ProductMapper {
     public ProductDTO mapToDto(Product c) {
         return new ProductDTO(
                 c.getId(),
-                c.getProductTypeCode(),
+                c.getCategory().getId(),
+                String.valueOf(c.getProductTypeCode()),
                 c.getBarcode(),
-                c.getBarcodeTypeCode(),
+                String.valueOf(c.getBarcodeTypeCode()),
                 c.getName(),
                 c.getDescription()
         );
@@ -36,11 +38,12 @@ public class ProductMapper {
     public Product mapToEntity(ProductDTO newProduct) {
         Product entity = new Product();
         entity.setId(newProduct.getId());
-        entity.setProductTypeCode(newProduct.getProductTypeCode());
+        // entity.setProductTypeCode(newProduct.getProductTypeCode());
         entity.setBarcode(newProduct.getBarcode());
-        entity.setBarcodeTypeCode(newProduct.getBarcodeTypeCode());
+        // entity.setBarcodeTypeCode(newProduct.getBarcodeTypeCode());
         entity.setName(newProduct.getName());
         entity.setDescription(newProduct.getDescription());
+
         return entity;
     }
 

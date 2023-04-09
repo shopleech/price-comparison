@@ -1,6 +1,9 @@
 package com.shopleech.publicapi.controller;
 
+import com.shopleech.publicapi.bll.service.CategoryService;
 import com.shopleech.publicapi.bll.service.ProductService;
+import com.shopleech.publicapi.domain.Product;
+import com.shopleech.publicapi.domain.Watchlist;
 import com.shopleech.publicapi.dto.v1.ProductDTO;
 import com.shopleech.publicapi.dto.v1.ProductImportDTO;
 import com.shopleech.publicapi.dto.v1.ProductSearchDTO;
@@ -27,6 +30,8 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private CategoryService categoryService;
     @Autowired
     private ProductMapper productMapper;
 
@@ -110,7 +115,10 @@ public class ProductController {
     public ResponseEntity<?> add(@RequestBody ProductDTO productDTO) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var item = productService.add(productMapper.mapToEntity(productDTO));
+            var product = productMapper.mapToEntity(productDTO);
+            product.setCategory(categoryService.get(productDTO.getCategoryId()));
+
+            var item = productService.add(product);
             responseMap.put("error", false);
             responseMap.put("details", productMapper.mapToDto(item));
             return ResponseEntity.ok(responseMap);

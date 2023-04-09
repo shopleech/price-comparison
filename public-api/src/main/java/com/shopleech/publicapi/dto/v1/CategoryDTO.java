@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CategoryDTO {
     private Integer id;
-    private Integer parentCategory;
+    private Integer parentCategoryId;
     private String name;
     private String categoryTypeCode;
 }
