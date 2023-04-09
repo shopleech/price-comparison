@@ -22,6 +22,7 @@ import { Options, Vue } from 'vue-class-component'
 import { UserService } from '@/services/UserService'
 import { useUserStore } from '@/stores/user'
 import Logger from '@/logger'
+import { IUser } from '@/domain/IUser'
 
 /**
  * @author Ahto Jalak
@@ -42,8 +43,8 @@ export default class UserDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.userStore.$state.user =
-            await this.userService.get(this.id)
+        const item = await this.userService.get(this.id)
+        this.userStore.$state.user = item.data as IUser
     }
 }
 

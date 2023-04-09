@@ -67,15 +67,15 @@ export default class ShopIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.ratings =
-            await this.shopService.getAll()
+        const items = await this.shopService.getAll()
+        this.ratings = items.data as IReview[]
     }
 
     clickToProduct (merchandiseId: string): void {
-        this.offerService.get(merchandiseId)
-            .then(y => {
-                router.push('/products/details/' + y.productId)
-            })
+        // this.offerService.get(merchandiseId)
+        //     .then(y => {
+        //         router.push('/products/details/' + y.productId)
+        //     })
     }
 
     clickToShopDelete (ratingId: string): void {

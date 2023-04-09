@@ -42,8 +42,8 @@ export default class FeatureDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.wishesStore.$state.feature =
-            await this.wishService.get(this.id)
+        // this.wishesStore.$state.feature =
+        //     await this.wishService.get(this.id)
     }
 }
 

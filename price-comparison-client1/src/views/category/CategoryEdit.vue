@@ -35,6 +35,7 @@ import { Options, Vue } from 'vue-class-component'
 import { useCategoryStore } from '@/stores/category'
 import { CategoryService } from '@/services/CategoryService'
 import Logger from '@/logger'
+import { ICategory } from '@/domain/ICategory'
 
 /**
  * @author Ahto Jalak
@@ -60,24 +61,24 @@ export default class CategoryCreate extends Vue {
         this.logger.info('submitClicked')
 
         const x = await this.categoryService.get(this.id)
-        x.name = this.categoryName
+        // x.name = this.categoryName
 
-        const res = await this.categoryService.update(this.id, x)
+        // const res = await this.categoryService.update(this.id, x)
 
-        if (res.status == null || res.status >= 300) {
-            this.errorMsg = res.status + ' ' + res.errorMsg
-        } else {
-            this.categoriesStore.$state.category =
-                await this.categoryService.get(this.id)
-            this.$router.push(`/categories/details/${this.id}`)
-        }
+        // if (res.status == null || res.status >= 300) {
+        //     this.errorMsg = res.status + ' ' + res.errorMsg
+        // } else {
+        //     const item = await this.categoryService.get(this.id)
+        //     this.categoriesStore.$state.category = item.data as ICategory
+        //     this.$router.push(`/categories/details/${this.id}`)
+        // }
     }
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        const x = await this.categoryService.get(this.id)
-        this.categoryName = x.name ?? ''
-        this.categoriesStore.$state.category = x
+        const item = await this.categoryService.get(this.id)
+        // this.categoryName = x.name ?? ''
+        // this.categoriesStore.$state.category = x
     }
 }
 </script>

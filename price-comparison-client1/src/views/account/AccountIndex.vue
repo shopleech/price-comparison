@@ -49,8 +49,8 @@ export default class AccountIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.accountsStore.$state.accounts =
-            await this.accountService.getAll()
+        // this.accountsStore.$state.accounts =
+        //     await this.accountService.getAll()
     }
 }
 

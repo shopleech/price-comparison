@@ -49,8 +49,8 @@ export default class MetricIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.wishesStore.$state.metrics =
-            await this.wishService.getAll()
+        // this.wishesStore.$state.metrics =
+        //     await this.wishService.getAll()
     }
 }
 

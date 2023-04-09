@@ -42,8 +42,8 @@ export default class CustomerDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.customersStore.$state.customer =
-            await this.customerService.get(this.id)
+        // this.customersStore.$state.customer =
+        //     await this.customerService.get(this.id)
     }
 }
 

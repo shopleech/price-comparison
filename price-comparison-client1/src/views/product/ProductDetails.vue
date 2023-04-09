@@ -105,8 +105,8 @@ export default class ProductDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.product =
-            await this.productService.get(this.id)
+        // this.product =
+        //     await this.productService.get(this.id)
         this.merchandises =
             await this.merchandiseService.getAllByProductId()
     }

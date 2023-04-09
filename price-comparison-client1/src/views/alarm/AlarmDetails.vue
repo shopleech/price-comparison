@@ -42,8 +42,8 @@ export default class AlarmDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.alarmsStore.$state.alarm =
-            await this.alarmService.get(this.id)
+        // this.alarmsStore.$state.alarm =
+        //     await this.alarmService.get(this.id)
     }
 }
 

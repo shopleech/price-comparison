@@ -42,8 +42,8 @@ export default class ReviewDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.reviewStore.$state.review =
-            await this.ratingService.get(this.id)
+        // this.reviewStore.$state.review =
+        //     await this.ratingService.get(this.id)
     }
 }
 

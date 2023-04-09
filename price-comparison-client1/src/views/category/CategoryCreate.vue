@@ -65,7 +65,7 @@ export default class CategoryCreate extends Vue {
             id: '',
             name: '--- no parent category ---'
         })
-        this.categories = await this.categoryService.getAll()
+        // this.categories = await this.categoryService.getAll()
     }
 
     async submitClicked (): Promise<void> {

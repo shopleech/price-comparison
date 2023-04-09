@@ -131,10 +131,12 @@ export default class HomeView extends Vue {
 
     private statsService = new StatsService()
 
-    private keyword = ''
+    private keyword = this.productService.getKeyword()
     private numOfProducts: number | undefined = 0
     private numOfPriceUpdates: number | undefined = 0
     private numOfUsers: number | undefined = 0
+    products: IProduct[] | null = null
+    publicStats: IPublicStats | null = null
 
     get isAuthenticated (): boolean {
         return this.identityService.isAuthenticated()
@@ -146,12 +148,11 @@ export default class HomeView extends Vue {
         await router.push('/')
     }
 
-    products: IProduct[] | null = null
-    publicStats: IPublicStats | null = null
-
     async searchProductClicked (): Promise<void> {
-        this.products =
-            await this.productService.getAllByKeyword({ keyword: this.keyword } as ISearchItem)
+        this.productService.search(this.keyword)
+        await router.push({
+            path: '/product'
+        })
     }
 
     async mounted (): Promise<void> {

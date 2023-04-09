@@ -102,13 +102,13 @@ export default class CategoryDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.category =
-            await this.categoryService.get(this.id).then(c => {
-                this.name = c.name
-                return c
-            })
-        this.categories =
-            await this.categoryService.getAllByCategoryId(this.id)
+        // this.category =
+        //     await this.categoryService.get(this.id).then(c => {
+        //         this.name = c.name
+        //         return c
+        //     })
+        // this.categories =
+        //     await this.categoryService.getAllByCategoryId(this.id)
         // this.products =
         //     await this.productService.getAllByCategoryId(this.id)
     }

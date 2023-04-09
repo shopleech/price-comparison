@@ -32,6 +32,7 @@ import { Options, Vue } from 'vue-class-component'
 import { UserService } from '@/services/UserService'
 import { useUserStore } from '@/stores/user'
 import Logger from '@/logger'
+import { IUser } from '@/domain/IUser'
 
 /**
  * @author Ahto Jalak
@@ -49,8 +50,8 @@ export default class UserIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.userStore.$state.users =
-            await this.userService.getAll()
+        const items = await this.userService.getAll()
+        this.userStore.$state.users = items.data as IUser[]
     }
 }
 

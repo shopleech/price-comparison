@@ -19,7 +19,7 @@ export class BaseService<TEntity> {
         this._path = path
     }
 
-    async getAll (): Promise<TEntity[]> {
+    async getAll (): Promise<IServiceResult<TEntity[]>> {
         this.logger.info('getAll')
         let response
         try {
@@ -29,26 +29,44 @@ export class BaseService<TEntity> {
                 }
             })
         } catch (e) {
-            throw new TypeError('Something happened with get all')
+            const res = {
+                status: (e as AxiosError).response?.status,
+                errorMsg: (e as AxiosError).response?.data.error,
+            }
+            return res
         }
 
-        const res = response.data as TEntity[]
-        return res
+        // const res = response.data.details as TEntity[]
+        // return res
+        return {
+            status: response.status,
+            data: response.data.details
+        }
     }
 
-    async get (id: string): Promise<TEntity> {
+    async get (id: string): Promise<IServiceResult<TEntity>> {
         this.logger.info('get')
         let response
         try {
             response = await httpCLient.get(
-                `/${this._path}/${id}`,
-                { headers: { Authorization: 'bearer ' + this.identityStore.$state.jwt?.token } }
-            )
+                `/${this._path}/${id}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.identityStore.$state.jwt?.token
+                    }
+                })
         } catch (e) {
-            throw new TypeError('Something happened with get')
+            const res = {
+                status: (e as AxiosError).response?.status,
+                errorMsg: (e as AxiosError).response?.data.error,
+            }
+            return res
         }
-        const res = response.data as TEntity
-        return res
+        // const res = response.data.details as TEntity
+        // return res
+        return {
+            status: response.status,
+            data: response.data.details
+        }
     }
 
     async add (entity: TEntity): Promise<IServiceResult<void>> {
@@ -56,9 +74,11 @@ export class BaseService<TEntity> {
 
         let response
         try {
-            response = await httpCLient.post(`/${this._path}`, entity,
-                { headers: { Authorization: 'bearer ' + this.identityStore.$state.jwt?.token } }
-            )
+            response = await httpCLient.post(`/${this._path}`, entity, {
+                headers: {
+                    Authorization: 'Bearer ' + this.identityStore.$state.jwt?.token
+                }
+            })
         } catch (e) {
             const res = {
                 status: (e as AxiosError).response?.status,
@@ -66,38 +86,41 @@ export class BaseService<TEntity> {
             }
 
             // try token refresh
-            if (res.status === 401 && this.identityStore.jwt) {
-                await this.identityStore.refreshUser().then(async value => {
-                    if (value) {
-                        this.logger.info('token refresh')
-                    }
-                })
-                // retry
-                const retry = await this.extracted(entity)
-                return retry
-            }
+            // if (res.status === 401 && this.identityStore.jwt) {
+            //     await this.identityStore.refreshUser().then(async value => {
+            //         if (value) {
+            //             this.logger.info('token refresh')
+            //         }
+            //     })
+            //     // retry
+            //     const retry = await this.extracted(entity)
+            //     return retry
+            // }
 
             return res
         }
 
-        return { status: response.status }
+        return {
+            status: response.status,
+            data: response.data.details
+        }
     }
 
-    private async extracted (entity: TEntity) {
-        let response
-        try {
-            response = await httpCLient.post(`/${this._path}`, entity,
-                { headers: { Authorization: 'bearer ' + this.identityStore.$state.jwt?.token } }
-            )
-        } catch (e) {
-            const res = {
-                status: (e as AxiosError).response?.status,
-                errorMsg: (e as AxiosError).response?.data.error,
-            }
-            return res
-        }
-        return { status: response.status }
-    }
+    // private async extracted (entity: TEntity) {
+    //     let response
+    //     try {
+    //         response = await httpCLient.post(`/${this._path}`, entity,
+    //             { headers: { Authorization: 'bearer ' + this.identityStore.$state.jwt?.token } }
+    //         )
+    //     } catch (e) {
+    //         const res = {
+    //             status: (e as AxiosError).response?.status,
+    //             errorMsg: (e as AxiosError).response?.data.error,
+    //         }
+    //         return res
+    //     }
+    //     return { status: response.status }
+    // }
 
     async update (id: string, entity: TEntity): Promise<IServiceResult<void>> {
         this.logger.info('add')
@@ -107,10 +130,9 @@ export class BaseService<TEntity> {
             response = await httpCLient.put(`/${this._path}/${id}`, entity,
                 {
                     headers: {
-                        Authorization: 'bearer ' + this.identityStore.$state.jwt?.token
+                        Authorization: 'Bearer ' + this.identityStore.$state.jwt?.token
                     }
-                }
-            )
+                })
         } catch (e) {
             const res = {
                 status: (e as AxiosError).response?.status,
@@ -119,16 +141,34 @@ export class BaseService<TEntity> {
             return res
         }
 
-        return { status: response.status }
+        return {
+            status: response.status,
+            data: response.data.details
+        }
     }
 
-    async delete (id: string): Promise<TEntity> {
+    async delete (id: string): Promise<IServiceResult<TEntity>> {
         this.logger.info('delete')
-        const response = await httpCLient.delete(
-            `/${this._path}/${id}`,
-            { headers: { Authorization: 'bearer ' + this.identityStore.$state.jwt?.token } }
-        )
-        const res = response.data as TEntity
-        return res
+        let response
+        try {
+            response = await httpCLient.delete(
+                `/${this._path}/${id}`, {
+                    headers: {
+                        Authorization: 'Bearer ' + this.identityStore.$state.jwt?.token
+                    }
+                })
+        } catch (e) {
+            const res = {
+                status: (e as AxiosError).response?.status,
+                errorMsg: (e as AxiosError).response?.data.error,
+            }
+            return res
+        }
+        // const res = response.data.details as TEntity
+        // return res
+        return {
+            status: response.status,
+            data: response.data.details
+        }
     }
 }

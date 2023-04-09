@@ -42,8 +42,8 @@ export default class AccountDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.accountsStore.$state.account =
-            await this.accountService.get(this.id)
+        // this.accountsStore.$state.account =
+        //     await this.accountService.get(this.id)
     }
 }
 

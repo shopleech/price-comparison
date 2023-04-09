@@ -3,10 +3,6 @@
     <div class="row">
 
     </div>
-
-    <div>
-        <RouterLink :to="{ name: 'products' }">Back to Products</RouterLink>
-    </div>
 </template>
 
 <script lang="ts">

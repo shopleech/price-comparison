@@ -42,8 +42,8 @@ export default class OfferDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.merchandisesStore.$state.offer =
-            await this.merchandiseService.get(this.id)
+        // this.merchandisesStore.$state.offer =
+        //     await this.merchandiseService.get(this.id)
     }
 }
 

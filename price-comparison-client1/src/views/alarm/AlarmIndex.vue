@@ -49,8 +49,8 @@ export default class AlarmIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.alarmsStore.$state.alarms =
-            await this.alarmService.getAll()
+        // this.alarmsStore.$state.alarms =
+        //     await this.alarmService.getAll()
     }
 }
 

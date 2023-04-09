@@ -49,8 +49,8 @@ export default class CustomerIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.customersStore.$state.customers =
-            await this.customerService.getAll()
+        // this.customersStore.$state.customers =
+        //     await this.customerService.getAll()
     }
 }
 

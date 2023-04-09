@@ -67,15 +67,15 @@ export default class ReviewIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.ratings =
-            await this.ratingService.getAll()
+        // this.ratings =
+        //     await this.ratingService.getAll()
     }
 
     clickToProduct (merchandiseId: string): void {
-        this.merchandiseService.get(merchandiseId)
-            .then(y => {
-                router.push('/review/details/' + y.productId)
-            })
+        // this.merchandiseService.get(merchandiseId)
+        //     .then(y => {
+        //         router.push('/review/details/' + y.productId)
+        //     })
     }
 
     clickToReviewDelete (ratingId: string): void {

@@ -49,8 +49,8 @@ export default class PriceIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.wishesStore.$state.prices =
-            await this.wishService.getAll()
+        // this.wishesStore.$state.prices =
+        //     await this.wishService.getAll()
     }
 }
 

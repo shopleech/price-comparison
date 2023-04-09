@@ -32,6 +32,7 @@ import { Options, Vue } from 'vue-class-component'
 import { RoleService } from '@/services/RoleService'
 import { useRoleStore } from '@/stores/role'
 import Logger from '@/logger'
+import { IRole } from '@/domain/IRole'
 
 /**
  * @author Ahto Jalak
@@ -50,8 +51,8 @@ export default class RoleIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.wishesStore.$state.roles =
-            await this.wishService.getAll()
+        const items = await this.wishService.getAll()
+        this.wishesStore.$state.roles = items.data as IRole[]
     }
 }
 

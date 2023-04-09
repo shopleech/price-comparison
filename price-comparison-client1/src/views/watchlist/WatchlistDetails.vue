@@ -22,6 +22,7 @@ import { Options, Vue } from 'vue-class-component'
 import { WatchlistService } from '@/services/WatchlistService'
 import { useWatchlistStore } from '@/stores/watchlist'
 import Logger from '@/logger'
+import { IWatchlist } from '@/domain/IWatchlist'
 
 /**
  * @author Ahto Jalak
@@ -43,8 +44,8 @@ export default class WatchlistDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.watchlistStore.$state.watchlist =
-            await this.watchlistService.get(this.id)
+        const item = await this.watchlistService.get(this.id)
+        this.watchlistStore.$state.watchlist = item.data as IWatchlist
     }
 }
 

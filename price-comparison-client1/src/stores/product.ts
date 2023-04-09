@@ -14,6 +14,7 @@ export const useProductStore = defineStore({
         currentRating: 'No Rating',
         currentSelectedRating: 'No Current Rating',
         boundRating: 3,
+        keyword: '',
     }),
     getters: {
         productCount: (state) => state.products.length,
@@ -30,6 +31,9 @@ export const useProductStore = defineStore({
         },
         setCurrentSelectedRating: function (rating: any) {
             this.currentSelectedRating = 'You have Selected: ' + rating + ' stars'
+        },
+        getCount: function () {
+            return this.products.length
         }
     },
 })

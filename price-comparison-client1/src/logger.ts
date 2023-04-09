@@ -3,7 +3,7 @@
  * @since 01.04.2023
  */
 export default class Logger {
-    className: string
+    className = ''
 
     constructor (name: string) {
         this.className = name

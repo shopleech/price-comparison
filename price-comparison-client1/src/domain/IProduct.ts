@@ -7,6 +7,7 @@ export interface IProduct {
     categoryId?: number;
     productTypeCode?: string;
     barcode?: string;
+    barcodeTypeCode?: string;
     name?: string;
     description?: string;
 }

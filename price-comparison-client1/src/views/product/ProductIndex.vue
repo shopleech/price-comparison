@@ -39,11 +39,17 @@
                 </div>
                 <div class="col-6">
                     <h3>
-                        <RouterLink :to="{ name: 'products-details', params: { id: item.id } }" class="text-dark">
+                        <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
                             {{ item.name }}
                         </RouterLink>
                     </h3>
                 </div>
+            </div>
+            <div v-if="productCount === 0">
+                Product not found.
+                <RouterLink :to="{ name: 'product-create', params: { barcode: this.barcode } }" class="text-dark">
+                    Add product
+                </RouterLink>
             </div>
         </div>
     </div>
@@ -54,6 +60,8 @@ import { ProductService } from '@/services/ProductService'
 import { Options, Vue } from 'vue-class-component'
 import Logger from '@/logger'
 import { IdentityService } from '@/services/IdentityService'
+import { ISearchItem } from '@/domain/ISearchItem'
+import { IProduct } from '@/domain/IProduct'
 
 /**
  * @author Ahto Jalak
@@ -61,22 +69,41 @@ import { IdentityService } from '@/services/IdentityService'
  */
 @Options({
     components: {},
-    props: {},
+    props: {
+        barcode: String
+    },
     emits: [],
 })
 export default class ProductIndex extends Vue {
-    keyword!: string
+    barcode: string | null = null
+    products: IProduct[] | null = null
 
     private logger = new Logger(ProductIndex.name)
     private productService = new ProductService()
     private identityService = new IdentityService()
 
+    keyword = this.productService.getKeyword()
+    productCount = this.productService.size()
+
     async searchProductClicked (): Promise<void> {
-        this.logger.info('click')
+        // await router.push({
+        //     name: 'product',
+        //     params: { keyword: this.keyword }
+        // })
+        const items = await this.productService.getAllByKeyword({ keyword: this.keyword } as ISearchItem)
+        this.products = items.data as IProduct[]
+        this.productCount = this.productService.size()
     }
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
+        if (this.barcode) {
+            this.keyword = this.barcode
+            this.productService.setKeyword(this.barcode)
+        }
+        const items = await this.productService.getAllByKeyword({ keyword: this.keyword } as ISearchItem)
+        this.products = items.data as IProduct[]
+        this.productCount = this.productService.size()
     }
 }
 

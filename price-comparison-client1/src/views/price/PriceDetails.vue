@@ -42,8 +42,8 @@ export default class PriceDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.wishesStore.$state.price =
-            await this.wishService.get(this.id)
+        // this.wishesStore.$state.price =
+        //     await this.wishService.get(this.id)
     }
 }
 

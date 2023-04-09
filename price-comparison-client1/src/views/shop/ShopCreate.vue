@@ -39,10 +39,6 @@
             </div>
         </div>
     </div>
-
-    <div>
-        <RouterLink :to="{ name: 'home' }">Back to Shops</RouterLink>
-    </div>
 </template>
 
 <script lang="ts">

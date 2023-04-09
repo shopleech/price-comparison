@@ -49,8 +49,8 @@ export default class FeatureIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.wishesStore.$state.features =
-            await this.wishService.getAll()
+        // this.wishesStore.$state.features =
+        //     await this.wishService.getAll()
     }
 }
 

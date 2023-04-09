@@ -19,8 +19,7 @@ npm run serve
 ```
 npm run build
 
-cd dist/
-docker build --build-arg APP_ENV=production -t sl-client .
+docker build -t sl-client .
 
 docker run -it -p 8888:80 --rm sl-client
 

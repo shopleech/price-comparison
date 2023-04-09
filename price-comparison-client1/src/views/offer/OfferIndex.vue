@@ -77,8 +77,8 @@ export default class OfferIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        this.merchandisesStore.$state.offers =
-            await this.merchandiseService.getAll()
+        // this.merchandisesStore.$state.offers =
+        //     await this.merchandiseService.getAll()
     }
 }
 

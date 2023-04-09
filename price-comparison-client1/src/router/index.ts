@@ -341,7 +341,14 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/product',
         name: 'product',
-        component: ProductIndex
+        component: ProductIndex,
+        props: true
+    },
+    {
+        path: '/product/scan/:barcode',
+        name: 'product-scan',
+        component: ProductIndex,
+        props: true
     },
     {
         path: '/product/create',
@@ -366,7 +373,6 @@ const routes: Array<RouteRecordRaw> = [
         component: ProductDetails,
         props: true
     },
-
     {
         path: '/review',
         name: 'review',
