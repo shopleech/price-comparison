@@ -59,10 +59,11 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody AccountDTO AccountDTO) {
+    public ResponseEntity<?> add(@RequestBody AccountDTO accountDTO) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var item = accountService.add(accountMapper.mapToEntity(AccountDTO));
+            var item = accountService.add(
+                    accountMapper.mapToEntity(accountDTO));
             responseMap.put("error", false);
             responseMap.put("details", accountMapper.mapToDto(item));
             return ResponseEntity.ok(responseMap);
@@ -74,10 +75,10 @@ public class AccountController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable(value = "id") Integer id, @RequestBody AccountDTO AccountDTO) {
+    public ResponseEntity<?> update(@PathVariable(value = "id") Integer id, @RequestBody AccountDTO accountDTO) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var item = accountService.update(id, accountMapper.mapToEntity(AccountDTO));
+            var item = accountService.update(id, accountMapper.mapToEntity(accountDTO));
             responseMap.put("error", false);
             responseMap.put("details", accountMapper.mapToDto(item));
             return ResponseEntity.ok(responseMap);

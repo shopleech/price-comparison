@@ -16,7 +16,6 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "customer_account")
 public class CustomerAccount {
-
     @Id
     @GeneratedValue
     private Integer id;

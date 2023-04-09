@@ -33,6 +33,7 @@ public class AccountMapper {
         Account entity = new Account();
         entity.setId(newAccount.getId());
         entity.setStatus(newAccount.getStatus());
+
         return entity;
     }
 

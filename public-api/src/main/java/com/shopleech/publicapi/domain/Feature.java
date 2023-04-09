@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "feature")
 public class Feature {
-
     @Id
     @GeneratedValue
     private Integer id;

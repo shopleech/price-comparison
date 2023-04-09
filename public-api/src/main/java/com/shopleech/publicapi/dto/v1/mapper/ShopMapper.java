@@ -23,8 +23,6 @@ public class ShopMapper {
     }
 
     public ShopDTO mapToDto(Shop c) {
-        logger.info("map-to-dto");
-        logger.info(c.getName());
         return new ShopDTO(
                 c.getId(),
                 c.getName(),
@@ -48,6 +46,7 @@ public class ShopMapper {
         entity.setUrl(s.getUrl());
         entity.setLatitude(s.getLatitude());
         entity.setLongitude(s.getLongitude());
+
         return entity;
     }
 }

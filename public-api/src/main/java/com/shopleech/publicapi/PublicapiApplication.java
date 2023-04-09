@@ -12,9 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @OpenAPIDefinition(info = @Info(title = "Public API", version = "2.0", description = "Database for price information"))
 @SecurityScheme(name = "Authorization", scheme = "bearer", bearerFormat = "JWT", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 public class PublicapiApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(PublicapiApplication.class, args);
     }
-
 }

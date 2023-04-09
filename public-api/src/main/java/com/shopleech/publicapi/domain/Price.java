@@ -18,7 +18,6 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Table(name = "price")
 public class Price {
-
     @Id
     @GeneratedValue
     private Integer id;

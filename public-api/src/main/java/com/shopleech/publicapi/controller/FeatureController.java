@@ -4,6 +4,8 @@ import com.shopleech.publicapi.bll.service.FeatureService;
 import com.shopleech.publicapi.dto.v1.FeatureDTO;
 import com.shopleech.publicapi.dto.v1.mapper.FeatureMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,8 @@ import java.util.Map;
 @RequestMapping("/v1/feature")
 @Tag(name = "Feature controller", description = "Endpoint")
 public class FeatureController {
+    Logger logger = LoggerFactory.getLogger(FeatureController.class);
+
     @Autowired
     private FeatureService featureService;
     @Autowired

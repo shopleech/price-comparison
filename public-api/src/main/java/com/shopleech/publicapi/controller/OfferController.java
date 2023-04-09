@@ -62,7 +62,8 @@ public class OfferController {
     public ResponseEntity<?> add(@RequestBody OfferDTO offerDTO) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var item = offerService.add(offerMapper.mapToEntity(offerDTO));
+            var item = offerService.add(
+                    offerMapper.mapToEntity(offerDTO));
             responseMap.put("error", false);
             responseMap.put("details", offerMapper.mapToDto(item));
             return ResponseEntity.ok(responseMap);

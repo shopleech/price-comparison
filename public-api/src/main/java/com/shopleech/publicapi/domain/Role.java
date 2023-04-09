@@ -18,7 +18,6 @@ import java.util.Set;
 @Entity
 @Table(name = "role")
 public class Role {
-
     @Id
     @GeneratedValue
     private Integer id;

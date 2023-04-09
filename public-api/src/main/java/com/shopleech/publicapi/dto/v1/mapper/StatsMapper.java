@@ -35,6 +35,7 @@ public class StatsMapper {
         entity.setNumOfProducts(newStats.getNumOfProducts());
         entity.setNumOfPriceUpdates(newStats.getNumOfPriceUpdates());
         entity.setNumOfUsers(newStats.getNumOfUsers());
+
         return entity;
     }
 }

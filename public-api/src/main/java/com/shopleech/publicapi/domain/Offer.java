@@ -19,7 +19,6 @@ import java.util.Set;
 @Entity
 @Table(name = "offer")
 public class Offer {
-
     @Id
     @GeneratedValue
     private Integer id;

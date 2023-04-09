@@ -25,9 +25,7 @@ public class RoleMapper {
     public RoleDTO mapToDto(Role c) {
         RoleDTO dto = new RoleDTO();
         dto.setId(c.getId());
-        // dto.setParentRole();
-        //dto.setName(c.getName());
-        // dto.setRoleTypeCode();
+        dto.setName(c.getName());
 
         return dto;
     }
@@ -38,12 +36,9 @@ public class RoleMapper {
     }
 
     public Role mapToEntity(RoleDTO entity) {
-
         Role c = new Role();
         c.setId(entity.getId());
-        // c.setParentRole();
-        //c.setName(entity.getName());
-        // c.setRoleTypeCode();
+        c.setName(entity.getName());
 
         return c;
     }

@@ -1,9 +1,13 @@
 package com.shopleech.publicapi.dto.v1.mapper;
 
+import com.shopleech.publicapi.bll.service.CustomerService;
+import com.shopleech.publicapi.bll.service.ProductService;
+import com.shopleech.publicapi.bll.service.UserService;
 import com.shopleech.publicapi.domain.Review;
 import com.shopleech.publicapi.dto.v1.ReviewDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,6 +20,11 @@ import java.util.stream.Collectors;
 @Component
 public class ReviewMapper {
     Logger logger = LoggerFactory.getLogger(ReviewMapper.class);
+
+    @Autowired
+    UserService userService;
+    @Autowired
+    ProductService productService;
 
     public List<ReviewDTO> mapToDto(List<Review> entities) {
         return entities.stream()
@@ -39,9 +48,14 @@ public class ReviewMapper {
     }
 
     public Review mapToEntity(ReviewDTO entity) {
-
         Review c = new Review();
         c.setId(entity.getId());
+        c.setCustomer(userService.getCurrentUser().getCustomer());
+        try {
+            c.setProduct(productService.get(entity.getProductId()));
+        } catch (Exception e) {
+            logger.error("review mapper failed");
+        }
         c.setReviewTypeCode(entity.getReviewTypeCode());
         c.setScore(entity.getScore());
         c.setDescription(entity.getDescription());

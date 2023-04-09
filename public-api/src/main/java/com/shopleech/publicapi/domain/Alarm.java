@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "alarm")
 public class Alarm {
-
     @Id
     @GeneratedValue
     private Integer id;

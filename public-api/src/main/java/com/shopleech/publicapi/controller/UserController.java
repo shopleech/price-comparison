@@ -42,10 +42,6 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private CustomerService customerService;
-    @Autowired
-    private AccountService accountService;
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private AuthenticationManager authenticationManager;

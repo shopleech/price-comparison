@@ -21,7 +21,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "shop")
 public class Shop {
-
     @Id
     @GeneratedValue
     private Integer id;

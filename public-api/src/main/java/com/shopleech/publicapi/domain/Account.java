@@ -20,7 +20,6 @@ import java.util.Set;
 @Entity
 @Table(name = "account")
 public class Account extends BaseDomainEntityMetaId {
-
     @Id
     @GeneratedValue
     private Integer id;

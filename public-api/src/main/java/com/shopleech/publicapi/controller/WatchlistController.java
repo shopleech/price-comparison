@@ -4,7 +4,6 @@ import com.shopleech.publicapi.bll.service.CustomerService;
 import com.shopleech.publicapi.bll.service.ProductService;
 import com.shopleech.publicapi.bll.service.UserService;
 import com.shopleech.publicapi.bll.service.WatchlistService;
-import com.shopleech.publicapi.domain.Watchlist;
 import com.shopleech.publicapi.dto.v1.WatchlistDTO;
 import com.shopleech.publicapi.dto.v1.mapper.WatchlistMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,12 +29,6 @@ public class WatchlistController {
 
     @Autowired
     private WatchlistService watchlistService;
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private CustomerService customerService;
-    @Autowired
-    private UserService userService;
     @Autowired
     private WatchlistMapper watchlistMapper;
 
@@ -73,13 +66,8 @@ public class WatchlistController {
     public ResponseEntity<?> add(@RequestBody WatchlistDTO watchlistDTO) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var user = userService.getCurrentUser();
-            var watchlist = new Watchlist();
-            watchlist.setWatchlistTypeCode(watchlistDTO.getWatchlistTypeCode());
-            watchlist.setCustomer(user.getCustomer());
-            watchlist.setProduct(productService.get(watchlistDTO.getProductId()));
-
-            var item = watchlistService.add(watchlist);
+            var item = watchlistService.add(
+                    watchlistMapper.mapToEntity(watchlistDTO));
             responseMap.put("error", false);
             responseMap.put("details", watchlistMapper.mapToDto(item));
 

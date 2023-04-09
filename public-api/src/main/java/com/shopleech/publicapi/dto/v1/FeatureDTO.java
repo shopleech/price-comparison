@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class FeatureDTO {
     private Integer id;
 
-    private Offer offer;
+    private Integer offerId;
 
     private FeatureTypeCode featureTypeCode;
     private String name;

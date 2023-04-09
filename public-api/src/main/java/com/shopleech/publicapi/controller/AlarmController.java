@@ -1,9 +1,6 @@
 package com.shopleech.publicapi.controller;
 
 import com.shopleech.publicapi.bll.service.AlarmService;
-import com.shopleech.publicapi.bll.service.ProductService;
-import com.shopleech.publicapi.bll.service.UserService;
-import com.shopleech.publicapi.domain.Alarm;
 import com.shopleech.publicapi.dto.v1.AlarmDTO;
 import com.shopleech.publicapi.dto.v1.mapper.AlarmMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,19 +26,14 @@ public class AlarmController {
     @Autowired
     private AlarmService alarmService;
     @Autowired
-    private UserService userService;
-    @Autowired
-    private ProductService productService;
-    @Autowired
     private AlarmMapper alarmMapper;
 
     @GetMapping
     public ResponseEntity<?> getAll() {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var item = alarmService.getAll();
             responseMap.put("error", false);
-            responseMap.put("details", alarmMapper.mapToDto(item));
+            responseMap.put("details", alarmMapper.mapToDto(alarmService.getAll()));
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);
@@ -54,9 +46,8 @@ public class AlarmController {
     public ResponseEntity<?> getById(@PathVariable(value = "id") Integer id) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var item = alarmService.get(id);
             responseMap.put("error", false);
-            responseMap.put("details", alarmMapper.mapToDto(item));
+            responseMap.put("details", alarmMapper.mapToDto(alarmService.get(id)));
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);
@@ -69,14 +60,9 @@ public class AlarmController {
     public ResponseEntity<?> add(@RequestBody AlarmDTO alarmDTO) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var user = userService.getCurrentUser();
-            var item = new Alarm();
-            item.setAlarmTypeCode(alarmDTO.getAlarmTypeCode());
-            item.setCustomer(user.getCustomer());
-            item.setProduct(productService.get(alarmDTO.getProductId()));
-
             responseMap.put("error", false);
-            responseMap.put("details", alarmMapper.mapToDto(alarmService.add(item)));
+            responseMap.put("details", alarmMapper.mapToDto(
+                    alarmService.add(alarmMapper.mapToEntity(alarmDTO))));
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);
@@ -89,9 +75,9 @@ public class AlarmController {
     public ResponseEntity<?> update(@PathVariable(value = "id") Integer id, @RequestBody AlarmDTO alarmDTO) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var item = alarmService.update(id, alarmMapper.mapToEntity(alarmDTO));
             responseMap.put("error", false);
-            responseMap.put("details", alarmMapper.mapToDto(item));
+            responseMap.put("details", alarmMapper.mapToDto(
+                    alarmService.update(id, alarmMapper.mapToEntity(alarmDTO))));
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);
@@ -104,9 +90,8 @@ public class AlarmController {
     public ResponseEntity<?> remove(@PathVariable(value = "id") Integer id) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var item = alarmService.remove(id);
             responseMap.put("error", false);
-            responseMap.put("details", item);
+            responseMap.put("details", alarmService.remove(id));
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);

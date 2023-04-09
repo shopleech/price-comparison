@@ -2,8 +2,6 @@ package com.shopleech.publicapi.controller;
 
 import com.shopleech.publicapi.bll.service.CategoryService;
 import com.shopleech.publicapi.bll.service.ProductService;
-import com.shopleech.publicapi.domain.Product;
-import com.shopleech.publicapi.domain.Watchlist;
 import com.shopleech.publicapi.dto.v1.ProductDTO;
 import com.shopleech.publicapi.dto.v1.ProductImportDTO;
 import com.shopleech.publicapi.dto.v1.ProductSearchDTO;

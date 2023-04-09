@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 public class ProductDTO {
     private Integer id;
     private Integer categoryId;
-    private String productTypeCode;
+    private ProductTypeCode productTypeCode;
     private String barcode;
-    private String barcodeTypeCode;
+    private BarcodeTypeCode barcodeTypeCode;
     private String name;
     private String description;
 }

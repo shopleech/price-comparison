@@ -25,9 +25,12 @@ public class CustomerMapper {
     public CustomerDTO mapToDto(Customer c) {
         CustomerDTO dto = new CustomerDTO();
         dto.setId(c.getId());
-        // dto.setParentCustomer();
-        // dto.setName(c.getName());
-        // dto.setCustomerTypeCode();
+        dto.setPersonalCode(c.getPersonalCode());
+        dto.setFirstName(c.getFirstName());
+        dto.setLastName(c.getLastName());
+        dto.setEmail(c.getEmail());
+        dto.setPhoneNumber(c.getPhoneNumber());
+        dto.setStatus(c.getStatus());
 
         return dto;
     }
@@ -38,12 +41,14 @@ public class CustomerMapper {
     }
 
     public Customer mapToEntity(CustomerDTO entity) {
-
         Customer c = new Customer();
         c.setId(entity.getId());
-        // c.setParentCustomer();
-        // c.setName(entity.getName());
-        // c.setCustomerTypeCode();
+        c.setPersonalCode(entity.getPersonalCode());
+        c.setFirstName(entity.getFirstName());
+        c.setLastName(entity.getLastName());
+        c.setEmail(entity.getEmail());
+        c.setPhoneNumber(entity.getPhoneNumber());
+        c.setStatus(entity.getStatus());
 
         return c;
     }

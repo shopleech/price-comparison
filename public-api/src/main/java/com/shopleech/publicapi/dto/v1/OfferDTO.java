@@ -18,11 +18,11 @@ import lombok.NoArgsConstructor;
 public class OfferDTO {
     private Integer id;
 
-    private Account account;
+    private Integer accountId;
 
-    private Product product;
+    private Integer productId;
 
-    private Shop shop;
+    private Integer shopId;
 
     private String barcode;
     private BarcodeTypeCode barcodeTypeCode;

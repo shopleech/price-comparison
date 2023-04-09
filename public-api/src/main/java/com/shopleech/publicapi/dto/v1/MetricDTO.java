@@ -20,11 +20,11 @@ import lombok.NoArgsConstructor;
 public class MetricDTO {
     private Integer id;
 
-    private Product product;
+    private Integer productId;
 
-    private Offer offer;
+    private Integer offerId;
 
-    private Category category;
+    private Integer categoryId;
 
     private MetricTypeCode metricTypeCode;
     private Double quantity;

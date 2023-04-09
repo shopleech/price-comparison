@@ -10,16 +10,4 @@ import java.util.List;
  * @since 07.02.2023
  */
 public interface UserRepositoryCustom {
-
-    UserDALDTO addUser(UserDALDTO user);
-
-    UserDALDTO getUserById(Integer id);
-
-    List<UserDALDTO> getAllUsers();
-
-    int getUserCount();
-
-    RoleDALDTO getRole(String user);
-
-    UserDALDTO updateUser(UserDALDTO mapToEntity);
 }

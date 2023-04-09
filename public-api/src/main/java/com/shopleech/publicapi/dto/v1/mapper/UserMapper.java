@@ -36,6 +36,7 @@ public class UserMapper {
         entity.setFirstname(newUser.getFirstname());
         entity.setLastname(newUser.getLastname());
         entity.setEmail(newUser.getEmail());
+
         return entity;
     }
 

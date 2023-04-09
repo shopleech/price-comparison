@@ -4,6 +4,8 @@ import com.shopleech.publicapi.bll.service.MetricService;
 import com.shopleech.publicapi.dto.v1.MetricDTO;
 import com.shopleech.publicapi.dto.v1.mapper.MetricMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +21,13 @@ import java.util.Map;
 @RequestMapping("/v1/metric")
 @Tag(name = "Metric controller", description = "Endpoint")
 public class MetricController {
+    Logger logger = LoggerFactory.getLogger(MetricController.class);
+
     @Autowired
     private MetricService metricService;
     @Autowired
     private MetricMapper metricMapper;
-    
+
     @GetMapping
     public ResponseEntity<?> getAll() {
         Map<String, Object> responseMap = new HashMap<>();

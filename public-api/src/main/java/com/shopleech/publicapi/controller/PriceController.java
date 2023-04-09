@@ -4,6 +4,8 @@ import com.shopleech.publicapi.bll.service.PriceService;
 import com.shopleech.publicapi.dto.v1.PriceDTO;
 import com.shopleech.publicapi.dto.v1.mapper.PriceMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,8 @@ import java.util.Map;
 @RequestMapping("/v1/price")
 @Tag(name = "Price controller", description = "Endpoint")
 public class PriceController {
+    Logger logger = LoggerFactory.getLogger(PriceController.class);
+
     @Autowired
     private PriceService priceService;
     @Autowired

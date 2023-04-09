@@ -19,7 +19,6 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "metric")
 public class Metric extends BaseDomainEntityMetaId {
-
     @Id
     @GeneratedValue
     private Integer id;
