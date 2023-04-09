@@ -35,6 +35,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Run install
+        working-directory: ${{ env.WORK_DIR }}
+        run: npm install
+
       - name: Run build
         working-directory: ${{ env.WORK_DIR }}
         run: npm run build
