@@ -30,7 +30,9 @@ public class CategoryMapper {
     public CategoryDTO mapToDto(Category c) {
         CategoryDTO dto = new CategoryDTO();
         dto.setId(c.getId());
-        dto.setParentCategoryId(c.getParentCategory().getId());
+        if (c.getParentCategory() != null) {
+            dto.setParentCategoryId(c.getParentCategory().getId());
+        }
         dto.setCategoryTypeCode(c.getCategoryTypeCode());
         dto.setName(c.getName());
 

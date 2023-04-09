@@ -36,9 +36,15 @@ public class OfferMapper {
     public OfferDTO mapToDto(Offer c) {
         OfferDTO dto = new OfferDTO();
         dto.setId(c.getId());
-        dto.setAccountId(c.getAccount().getId());
-        dto.setProductId(c.getProduct().getId());
-        dto.setShopId(c.getShop().getId());
+        if (c.getAccount() != null) {
+            dto.setAccountId(c.getAccount().getId());
+        }
+        if (c.getProduct() != null) {
+            dto.setProductId(c.getProduct().getId());
+        }
+        if (c.getShop() != null) {
+            dto.setShopId(c.getShop().getId());
+        }
         dto.setBarcode(c.getBarcode());
         dto.setBarcodeTypeCode(c.getBarcodeTypeCode());
         dto.setName(c.getName());

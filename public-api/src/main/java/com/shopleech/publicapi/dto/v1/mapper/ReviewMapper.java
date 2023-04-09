@@ -34,7 +34,9 @@ public class ReviewMapper {
     public ReviewDTO mapToDto(Review c) {
         ReviewDTO dto = new ReviewDTO();
         dto.setId(c.getId());
-        dto.setProductId(c.getProduct().getId());
+        if (c.getProduct() != null) {
+            dto.setProductId(c.getProduct().getId());
+        }
         dto.setReviewTypeCode(c.getReviewTypeCode());
         dto.setScore(c.getScore());
         dto.setDescription(c.getDescription());

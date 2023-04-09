@@ -30,7 +30,9 @@ public class FeatureMapper {
     public FeatureDTO mapToDto(Feature c) {
         FeatureDTO dto = new FeatureDTO();
         dto.setId(c.getId());
-        dto.setOfferId(c.getOffer().getId());
+        if (c.getOffer() != null) {
+            dto.setOfferId(c.getOffer().getId());
+        }
         dto.setFeatureTypeCode(c.getFeatureTypeCode());
         dto.setName(c.getName());
         dto.setDescription(c.getDescription());

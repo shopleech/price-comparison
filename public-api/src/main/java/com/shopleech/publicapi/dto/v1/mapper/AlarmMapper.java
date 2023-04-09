@@ -31,22 +31,29 @@ public class AlarmMapper {
     }
 
     public AlarmDTO mapToDto(Alarm c) {
-        return new AlarmDTO(
-                c.getId(),
-                c.getProduct().getId(),
-                c.getAlarmTypeCode(),
-                c.getMinValue(),
-                c.getMaxValue(),
-                c.getName()
-        );
+        var dto = new AlarmDTO();
+        dto.setId(c.getId());
+        if (c.getProduct() != null) {
+            dto.setProductId(c.getProduct().getId());
+        }
+        dto.setAlarmTypeCode(c.getAlarmTypeCode());
+        dto.setMinValue(c.getMinValue());
+        dto.setMaxValue(c.getMaxValue());
+        dto.setName(c.getName());
+
+        return dto;
     }
 
-    public Alarm mapToEntity(AlarmDTO newAlarm) throws Exception {
+    public Alarm mapToEntity(AlarmDTO newAlarm) {
         Alarm entity = new Alarm();
         entity.setId(newAlarm.getId());
         entity.setAlarmTypeCode(newAlarm.getAlarmTypeCode());
         entity.setCustomer(userService.getCurrentUser().getCustomer());
-        entity.setProduct(productService.get(newAlarm.getProductId()));
+        try {
+            entity.setProduct(productService.get(newAlarm.getProductId()));
+        } catch (Exception e) {
+            logger.error("alarm mapper failed");
+        }
         entity.setMinValue(newAlarm.getMinValue());
         entity.setMaxValue(newAlarm.getMaxValue());
         entity.setName(newAlarm.getName());

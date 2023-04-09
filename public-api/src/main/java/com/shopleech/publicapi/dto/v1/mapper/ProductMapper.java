@@ -28,15 +28,18 @@ public class ProductMapper {
     }
 
     public ProductDTO mapToDto(Product c) {
-        return new ProductDTO(
-                c.getId(),
-                c.getCategory().getId(),
-                c.getProductTypeCode(),
-                c.getBarcode(),
-                c.getBarcodeTypeCode(),
-                c.getName(),
-                c.getDescription()
-        );
+        var dto = new ProductDTO();
+        dto.setId(c.getId());
+        if (c.getCategory() != null) {
+            dto.setCategoryId(c.getCategory().getId());
+        }
+        dto.setProductTypeCode(c.getProductTypeCode());
+        dto.setBarcode(c.getBarcode());
+        dto.setBarcodeTypeCode(c.getBarcodeTypeCode());
+        dto.setName(c.getName());
+        dto.setDescription(c.getDescription());
+
+        return dto;
     }
 
     public Product mapToEntity(ProductDTO newProduct) {

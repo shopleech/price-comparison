@@ -31,11 +31,14 @@ public class WatchlistMapper {
     }
 
     public WatchlistDTO mapToDto(Watchlist c) {
-        return new WatchlistDTO(
-                c.getId(),
-                c.getWatchlistTypeCode(),
-                c.getProduct().getId()
-        );
+        var dto = new WatchlistDTO();
+        dto.setId(c.getId());
+        dto.setWatchlistTypeCode(c.getWatchlistTypeCode());
+        if (c.getProduct() != null) {
+            dto.setProductId(c.getProduct().getId());
+        }
+
+        return dto;
     }
 
     public Watchlist mapToEntity(WatchlistDTO newWatchlist) throws Exception {

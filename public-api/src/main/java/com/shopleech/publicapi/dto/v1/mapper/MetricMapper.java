@@ -36,9 +36,15 @@ public class MetricMapper {
     public MetricDTO mapToDto(Metric c) {
         MetricDTO dto = new MetricDTO();
         dto.setId(c.getId());
-        dto.setProductId(c.getProduct().getId());
-        dto.setOfferId(c.getOffer().getId());
-        dto.setCategoryId(c.getCategory().getId());
+        if (c.getProduct() != null) {
+            dto.setProductId(c.getProduct().getId());
+        }
+        if (c.getOffer() != null) {
+            dto.setOfferId(c.getOffer().getId());
+        }
+        if (c.getCategory() != null) {
+            dto.setCategoryId(c.getCategory().getId());
+        }
         dto.setMetricTypeCode(c.getMetricTypeCode());
         dto.setQuantity(c.getQuantity());
 
