@@ -14,7 +14,7 @@ on:
     branches:
       - main
     paths:
-      - price-comparison-client1
+      - price-comparison-client1/**
 
 env:
   WORK_DIR: ./price-comparison-client1
