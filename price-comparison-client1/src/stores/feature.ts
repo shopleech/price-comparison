@@ -1,4 +1,4 @@
-import type { IFeature } from '@/domain/IFeature'
+import type { IFeature } from '@/dal/domain/IFeature'
 import { defineStore } from 'pinia'
 
 /**

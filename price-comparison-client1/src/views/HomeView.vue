@@ -1,50 +1,67 @@
 <template>
-    <RouterLink :to="{ name: 'home' }">
-        <img src="https://via.placeholder.com/200x40.png?text=" alt=""/>
-    </RouterLink>
-
-    <h2>Price comparison app</h2>
     <div class="row" v-if="isAuthenticated">
         <div class="col-12 p-3">
             <div class="row">
-                <div class="col-12">
+                <div class="col-6">
                     <RouterLink :to="{ name: 'shop-create' }" class="text-dark">
                         Add store
                     </RouterLink>
                 </div>
-                <div class="col-12">
+                <div class="col-6">
                     <RouterLink :to="{ name: 'product-create' }" class="text-dark">
                         Add product
                     </RouterLink>
                 </div>
             </div>
+            <div v-if="errorMsg != null" class="text-danger validation-summary-errors" data-valmsg-summary="true">
+                <ul>
+                    <li>{{ errorMsg }}</li>
+                </ul>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <div class="input-group mb-3">
                         <input v-model="keyword" type="text" class="form-control" placeholder="Product barcode"
-                               aria-label="Product title or barcode" aria-describedby="basic-addon2">
+                               aria-label="Product title or barcode" @input="searchProduct">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" @click="searchProductClicked" type="button">
+                            <button class="btn btn-outline-secondary" @click="searchProduct" type="button">
                                 Search
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div v-for="item of products" :key="item.id" class="border p-2 mb-4 row">
-                <div class="col-3">
-                    <img src="https://via.placeholder.com/50x50.png?text=product" alt="product"/>
+            <div v-if="keyword.trim().length >= 3">
+                Number of products found: {{ getProductList().length }}
+                <div v-for="item of getProductList()" :key="item.id" class="border p-2 mb-4 row">
+                    <div class="col-6">
+                        <img src="https://via.placeholder.com/50x50.png?text=product" alt="product"/>
+                    </div>
+                    <div class="col-6">
+                        <h3>
+                            <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
+                                {{ item.name }}
+                            </RouterLink>
+                        </h3>
+                    </div>
                 </div>
-                <div class="col-6">
-                    <h3>
-                        <RouterLink :to="{ name: 'products-details', params: { id: item.id } }" class="text-dark">
-                            {{ item.name }}
-                        </RouterLink>
-                    </h3>
+            </div>
+            <div v-if="keyword.trim().length < 3">
+                <div v-for="item of getCategoryList()" :key="item.id" class="border p-2 mb-4 row">
+                    <div class="col-6">
+                        <img src="https://via.placeholder.com/50x50.png?text=category" alt="category"/>
+                    </div>
+                    <div class="col-6">
+                        <h3>
+                            <RouterLink :to="{ name: 'category-details', params: { id: item.id } }" class="text-dark">
+                                {{ item.name }}
+                            </RouterLink>
+                        </h3>
+                    </div>
                 </div>
             </div>
             <div class="row fixed-bottom p-3">
-                <div class="col-6 col-md-2">
+                <div class="col-6">
                     <a @click="logoutClicked()" class="btn btn-secondary btn-lg w-100">Logout</a>
                 </div>
             </div>
@@ -52,42 +69,40 @@
     </div>
     <div class="row" v-if="!isAuthenticated">
         <div class="col-12 p-3">
-            <h3>Price comparison app</h3>
-            <hr/>
             <div class="row">
-                <div class="col-8 hidden-md-down col-md-2">
+                <div class="col-6">
                     Number of products
                 </div>
-                <div class="col-4 col-md-2">
-                    {{ numOfProducts }}
+                <div class="col-6">
+                    {{ getStats().numOfProducts }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-8 col-md-2">
+                <div class="col-6">
                     Number of price updates
                 </div>
-                <div class="col-4 col-md-2">
-                    {{ numOfPriceUpdates }}
+                <div class="col-6">
+                    {{ getStats().numOfPriceUpdates }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-8 col-md-2">
+                <div class="col-6">
                     Number of users
                 </div>
-                <div class="col-4 col-md-2">
-                    {{ numOfUsers }}
+                <div class="col-6">
+                    {{ getStats().numOfUsers }}
                 </div>
             </div>
             <div class="row">
                 <div class="col-12"></div>
             </div>
-            <div class="row fixed-bottom p-3">
-                <div class="col-6 col-md-2">
+            <div class="row fixed-bottom p-3 col-xl-4 col-lg-5 col-md-6 col-sm-7">
+                <div class="col-6">
                     <RouterLink :to="{ name: 'identity-login'}" class="btn btn-secondary btn-lg w-100">
                         Login
                     </RouterLink>
                 </div>
-                <div class="col-6 col-md-2">
+                <div class="col-6">
                     <RouterLink :to="{ name: 'identity-register'}" class="btn btn-primary btn-lg w-100">
                         Get started
                     </RouterLink>
@@ -100,13 +115,17 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import router from '@/router'
-import { ProductService } from '@/services/ProductService'
-import { IProduct } from '@/domain/IProduct'
-import { ISearchItem } from '@/domain/ISearchItem'
-import { IPublicStats } from '@/domain/IPublicStats'
-import { StatsService } from '@/services/StatsService'
-import { IdentityService } from '@/services/IdentityService'
+import { ProductService } from '@/bll/service/ProductService'
+import { IProduct } from '@/dal/domain/IProduct'
+import { StatsService } from '@/bll/service/StatsService'
+import { IdentityService } from '@/bll/service/IdentityService'
 import Logger from '@/logger'
+import { useProductStore } from '@/stores/product'
+import { useStatsStore } from '@/stores/stats'
+import { IPublicStats } from '@/dal/domain/IPublicStats'
+import { useCategoryStore } from '@/stores/category'
+import { CategoryService } from '@/bll/service/CategoryService'
+import { ICategory } from '@/dal/domain/ICategory'
 
 /**
  * @author Ahto Jalak
@@ -115,28 +134,22 @@ import Logger from '@/logger'
 @Options({
     components: {},
     data () {
-        return {
-            keyword: '',
-        }
+        return {}
     },
     methods: {},
     props: {}
 })
 export default class HomeView extends Vue {
     private logger = new Logger(HomeView.name)
-
     private identityService = new IdentityService()
-
     private productService = new ProductService()
-
     private statsService = new StatsService()
-
-    private keyword = this.productService.getKeyword()
-    private numOfProducts: number | undefined = 0
-    private numOfPriceUpdates: number | undefined = 0
-    private numOfUsers: number | undefined = 0
-    products: IProduct[] | null = null
-    publicStats: IPublicStats | null = null
+    private categoryService = new CategoryService()
+    private productStore = useProductStore()
+    private statsStore = useStatsStore()
+    private categoryStore = useCategoryStore()
+    keyword = ''
+    errorMsg: string | null = null
 
     get isAuthenticated (): boolean {
         return this.identityService.isAuthenticated()
@@ -148,21 +161,61 @@ export default class HomeView extends Vue {
         await router.push('/')
     }
 
-    async searchProductClicked (): Promise<void> {
-        this.productService.search(this.keyword)
-        await router.push({
-            path: '/product'
+    searchProduct () {
+        this.logger.info('searchShop')
+
+        if (this.keyword.trim().length < 3) {
+            this.productStore.$reset()
+            return
+        }
+
+        this.productService.findByName(this.keyword).then((items) => {
+            this.logger.info('found something')
+            if (items.errorMsg !== undefined) {
+                this.errorMsg = items.errorMsg
+            } else {
+                if (items.data) {
+                    this.productStore.$state.products = items.data
+                }
+            }
         })
     }
 
-    async mounted (): Promise<void> {
+    mounted (): void {
         this.logger.info('mounted')
 
-        this.publicStats = await this.statsService.getPublicStats()
+        this.statsService.getPublicStats().then((item) => {
+            this.logger.info('found something')
+            if (item.errorMsg !== undefined) {
+                this.errorMsg = item.errorMsg
+            } else {
+                if (item.data) {
+                    this.statsStore.$state.publicStats = item.data
+                }
+            }
+        })
 
-        this.numOfProducts = this.publicStats?.numOfProducts
-        this.numOfPriceUpdates = this.publicStats?.numOfPriceUpdates
-        this.numOfUsers = this.publicStats?.numOfUsers
+        this.categoryService.getAllByCategoryId(null).then((items) => {
+            if (items.errorMsg !== undefined) {
+                this.errorMsg = items.errorMsg
+            } else {
+                if (items.data) {
+                    this.categoryStore.$state.categories = items.data
+                }
+            }
+        })
+    }
+
+    getProductList (): IProduct[] {
+        return this.productStore.$state.products
+    }
+
+    getStats (): IPublicStats {
+        return this.statsStore.$state.publicStats
+    }
+
+    getCategoryList (): ICategory[] {
+        return this.categoryStore.$state.categories
     }
 }
 </script>

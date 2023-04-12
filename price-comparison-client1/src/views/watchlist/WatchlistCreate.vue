@@ -23,11 +23,11 @@
 </template>
 
 <script lang="ts">
-import { WatchlistService } from '@/services/WatchlistService'
+import { WatchlistService } from '@/bll/service/WatchlistService'
 import { useWatchlistStore } from '@/stores/watchlist'
 import { Options, Vue } from 'vue-class-component'
-import { CustomerService } from '@/services/CustomerService'
-import { IWatchlist } from '@/domain/IWatchlist'
+import { CustomerService } from '@/bll/service/CustomerService'
+import { IWatchlist } from '@/dal/domain/IWatchlist'
 import Logger from '@/logger'
 
 /**

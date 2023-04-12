@@ -29,10 +29,10 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { RoleService } from '@/services/RoleService'
+import { RoleService } from '@/bll/service/RoleService'
 import { useRoleStore } from '@/stores/role'
 import Logger from '@/logger'
-import { IRole } from '@/domain/IRole'
+import { IRole } from '@/dal/domain/IRole'
 
 /**
  * @author Ahto Jalak

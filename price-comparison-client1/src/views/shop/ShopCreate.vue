@@ -6,7 +6,6 @@
     <h4>Create shop</h4>
     <div class="row">
         <div class="col-md-12">
-
             <div v-if="errorMsg != null" class="text-danger validation-summary-errors" data-valmsg-summary="true">
                 <ul>
                     <li>{{ errorMsg }}</li>
@@ -15,7 +14,7 @@
             <div>
                 <div class="form-group">
                     <label className="control-label" htmlFor="firstname">Name</label>
-                    <input v-model="name" className="form-control" type="text"/>
+                    <input v-model="name" className="form-control" type="text" @input="searchShop"/>
                 </div>
                 <div class="form-group">
                     <label className="control-label" htmlFor="firstname">Address</label>
@@ -37,16 +36,25 @@
                     <input @click="submitClicked()" type="submit" value="Create" class="btn btn-primary"/>
                 </div>
             </div>
+            <div>
+                Shops with similar name found: {{ getShopList().length }}
+                <ul>
+                    <li v-for="item of getShopList()" :key="item.id">
+                        {{ item.name }}
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ShopService } from '@/services/ShopService'
+import { ShopService } from '@/bll/service/ShopService'
 import Logger from '@/logger'
 import router from '@/router'
-import { IShop } from '@/domain/IShop'
+import { IShop } from '@/dal/domain/IShop'
+import { useShopStore } from '@/stores/shop'
 
 /**
  * @author Ahto Jalak
@@ -54,25 +62,21 @@ import { IShop } from '@/domain/IShop'
  */
 @Options({
     components: {},
-    props: {
-        id: String,
-    },
+    props: {},
     emits: [],
 })
 export default class ShopCreate extends Vue {
     private logger = new Logger(ShopCreate.name)
+    private shopStore = useShopStore()
     private shopService = new ShopService()
-    id = 0
     name = ''
     address = ''
     url = ''
     latitude = '59.436962'
     longitude = '24.753574'
-    shop: IShop | null = null;
-    shops: IShop[] | null = null;
-    errorMsg: string | null = null;
+    errorMsg: string | null = null
 
-    async submitClicked (): Promise<void> {
+    submitClicked (): void {
         this.logger.info('submitClicked')
 
         const shopInfo: IShop = {
@@ -82,20 +86,40 @@ export default class ShopCreate extends Vue {
             latitude: this.latitude,
             longitude: this.longitude
         }
-
-        const res = await this.shopService.add(shopInfo)
-
-        if (res.status == null || res.status >= 300) {
-            this.errorMsg = res.status + ' ' + res.errorMsg
-        } else {
-            await this.shopService.pullAllShops()
-            await router.push('/')
-        }
+        this.shopService.add(shopInfo).then((item) => {
+            if (item.errorMsg !== undefined) {
+                this.errorMsg = item.errorMsg
+            } else {
+                if (item.data) {
+                    this.shopStore.$state.shop = item.data
+                }
+                router.push('/')
+            }
+        })
     }
 
-    async mounted () {
-        this.logger.info('mounted')
-        this.shops = await this.shopService.pullAllShops()
+    searchShop () {
+        this.logger.info('searchShop')
+
+        if (this.name.trim().length < 3) {
+            this.shopStore.$reset()
+            return
+        }
+
+        this.shopService.findByName(this.name).then((items) => {
+            this.logger.info('found something')
+            if (items.errorMsg !== undefined) {
+                this.errorMsg = items.errorMsg
+            } else {
+                if (items.data) {
+                    this.shopStore.$state.shops = items.data
+                }
+            }
+        })
+    }
+
+    getShopList () {
+        return this.shopStore.$state.shops
     }
 }
 </script>

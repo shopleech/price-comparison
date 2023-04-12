@@ -15,4 +15,7 @@ import java.util.List;
 public interface ShopRepository extends JpaRepository<Shop, Integer>, ShopRepositoryCustom {
     @Query(value = "SELECT COUNT(*) FROM shop", nativeQuery = true)
     int countAll();
+
+    @Query(value = "SELECT * FROM shop where name ilike '%'||:name||'%'", nativeQuery = true)
+    List<Shop> findByName(String name);
 }

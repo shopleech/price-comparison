@@ -50,14 +50,14 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import vue3StarRatings from 'vue3-star-ratings'
-import { ProductService } from '@/services/ProductService'
-import { OfferService } from '@/services/OfferService'
+import { ProductService } from '@/bll/service/ProductService'
+import { OfferService } from '@/bll/service/OfferService'
 import { useProductStore } from '@/stores/product'
 import { useIdentityStore } from '@/stores/identity'
-import { IProduct } from '@/domain/IProduct'
-import { IOffer } from '@/domain/IOffer'
-import { ReviewService } from '@/services/ReviewService'
-import { WatchlistService } from '@/services/WatchlistService'
+import { IProduct } from '@/dal/domain/IProduct'
+import { IOffer } from '@/dal/domain/IOffer'
+import { ReviewService } from '@/bll/service/ReviewService'
+import { WatchlistService } from '@/bll/service/WatchlistService'
 import Logger from '@/logger'
 
 /**

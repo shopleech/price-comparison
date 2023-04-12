@@ -1,4 +1,4 @@
-import { IMetric } from '@/domain/IMetric'
+import { IMetric } from '@/dal/domain/IMetric'
 import { defineStore } from 'pinia'
 
 /**

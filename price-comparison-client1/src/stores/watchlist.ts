@@ -1,4 +1,4 @@
-import type { IWatchlist } from '@/domain/IWatchlist'
+import type { IWatchlist } from '@/dal/domain/IWatchlist'
 import { defineStore } from 'pinia'
 
 /**

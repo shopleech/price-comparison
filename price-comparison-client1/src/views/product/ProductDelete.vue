@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { ProductService } from '@/services/ProductService'
+import { ProductService } from '@/bll/service/ProductService'
 import { useProductStore } from '@/stores/product'
 import { Options, Vue } from 'vue-class-component'
 import Logger from '@/logger'
@@ -46,7 +46,7 @@ export default class ProductDelete extends Vue {
     async submitClicked (): Promise<void> {
         this.logger.info('submitClicked')
 
-        await this.productService.delete(this.id)
+        // await this.productService.delete(this.id)
 
         /*
         if (res.status >= 300) {

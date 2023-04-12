@@ -23,10 +23,10 @@
 </template>
 
 <script lang="ts">
-import { AccountService } from '@/services/AccountService'
+import { AccountService } from '@/bll/service/AccountService'
 import { useAccountStore } from '@/stores/account'
 import { Options, Vue } from 'vue-class-component'
-import { CustomerService } from '@/services/CustomerService'
+import { CustomerService } from '@/bll/service/CustomerService'
 import Logger from '@/logger'
 
 /**

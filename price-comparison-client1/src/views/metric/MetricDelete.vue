@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { MetricService } from '@/services/MetricService'
+import { MetricService } from '@/bll/service/MetricService'
 import { useMetricStore } from '@/stores/metric'
 import Logger from '@/logger'
 

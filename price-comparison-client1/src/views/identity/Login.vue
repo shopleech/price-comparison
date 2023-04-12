@@ -11,7 +11,7 @@
                     <li>{{ errorMsg }}</li>
                 </ul>
             </div>
-            <div class="col-md-2">
+            <div>
                 <div class="form-group">
                     <label className="control-label" htmlFor="firstname">email</label>
                     <input v-model="email" className="form-control" type="text"/>
@@ -37,9 +37,9 @@
 <script lang="ts">
 import { useIdentityStore } from '@/stores/identity'
 import { Options, Vue } from 'vue-class-component'
-import { ILoginInfo } from '@/domain/ILoginInfo'
+import { ILoginInfo } from '@/dal/domain/ILoginInfo'
 import router from '@/router'
-import { IResponseMessage } from '@/domain/IResponseMessage'
+import { IResponseMessage } from '@/dal/domain/IResponseMessage'
 import Logger from '@/logger'
 
 /**

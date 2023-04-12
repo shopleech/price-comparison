@@ -31,6 +31,7 @@ public class StatsService implements IStatsService {
         stats.setNumOfProducts(productRepository.getProductCount());
         stats.setNumOfPriceUpdates(priceRepository.getPriceUpdateCount());
         stats.setNumOfUsers(userRepository.getUserCount());
+
         return stats;
     }
 }

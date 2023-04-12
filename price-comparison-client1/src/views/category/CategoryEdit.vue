@@ -33,9 +33,8 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { useCategoryStore } from '@/stores/category'
-import { CategoryService } from '@/services/CategoryService'
+import { CategoryService } from '@/bll/service/CategoryService'
 import Logger from '@/logger'
-import { ICategory } from '@/domain/ICategory'
 
 /**
  * @author Ahto Jalak
@@ -60,7 +59,7 @@ export default class CategoryCreate extends Vue {
     async submitClicked (): Promise<void> {
         this.logger.info('submitClicked')
 
-        const x = await this.categoryService.get(this.id)
+        // const x = await this.categoryService.get(this.id)
         // x.name = this.categoryName
 
         // const res = await this.categoryService.update(this.id, x)
@@ -76,7 +75,7 @@ export default class CategoryCreate extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        const item = await this.categoryService.get(this.id)
+        // const item = await this.categoryService.get(this.id)
         // this.categoryName = x.name ?? ''
         // this.categoriesStore.$state.category = x
     }

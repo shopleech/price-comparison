@@ -29,10 +29,10 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { WatchlistService } from '@/services/WatchlistService'
+import { WatchlistService } from '@/bll/service/WatchlistService'
 import { useWatchlistStore } from '@/stores/watchlist'
 import Logger from '@/logger'
-import { IWatchlist } from '@/domain/IWatchlist'
+import { IWatchlist } from '@/dal/domain/IWatchlist'
 
 /**
  * @author Ahto Jalak

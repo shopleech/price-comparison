@@ -3,8 +3,8 @@
  * @since 06.02.2023
  */
 export interface ICategory {
-    id?: string;
-    parentCategoryId?: string;
+    id?: number;
+    parentCategoryId?: number;
     categoryTypeCode?: string;
     name?: string;
 }

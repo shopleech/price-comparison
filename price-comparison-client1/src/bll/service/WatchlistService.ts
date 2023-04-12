@@ -1,4 +1,4 @@
-import type { IWatchlist } from '@/domain/IWatchlist'
+import type { IWatchlist } from '@/dal/domain/IWatchlist'
 import httpCLient from '@/http-client'
 import { BaseService } from './BaseService'
 import { AxiosError } from 'axios'

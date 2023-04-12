@@ -1,7 +1,12 @@
 <template>
+    <Header/>
     <div class="container-fluid h-100" id="yellow">
         <main class="h-100">
-            <router-view/>
+            <div class="row">
+                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-7">
+                    <router-view/>
+                </div>
+            </div>
         </main>
     </div>
 </template>
@@ -11,10 +16,16 @@ import { Options, Vue } from 'vue-class-component'
 import router from '@/router/index'
 import { useIdentityStore } from '@/stores/identity'
 import Logger from '@/logger'
+import Header from '@/components/Header.vue'
 
+/**
+ * @author Ahto Jalak
+ * @since 06.02.2023
+ */
 @Options({
-    // don't forget to register imported components
-    components: {},
+    components: {
+        Header
+    },
 })
 export default class App extends Vue {
     private logger = new Logger(App.name)

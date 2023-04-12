@@ -110,4 +110,23 @@ public class ShopController {
             return ResponseEntity.status(500).body(responseMap);
         }
     }
+
+    @Operation(
+            summary = "Search shop",
+            responses = @ApiResponse(responseCode = "200", description = "Shop returned"))
+    @PostMapping("/search")
+    public ResponseEntity<?> search(@RequestBody ShopDTO shopDTO) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = shopService.search(
+                    shopMapper.mapToEntity(shopDTO));
+            responseMap.put("error", false);
+            responseMap.put("details", shopMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
 }

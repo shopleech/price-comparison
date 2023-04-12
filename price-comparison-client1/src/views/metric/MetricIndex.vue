@@ -30,7 +30,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { useMetricStore } from '@/stores/metric'
-import { MetricService } from '@/services/MetricService'
+import { MetricService } from '@/bll/service/MetricService'
 import Logger from '@/logger'
 
 /**

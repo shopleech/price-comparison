@@ -24,8 +24,8 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { CustomerService } from '@/services/CustomerService'
-import { PriceService } from '@/services/PriceService'
+import { CustomerService } from '@/bll/service/CustomerService'
+import { PriceService } from '@/bll/service/PriceService'
 import { usePriceStore } from '@/stores/price'
 import Logger from '@/logger'
 

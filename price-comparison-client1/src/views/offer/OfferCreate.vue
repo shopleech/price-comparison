@@ -56,7 +56,7 @@
 import { Options, Vue } from 'vue-class-component'
 import HttpClient from '@/http-client'
 import Papa from 'papaparse'
-import { OfferService } from '@/services/OfferService'
+import { OfferService } from '@/bll/service/OfferService'
 import { useOfferStore } from '@/stores/offer'
 import Logger from '@/logger'
 

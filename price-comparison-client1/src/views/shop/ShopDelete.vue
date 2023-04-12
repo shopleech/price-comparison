@@ -24,8 +24,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import router from '@/router'
-import { ShopService } from '@/services/ShopService'
+import { ShopService } from '@/bll/service/ShopService'
 import { useShopStore } from '@/stores/shop'
 import Logger from '@/logger'
 
@@ -51,11 +50,11 @@ export default class ShopDelete extends Vue {
     async submitClicked (): Promise<void> {
         this.logger.info('submitClicked')
 
-        await this.ratingService
-            .delete(this.id)
-            .then(() => {
-                router.push('/shop')
-            })
+        // await this.ratingService
+        //     .delete(this.id)
+        //     .then(() => {
+        //         router.push('/shop')
+        //     })
 
         /*
         if (res.status >= 300) {

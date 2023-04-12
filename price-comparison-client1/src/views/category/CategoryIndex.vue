@@ -1,9 +1,6 @@
 <template>
     <div class="row">
         <div class="col-lg-10">
-            <div v-if="identityStore.isAdmin()">
-                <RouterLink :to="{ name: 'categories-create' }">Create category</RouterLink>
-            </div>
             <h2>Main category items</h2>
             <div v-for="item of categories" :key="item.id" class="border p-2 mb-4 row">
                 <div class="col-3">
@@ -29,11 +26,9 @@
 </template>
 
 <script lang="ts">
-import { CategoryService } from '@/services/CategoryService'
+import { CategoryService } from '@/bll/service/CategoryService'
 import { useCategoryStore } from '@/stores/category'
 import { Options, Vue } from 'vue-class-component'
-import { ICategory } from '@/domain/ICategory'
-import { useIdentityStore } from '@/stores/identity'
 import Logger from '@/logger'
 
 /**
@@ -47,19 +42,9 @@ import Logger from '@/logger'
 })
 export default class CategoryIndex extends Vue {
     private logger = new Logger(CategoryIndex.name)
-    categoriesStore = useCategoryStore()
+    categoryStore = useCategoryStore()
     categoryService = new CategoryService()
-    private identityStore = useIdentityStore()
-
-    get isAuthenticated (): boolean {
-        return this.identityStore.getJwt() !== null
-    }
-
-    get isAdmin (): boolean {
-        return this.identityStore.isAdmin()
-    }
-
-    categories: ICategory[] | null = null
+    errorMsg: string | null = null
 
     /*
     limitArray (length = 3) {
@@ -75,8 +60,15 @@ export default class CategoryIndex extends Vue {
     */
 
     async mounted (): Promise<void> {
-        this.categories =
-            await this.categoryService.getAllByCategoryId(null)
+        this.categoryService.getAllByCategoryId(null).then((items) => {
+            if (items.errorMsg !== undefined) {
+                this.errorMsg = items.errorMsg
+            } else {
+                if (items.data) {
+                    this.categoryStore.$state.categories = items.data
+                }
+            }
+        })
     }
 }
 

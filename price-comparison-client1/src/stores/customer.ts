@@ -1,4 +1,4 @@
-import type { ICustomer } from '@/domain/ICustomer'
+import type { ICustomer } from '@/dal/domain/ICustomer'
 import { defineStore } from 'pinia'
 
 /**

@@ -33,10 +33,10 @@
 </template>
 
 <script lang="ts">
-import { CategoryService } from '@/services/CategoryService'
+import { CategoryService } from '@/bll/service/CategoryService'
 import { useCategoryStore } from '@/stores/category'
 import { Options, Vue } from 'vue-class-component'
-import { ICategory } from '@/domain/ICategory'
+import { ICategory } from '@/dal/domain/ICategory'
 import router from '@/router'
 import Logger from '@/logger'
 
@@ -55,32 +55,37 @@ export default class CategoryCreate extends Vue {
     categoryService = new CategoryService()
 
     categories: ICategory[] = []
-    categoryParentCategoryId: string | null = null
+    categoryParentCategoryId: number | null = null
     categoryName: string | null = null
     errorMsg: string | null = null
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
         this.categories.push({
-            id: '',
+            id: 0,
             name: '--- no parent category ---'
         })
-        // this.categories = await this.categoryService.getAll()
+        this.categoryService.getAllByCategoryId(null).then((res) => {
+            if (res.data) {
+                for (const item of res.data) {
+                    this.categories.push(item)
+                }
+            }
+        })
     }
 
-    async submitClicked (): Promise<void> {
+    submitClicked (): void {
         this.logger.info('submitClicked')
         const category = {
             parentCategoryId: this.categoryParentCategoryId,
             name: this.categoryName,
-        }
-        await this.categoryService.add(category as ICategory).then(res => {
-            if (res.status == null || res.status >= 300) {
+        } as ICategory
+        this.categoryService.add(category).then(res => {
+            if (res.data == null) {
                 this.errorMsg = res.status + ' ' + res.errorMsg
             } else {
-                // this.categoriesStore.$state.categories =
-                //     await this.categoryService.getAll()
-                router.push('/categories')
+                this.categoriesStore.$state.categories.push(res.data)
+                router.push('/category')
             }
         })
     }

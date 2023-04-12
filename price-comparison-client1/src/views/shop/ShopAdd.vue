@@ -1,8 +1,6 @@
 <template>
-    <div class="row" v-if="isAuthenticated">
+    <div class="row">
         <div class="col-12 p-3">
-            <h3>Price comparison app</h3>
-            <hr/>
             <div v-if="errorMsg != null" className="text-danger validation-summary-errors" data-valmsg-summary="true">
                 <ul>
                     <li>{{ errorMsg }}</li>
@@ -79,9 +77,9 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
-import { ProductService } from '@/services/ProductService'
+import { ProductService } from '@/bll/service/ProductService'
 import { useProductStore } from '@/stores/product'
-import { IShop } from '@/domain/IShop'
+import { IShop } from '@/dal/domain/IShop'
 import Logger from '@/logger'
 
 /**

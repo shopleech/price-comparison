@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { IReview } from '@/domain/IReview'
+import { IReview } from '@/dal/domain/IReview'
 
 /**
  * @author Ahto Jalak

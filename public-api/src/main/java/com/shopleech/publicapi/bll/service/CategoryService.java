@@ -54,4 +54,22 @@ public class CategoryService implements ICategoryService {
     public Integer remove(Integer id) {
         return id;
     }
+
+    @Override
+    public List<Category> getAllByCategoryId(Integer id) {
+        if (id == null || id == 0) {
+            return categoryRepository.getMainCategoryList();
+        }
+
+        return categoryRepository.getAllByCategoryId(id);
+    }
+
+    @Override
+    public List<Category> getAllByCategory(Category entity) {
+        if (entity.getName() != null) {
+            return categoryRepository.getAllByName(entity.getName());
+        }
+
+        return getAllByCategoryId(entity.getId());
+    }
 }

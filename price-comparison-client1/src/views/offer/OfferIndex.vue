@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { OfferService } from '@/services/OfferService'
+import { OfferService } from '@/bll/service/OfferService'
 import { Options, Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
 import { useOfferStore } from '@/stores/offer'

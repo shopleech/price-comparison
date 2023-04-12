@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { IAlarm } from '@/domain/IAlarm'
+import { IAlarm } from '@/dal/domain/IAlarm'
 
 /**
  * @author Ahto Jalak

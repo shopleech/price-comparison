@@ -1,4 +1,4 @@
-import type { ICategory } from '@/domain/ICategory'
+import type { ICategory } from '@/dal/domain/ICategory'
 import { defineStore } from 'pinia'
 
 /**

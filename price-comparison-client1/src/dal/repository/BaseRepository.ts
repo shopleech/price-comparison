@@ -1,18 +1,17 @@
 import httpCLient from '@/http-client'
 import { useIdentityStore } from '@/stores/identity'
 import type { AxiosError } from 'axios'
-import type { IServiceResult } from './IServiceResult'
 import Logger from '@/logger'
+import { IServiceResult } from '@/bll/service/model/IServiceResult'
+import { IBaseRepository } from '@/dal/repository/model/IBaseRepository'
 
 /**
  * @author Ahto Jalak
- * @since 06.02.2023
+ * @since 12.04.2023
  */
-export class BaseService<TEntity> {
-    protected logger = new Logger(BaseService.name)
-
+export class BaseRepository<TEntity> implements IBaseRepository<TEntity> {
+    protected logger = new Logger(BaseRepository.name)
     protected identityStore = useIdentityStore()
-
     protected _path: string
 
     constructor (path: string) {
@@ -21,6 +20,7 @@ export class BaseService<TEntity> {
 
     async getAll (): Promise<IServiceResult<TEntity[]>> {
         this.logger.info('getAll')
+
         let response
         try {
             response = await httpCLient.get(`/${this._path}`, {
@@ -29,22 +29,19 @@ export class BaseService<TEntity> {
                 }
             })
         } catch (e) {
-            const res = {
+            return {
                 status: (e as AxiosError).response?.status,
-                errorMsg: (e as AxiosError).response?.data.error,
+                errorMsg: (e as AxiosError).response?.data.message,
             }
-            return res
         }
 
-        // const res = response.data.details as TEntity[]
-        // return res
         return {
             status: response.status,
             data: response.data.details
         }
     }
 
-    async get (id: string): Promise<IServiceResult<TEntity>> {
+    async get (id: number): Promise<IServiceResult<TEntity>> {
         this.logger.info('get')
         let response
         try {
@@ -55,21 +52,19 @@ export class BaseService<TEntity> {
                     }
                 })
         } catch (e) {
-            const res = {
+            return {
                 status: (e as AxiosError).response?.status,
-                errorMsg: (e as AxiosError).response?.data.error,
+                errorMsg: (e as AxiosError).response?.data.message,
             }
-            return res
         }
-        // const res = response.data.details as TEntity
-        // return res
+
         return {
             status: response.status,
             data: response.data.details
         }
     }
 
-    async add (entity: TEntity): Promise<IServiceResult<void>> {
+    async add (entity: TEntity): Promise<IServiceResult<TEntity>> {
         this.logger.info('add')
 
         let response
@@ -80,24 +75,10 @@ export class BaseService<TEntity> {
                 }
             })
         } catch (e) {
-            const res = {
+            return {
                 status: (e as AxiosError).response?.status,
-                errorMsg: (e as AxiosError).response?.data.error,
+                errorMsg: (e as AxiosError).response?.data.message,
             }
-
-            // try token refresh
-            // if (res.status === 401 && this.identityStore.jwt) {
-            //     await this.identityStore.refreshUser().then(async value => {
-            //         if (value) {
-            //             this.logger.info('token refresh')
-            //         }
-            //     })
-            //     // retry
-            //     const retry = await this.extracted(entity)
-            //     return retry
-            // }
-
-            return res
         }
 
         return {
@@ -106,23 +87,7 @@ export class BaseService<TEntity> {
         }
     }
 
-    // private async extracted (entity: TEntity) {
-    //     let response
-    //     try {
-    //         response = await httpCLient.post(`/${this._path}`, entity,
-    //             { headers: { Authorization: 'bearer ' + this.identityStore.$state.jwt?.token } }
-    //         )
-    //     } catch (e) {
-    //         const res = {
-    //             status: (e as AxiosError).response?.status,
-    //             errorMsg: (e as AxiosError).response?.data.error,
-    //         }
-    //         return res
-    //     }
-    //     return { status: response.status }
-    // }
-
-    async update (id: string, entity: TEntity): Promise<IServiceResult<void>> {
+    async update (id: number, entity: TEntity): Promise<IServiceResult<TEntity>> {
         this.logger.info('add')
 
         let response
@@ -134,11 +99,10 @@ export class BaseService<TEntity> {
                     }
                 })
         } catch (e) {
-            const res = {
+            return {
                 status: (e as AxiosError).response?.status,
-                errorMsg: (e as AxiosError).response?.data.error,
+                errorMsg: (e as AxiosError).response?.data.message,
             }
-            return res
         }
 
         return {
@@ -147,8 +111,9 @@ export class BaseService<TEntity> {
         }
     }
 
-    async delete (id: string): Promise<IServiceResult<TEntity>> {
+    async delete (id: number): Promise<IServiceResult<number>> {
         this.logger.info('delete')
+
         let response
         try {
             response = await httpCLient.delete(
@@ -158,14 +123,12 @@ export class BaseService<TEntity> {
                     }
                 })
         } catch (e) {
-            const res = {
+            return {
                 status: (e as AxiosError).response?.status,
-                errorMsg: (e as AxiosError).response?.data.error,
+                errorMsg: (e as AxiosError).response?.data.message,
             }
-            return res
         }
-        // const res = response.data.details as TEntity
-        // return res
+
         return {
             status: response.status,
             data: response.data.details

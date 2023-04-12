@@ -60,8 +60,8 @@
 import { useIdentityStore } from '@/stores/identity'
 import { Options, Vue } from 'vue-class-component'
 import router from '@/router'
-import { IResponseMessage } from '@/domain/IResponseMessage'
-import { IRegisterInfo } from '@/domain/IRegisterInfo'
+import { IResponseMessage } from '@/dal/domain/IResponseMessage'
+import { IRegisterInfo } from '@/dal/domain/IRegisterInfo'
 import Logger from '@/logger'
 
 /**

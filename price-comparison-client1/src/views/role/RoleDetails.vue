@@ -19,10 +19,10 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { RoleService } from '@/services/RoleService'
+import { RoleService } from '@/bll/service/RoleService'
 import { useRoleStore } from '@/stores/role'
 import Logger from '@/logger'
-import { IWatchlist } from '@/domain/IWatchlist'
+import { IWatchlist } from '@/dal/domain/IWatchlist'
 
 /**
  * @author Ahto Jalak
@@ -45,7 +45,7 @@ export default class RoleDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        var item = await this.wishService.get(this.id)
+        const item = await this.wishService.get(this.id)
         this.wishesStore.$state.role = item.data as IWatchlist
     }
 }

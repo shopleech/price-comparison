@@ -4,7 +4,6 @@ import com.shopleech.publicapi.bll.service.CategoryService;
 import com.shopleech.publicapi.bll.service.ProductService;
 import com.shopleech.publicapi.dto.v1.ProductDTO;
 import com.shopleech.publicapi.dto.v1.ProductImportDTO;
-import com.shopleech.publicapi.dto.v1.ProductSearchDTO;
 import com.shopleech.publicapi.dto.v1.mapper.ProductMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -34,10 +33,11 @@ public class ProductController {
     private ProductMapper productMapper;
 
     @PostMapping("/search")
-    public ResponseEntity<?> search(@RequestBody ProductSearchDTO request) {
+    public ResponseEntity<?> search(@RequestBody ProductDTO request) {
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var serviceAll = productService.getAllByKeyword(request.getKeyword());
+            var serviceAll = productService.getAllByProduct(
+                    productMapper.mapToEntity(request));
             responseMap.put("error", false);
             responseMap.put("details", productMapper.mapToDto(serviceAll));
             return ResponseEntity.ok(responseMap);

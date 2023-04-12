@@ -26,7 +26,7 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">Category</label>
                 <select class="col-sm-2" v-model="categoryId">
-                    <option v-for="option in categoryOptions" v-bind:key="option.id" :value="option.id">
+                    <option v-for="option in getCategoryList()" v-bind:key="option.id" :value="option.id">
                         {{ option.name }}
                     </option>
                 </select>
@@ -41,13 +41,14 @@
 </template>
 
 <script lang="ts">
-import { CategoryService } from '@/services/CategoryService'
-import { ProductService } from '@/services/ProductService'
+import { CategoryService } from '@/bll/service/CategoryService'
+import { ProductService } from '@/bll/service/ProductService'
 import { Options, Vue } from 'vue-class-component'
-import { IProduct } from '@/domain/IProduct'
-import { ICategory } from '@/domain/ICategory'
+import { IProduct } from '@/dal/domain/IProduct'
+import { ICategory } from '@/dal/domain/ICategory'
 import Logger from '@/logger'
 import router from '@/router'
+import { useCategoryStore } from '@/stores/category'
 
 /**
  * @author Ahto Jalak
@@ -61,17 +62,16 @@ import router from '@/router'
     emits: [],
 })
 export default class ProductCreate extends Vue {
-    barcode = ''
+    private logger = new Logger(ProductCreate.name)
+    private productService = new ProductService()
+    private categoryService = new CategoryService()
+    private categoryStore = useCategoryStore()
 
+    barcode = ''
     name = ''
     description = ''
     categoryId = 0
     errorMsg: string | null = null
-
-    private logger = new Logger(ProductCreate.name)
-    private productService = new ProductService()
-    private categoryService = new CategoryService()
-    private categoryOptions: ICategory[] | null = null
 
     async submitClicked (): Promise<void> {
         this.logger.info('submitClicked')
@@ -93,9 +93,22 @@ export default class ProductCreate extends Vue {
         }
     }
 
-    async mounted (): Promise<void> {
+    mounted (): void {
         this.logger.info('mounted')
-        this.categoryOptions = await this.categoryService.getAllCategories()
+
+        this.categoryService.getAllByCategoryId(null).then((items) => {
+            if (items.errorMsg !== undefined) {
+                this.errorMsg = items.errorMsg
+            } else {
+                if (items.data) {
+                    this.categoryStore.$state.categories = items.data
+                }
+            }
+        })
+    }
+
+    getCategoryList (): ICategory[] {
+        return this.categoryStore.$state.categories
     }
 }
 </script>

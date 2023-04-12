@@ -18,4 +18,8 @@ public interface ICategoryService {
     Category update(Integer id, Category category);
 
     Integer remove(Integer id);
+
+    List<Category> getAllByCategoryId(Integer id);
+
+    List<Category> getAllByCategory(Category entity);
 }

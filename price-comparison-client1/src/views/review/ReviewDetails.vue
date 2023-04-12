@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { ReviewService } from '@/services/ReviewService'
+import { ReviewService } from '@/bll/service/ReviewService'
 import { useReviewStore } from '@/stores/review'
 import Logger from '@/logger'
 

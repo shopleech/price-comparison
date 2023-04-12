@@ -31,13 +31,12 @@
 </template>
 
 <script lang="ts">
-import { OfferService } from '@/services/OfferService'
+import { OfferService } from '@/bll/service/OfferService'
 import { Options, Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
-import { IReview } from '@/domain/IReview'
-import router from '@/router'
+import { IReview } from '@/dal/domain/IReview'
 import { useShopStore } from '@/stores/shop'
-import { ShopService } from '@/services/ShopService'
+import { ShopService } from '@/bll/service/ShopService'
 import Logger from '@/logger'
 
 /**
@@ -67,11 +66,12 @@ export default class ShopIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        const items = await this.shopService.getAll()
-        this.ratings = items.data as IReview[]
+        // const items = await this.shopService.getAll()
+        // this.ratings = items.data as IReview[]
     }
 
     clickToProduct (merchandiseId: string): void {
+        this.logger.info(merchandiseId)
         // this.offerService.get(merchandiseId)
         //     .then(y => {
         //         router.push('/products/details/' + y.productId)
@@ -79,11 +79,12 @@ export default class ShopIndex extends Vue {
     }
 
     clickToShopDelete (ratingId: string): void {
-        this.shopService.delete(ratingId)
-            .then(() => {
-                this.logger.log('success')
-                router.push('/ratings')
-            })
+        this.logger.info(ratingId)
+        // this.shopService.delete(ratingId)
+        //     .then(() => {
+        //         this.logger.log('success')
+        //         router.push('/ratings')
+        //     })
     }
 }
 

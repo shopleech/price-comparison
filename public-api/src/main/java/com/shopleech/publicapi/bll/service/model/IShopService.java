@@ -13,9 +13,11 @@ public interface IShopService {
 
     Shop get(Integer id) throws Exception;
 
-    Shop add(Shop shop);
+    Shop add(Shop shop) throws Exception;
 
-    Shop update(Integer id, Shop shop);
+    Shop update(Integer id, Shop shop) throws Exception;
 
-    Integer remove(Integer id);
+    Integer remove(Integer id) throws Exception;
+
+    List<Shop> search(Shop entity);
 }

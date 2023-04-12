@@ -1,4 +1,4 @@
-import type { IProduct } from '@/domain/IProduct'
+import type { IProduct } from '@/dal/domain/IProduct'
 import { defineStore } from 'pinia'
 
 /**

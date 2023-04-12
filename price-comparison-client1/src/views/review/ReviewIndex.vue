@@ -31,12 +31,12 @@
 </template>
 
 <script lang="ts">
-import { OfferService } from '@/services/OfferService'
+import { OfferService } from '@/bll/service/OfferService'
 import { Options, Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
-import { IReview } from '@/domain/IReview'
+import { IReview } from '@/dal/domain/IReview'
 import router from '@/router'
-import { ReviewService } from '@/services/ReviewService'
+import { ReviewService } from '@/bll/service/ReviewService'
 import { useReviewStore } from '@/stores/review'
 import Logger from '@/logger'
 
@@ -72,6 +72,7 @@ export default class ReviewIndex extends Vue {
     }
 
     clickToProduct (merchandiseId: string): void {
+        this.logger.info(merchandiseId)
         // this.merchandiseService.get(merchandiseId)
         //     .then(y => {
         //         router.push('/review/details/' + y.productId)

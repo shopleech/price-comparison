@@ -23,10 +23,9 @@
 </template>
 
 <script lang="ts">
-import { CategoryService } from '@/services/CategoryService'
+import { CategoryService } from '@/bll/service/CategoryService'
 import { useCategoryStore } from '@/stores/category'
 import { Options, Vue } from 'vue-class-component'
-import router from '@/router'
 import Logger from '@/logger'
 
 /**
@@ -48,12 +47,12 @@ export default class CategoryDelete extends Vue {
 
     errorMsg: string | null = null
 
-    async submitClicked (): Promise<void> {
+    submitClicked (): void {
         this.logger.info('submitClicked')
 
-        await this.categoryService.delete(this.id).then(() => {
-            router.push('/')
-        })
+        // this.categoryService.delete(this.id).then(() => {
+        //     router.push('/')
+        // })
 
         /*
         if (res.status >= 300) {

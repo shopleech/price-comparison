@@ -1,4 +1,4 @@
-import type { IRole } from '@/domain/IRole'
+import type { IRole } from '@/dal/domain/IRole'
 import { defineStore } from 'pinia'
 
 /**

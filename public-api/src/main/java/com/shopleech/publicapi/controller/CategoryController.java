@@ -102,4 +102,20 @@ public class CategoryController {
             return ResponseEntity.status(500).body(responseMap);
         }
     }
+
+    @PostMapping("/search")
+    public ResponseEntity<?> search(@RequestBody CategoryDTO request) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = categoryService.getAllByCategory(
+                    categoryMapper.mapToEntity(request));
+            responseMap.put("error", false);
+            responseMap.put("details", categoryMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
 }

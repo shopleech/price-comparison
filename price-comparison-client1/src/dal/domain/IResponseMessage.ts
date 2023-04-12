@@ -1,4 +1,4 @@
-import { IJwtResponse } from '@/domain/IJwtResponse'
+import { IJwtResponse } from '@/dal/domain/IJwtResponse'
 
 export interface IResponseMessage {
     data?: IJwtResponse;

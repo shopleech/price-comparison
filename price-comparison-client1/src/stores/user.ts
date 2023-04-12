@@ -1,4 +1,4 @@
-import type { IUser } from '@/domain/IUser'
+import type { IUser } from '@/dal/domain/IUser'
 import { defineStore } from 'pinia'
 
 /**

@@ -1,21 +1,21 @@
 import httpCLient from '@/http-client'
 import { BaseService } from './BaseService'
 import { AxiosError } from 'axios'
-import { IUser } from '@/domain/IUser'
+import { IRole } from '@/dal/domain/IRole'
 
 /**
  * @author Ahto Jalak
  * @since 06.02.2023
  */
-export class UserService extends BaseService<IUser> {
+export class RoleService extends BaseService<IRole> {
     constructor () {
-        super('v1/user')
+        super('v1/role')
     }
 
-    async addMerchandiseRating (merchandiseId: string) {
+    async addMerchandiseRating () {
         this.logger.info('add')
 
-        const entity: IUser = {}
+        const entity: IRole = {}
 
         let response
         try {

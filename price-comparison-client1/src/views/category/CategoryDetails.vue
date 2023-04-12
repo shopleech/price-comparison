@@ -48,14 +48,14 @@
 </template>
 
 <script lang="ts">
-import { CategoryService } from '@/services/CategoryService'
+import { CategoryService } from '@/bll/service/CategoryService'
 import { useCategoryStore } from '@/stores/category'
 import { Options, Vue } from 'vue-class-component'
 import { useProductStore } from '@/stores/product'
-import { ProductService } from '@/services/ProductService'
+import { ProductService } from '@/bll/service/ProductService'
 import { useIdentityStore } from '@/stores/identity'
-import { ICategory } from '@/domain/ICategory'
-import { IProduct } from '@/domain/IProduct'
+import { ICategory } from '@/dal/domain/ICategory'
+import { IProduct } from '@/dal/domain/IProduct'
 import Logger from '@/logger'
 
 /**

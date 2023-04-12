@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { AccountService } from '@/services/AccountService'
+import { AccountService } from '@/bll/service/AccountService'
 import { useAccountStore } from '@/stores/account'
 import { Options, Vue } from 'vue-class-component'
 import Logger from '@/logger'

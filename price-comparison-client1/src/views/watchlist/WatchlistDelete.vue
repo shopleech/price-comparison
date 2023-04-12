@@ -25,7 +25,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { useWatchlistStore } from '@/stores/watchlist'
-import { WatchlistService } from '@/services/WatchlistService'
+import { WatchlistService } from '@/bll/service/WatchlistService'
 import Logger from '@/logger'
 
 /**

@@ -21,11 +21,6 @@ public class ShopService implements IShopService {
     @Autowired
     private ShopRepository shopRepository;
 
-    public Shop createNewShop(Shop shop) {
-        logger.info(shop.getName());
-        return shopRepository.save(shop);
-    }
-
     @Override
     public List<Shop> getAll() {
         return shopRepository.findAll();
@@ -43,17 +38,39 @@ public class ShopService implements IShopService {
     }
 
     @Override
-    public Shop add(Shop shop) {
-        return shop;
+    public Shop add(Shop shop) throws Exception {
+        if (shop.getName().trim().isEmpty()) {
+            throw new Exception("shop name missing");
+        }
+
+        return shopRepository.save(shop);
     }
 
     @Override
-    public Shop update(Integer id, Shop shop) {
-        return shop;
+    public Shop update(Integer id, Shop shop) throws Exception {
+        var item = get(id);
+        item.setName(shop.getName());
+        item.setAddress(shop.getAddress());
+        item.setUrl(shop.getUrl());
+        item.setLatitude(shop.getLatitude());
+        item.setLongitude(shop.getLongitude());
+
+        return shopRepository.save(item);
     }
 
     @Override
-    public Integer remove(Integer id) {
+    public Integer remove(Integer id) throws Exception {
+        shopRepository.delete(get(id));
+
+        if (get(id) != null) {
+            throw new Exception("shop delete failed");
+        }
+
         return id;
+    }
+
+    @Override
+    public List<Shop> search(Shop entity) {
+        return shopRepository.findByName(entity.getName());
     }
 }

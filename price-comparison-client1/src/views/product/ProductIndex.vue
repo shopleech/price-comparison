@@ -56,12 +56,11 @@
 </template>
 
 <script lang="ts">
-import { ProductService } from '@/services/ProductService'
+import { ProductService } from '@/bll/service/ProductService'
 import { Options, Vue } from 'vue-class-component'
 import Logger from '@/logger'
-import { IdentityService } from '@/services/IdentityService'
-import { ISearchItem } from '@/domain/ISearchItem'
-import { IProduct } from '@/domain/IProduct'
+import { IdentityService } from '@/bll/service/IdentityService'
+import { IProduct } from '@/dal/domain/IProduct'
 
 /**
  * @author Ahto Jalak
@@ -82,28 +81,28 @@ export default class ProductIndex extends Vue {
     private productService = new ProductService()
     private identityService = new IdentityService()
 
-    keyword = this.productService.getKeyword()
-    productCount = this.productService.size()
+    // keyword = this.productService.getKeyword()
+    // productCount = this.productService.size()
 
     async searchProductClicked (): Promise<void> {
         // await router.push({
         //     name: 'product',
         //     params: { keyword: this.keyword }
         // })
-        const items = await this.productService.getAllByKeyword({ keyword: this.keyword } as ISearchItem)
-        this.products = items.data as IProduct[]
-        this.productCount = this.productService.size()
+        // const items = await this.productService.getAllByKeyword({ keyword: this.keyword } as ISearchItem)
+        // this.products = items.data as IProduct[]
+        // this.productCount = this.productService.size()
     }
 
     async mounted (): Promise<void> {
-        this.logger.info('mounted')
-        if (this.barcode) {
-            this.keyword = this.barcode
-            this.productService.setKeyword(this.barcode)
-        }
-        const items = await this.productService.getAllByKeyword({ keyword: this.keyword } as ISearchItem)
-        this.products = items.data as IProduct[]
-        this.productCount = this.productService.size()
+        // this.logger.info('mounted')
+        // if (this.barcode) {
+        //     this.keyword = this.barcode
+        //     this.productService.setKeyword(this.barcode)
+        // }
+        // const items = await this.productService.getAllByKeyword({ keyword: this.keyword } as ISearchItem)
+        // this.products = items.data as IProduct[]
+        // this.productCount = this.productService.size()
     }
 }
 

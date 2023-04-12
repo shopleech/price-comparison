@@ -25,7 +25,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { useReviewStore } from '@/stores/review'
-import { ReviewService } from '@/services/ReviewService'
+import { ReviewService } from '@/bll/service/ReviewService'
 import Logger from '@/logger'
 
 /**

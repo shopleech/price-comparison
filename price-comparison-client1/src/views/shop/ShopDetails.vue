@@ -20,9 +20,8 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { useShopStore } from '@/stores/shop'
-import { ShopService } from '@/services/ShopService'
+import { ShopService } from '@/bll/service/ShopService'
 import Logger from '@/logger'
-import { IShop } from '@/domain/IShop'
 
 /**
  * @author Ahto Jalak
@@ -43,8 +42,8 @@ export default class ShopDetails extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        const item = await this.shopService.get(this.id)
-        this.shopStore.$state.shop = item.data as IShop
+        // const item = await this.shopService.get(this.id)
+        // this.shopStore.$state.shop = item.data as IShop
     }
 }
 

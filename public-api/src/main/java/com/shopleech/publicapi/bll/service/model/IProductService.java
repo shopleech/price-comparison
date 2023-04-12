@@ -23,4 +23,6 @@ public interface IProductService {
     Product update(Integer id, Product product);
 
     Integer remove(Integer id);
+
+    List<Product> getAllByProduct(Product product);
 }

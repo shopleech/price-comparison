@@ -22,8 +22,7 @@
     "vue-axios": "^3.4.1",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.3",
-    "vue3-star-ratings": "^1.1.0",
-    "vuex": "^4.0.0"
+    "vue3-star-ratings": "^1.1.0"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.1.11",
@@ -37,7 +36,6 @@
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-typescript": "~5.0.0",
     "@vue/cli-plugin-unit-jest": "~5.0.0",
-    "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "@vue/eslint-config-standard": "^7.0.0",
     "@vue/eslint-config-typescript": "^9.1.0",

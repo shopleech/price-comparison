@@ -24,9 +24,9 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import { CustomerService } from '@/services/CustomerService'
+import { CustomerService } from '@/bll/service/CustomerService'
 import { useFeatureStore } from '@/stores/feature'
-import { FeatureService } from '@/services/FeatureService'
+import { FeatureService } from '@/bll/service/FeatureService'
 import Logger from '@/logger'
 
 /**

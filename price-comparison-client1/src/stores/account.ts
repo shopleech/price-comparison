@@ -1,4 +1,4 @@
-import type { IAccount } from '@/domain/IAccount'
+import type { IAccount } from '@/dal/domain/IAccount'
 import { defineStore } from 'pinia'
 
 /**

@@ -1,4 +1,4 @@
-import type { IMetric } from '@/domain/IMetric'
+import type { IMetric } from '@/dal/domain/IMetric'
 import { BaseService } from './BaseService'
 
 export class MetricService extends BaseService<IMetric> {

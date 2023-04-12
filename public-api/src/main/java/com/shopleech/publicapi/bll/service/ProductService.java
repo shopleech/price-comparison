@@ -109,6 +109,11 @@ public class ProductService implements IProductService {
         return id;
     }
 
+    @Override
+    public List<Product> getAllByProduct(Product product) {
+        return productRepository.getAllProductsByKeyword(product.getName());
+    }
+
     public static UserDetails currentUserDetails() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();

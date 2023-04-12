@@ -1,4 +1,4 @@
-import type { IShop } from '@/domain/IShop'
+import type { IShop } from '@/dal/domain/IShop'
 import { defineStore } from 'pinia'
 
 /**

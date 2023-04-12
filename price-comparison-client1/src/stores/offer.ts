@@ -1,4 +1,4 @@
-import type { IOffer } from '@/domain/IOffer'
+import type { IOffer } from '@/dal/domain/IOffer'
 import { defineStore } from 'pinia'
 
 /**

@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { AlarmService } from '@/services/AlarmService'
+import { AlarmService } from '@/bll/service/AlarmService'
 import { useAlarmStore } from '@/stores/alarm'
 import { Options, Vue } from 'vue-class-component'
 import Logger from '@/logger'

@@ -1,10 +1,10 @@
-import type { IJwtResponse } from '@/domain/IJwtResponse'
+import type { IJwtResponse } from '@/dal/domain/IJwtResponse'
 import httpCLient from '@/http-client'
 import { useIdentityStore } from '@/stores/identity'
 import type { AxiosError } from 'axios'
-import type { IServiceResult } from './IServiceResult'
-import { ILoginInfo } from '@/domain/ILoginInfo'
-import { IRegisterInfo } from '@/domain/IRegisterInfo'
+import type { IServiceResult } from './model/IServiceResult'
+import { ILoginInfo } from '@/dal/domain/ILoginInfo'
+import { IRegisterInfo } from '@/dal/domain/IRegisterInfo'
 import Logger from '@/logger'
 
 /**

@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import { IJwtResponse } from '@/domain/IJwtResponse'
-import { ILoginInfo } from '@/domain/ILoginInfo'
-import { IdentityService } from '@/services/IdentityService'
-import { IResponseMessage } from '@/domain/IResponseMessage'
-import { IRegisterInfo } from '@/domain/IRegisterInfo'
+import { IJwtResponse } from '@/dal/domain/IJwtResponse'
+import { ILoginInfo } from '@/dal/domain/ILoginInfo'
+import { IdentityService } from '@/bll/service/IdentityService'
+import { IResponseMessage } from '@/dal/domain/IResponseMessage'
+import { IRegisterInfo } from '@/dal/domain/IRegisterInfo'
 
 /**
  * @author Ahto Jalak

@@ -1,4 +1,4 @@
-import type { IAlarm } from '@/domain/IAlarm'
+import type { IAlarm } from '@/dal/domain/IAlarm'
 import { BaseService } from './BaseService'
 
 /**

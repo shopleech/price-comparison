@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { OfferService } from '@/services/OfferService'
+import { OfferService } from '@/bll/service/OfferService'
 import { Options, Vue } from 'vue-class-component'
 import { useOfferStore } from '@/stores/offer'
 import Logger from '@/logger'
