@@ -1,12 +1,8 @@
 <template>
-    <Header/>
-    <div class="container-fluid h-100" id="yellow">
-        <main class="h-100">
-            <div class="row">
-                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-7">
-                    <router-view/>
-                </div>
-            </div>
+    <div class="container-fluid h-100 row">
+        <main class="h-100 main-border col-xl-4 col-lg-5 col-md-6 col-sm-7">
+            <Header/>
+            <router-view/>
         </main>
     </div>
 </template>
@@ -62,5 +58,7 @@ html, body {
     background-color: whitesmoke;
     height: 100%;
 }
-
+.main-border {
+    border: 1px solid silver;
+}
 </style>

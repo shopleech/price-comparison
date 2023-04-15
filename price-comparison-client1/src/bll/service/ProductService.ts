@@ -2,6 +2,7 @@ import { IProduct } from '@/dal/domain/IProduct'
 import { IServiceResult } from '@/bll/service/model/IServiceResult'
 import { ProductRepository } from '@/dal/repository/ProductRepository'
 import { IProductService } from '@/bll/service/model/IProductService'
+import { IProductImport } from '@/dal/domain/IProductImport'
 
 /**
  * @author Ahto Jalak
@@ -22,5 +23,9 @@ export class ProductService implements IProductService {
 
     async getAll (): Promise<IServiceResult<IProduct[]>> {
         return this.productRepository.getAll()
+    }
+
+    async import (entity: IProductImport): Promise<IServiceResult<IProduct[]>> {
+        return this.productRepository.import(entity)
     }
 }

@@ -4,6 +4,7 @@ import { IProductRepository } from '@/dal/repository/model/IProductRepository'
 import httpCLient from '@/http-client'
 import { AxiosError } from 'axios'
 import { IProduct } from '@/dal/domain/IProduct'
+import { IProductImport } from '@/dal/domain/IProductImport'
 
 /**
  * @author Ahto Jalak
@@ -20,6 +21,29 @@ export class ProductRepository extends BaseRepository<IProduct> implements IProd
         let response
         try {
             response = await httpCLient.post(`/${this._path}/search`, entity, {
+                headers: {
+                    Authorization: 'Bearer ' + this.identityStore.$state.jwt?.token,
+                }
+            })
+        } catch (e) {
+            return {
+                status: (e as AxiosError).response?.status,
+                errorMsg: (e as AxiosError).response?.data.message,
+            }
+        }
+
+        return {
+            status: response.status,
+            data: response.data.details,
+        }
+    }
+
+    async import (entity: IProductImport) {
+        this.logger.info('findByName')
+
+        let response
+        try {
+            response = await httpCLient.post(`/${this._path}/import`, entity, {
                 headers: {
                     Authorization: 'Bearer ' + this.identityStore.$state.jwt?.token,
                 }

@@ -2,14 +2,14 @@
     <div class="row" v-if="isAuthenticated">
         <div class="col-12 p-3">
             <div class="row">
-                <div class="col-6">
+                <div class="col-3">
                     <RouterLink :to="{ name: 'shop-create' }" class="text-dark">
                         Add store
                     </RouterLink>
                 </div>
-                <div class="col-6">
-                    <RouterLink :to="{ name: 'product-create' }" class="text-dark">
-                        Add product
+                <div class="col-3">
+                    <RouterLink :to="{ name: 'product-import' }" class="text-dark">
+                        Import products
                     </RouterLink>
                 </div>
             </div>
@@ -27,7 +27,14 @@
                             <button class="btn btn-outline-secondary" @click="searchProduct" type="button">
                                 Search
                             </button>
+                            <button class="btn btn-outline-secondary" @click="showScanner=1" type="button">
+                                Scan
+                            </button>
                         </div>
+                    </div>
+                    <div v-if="showScanner">
+                        <button @click="showScanner=0">Close scanner</button>
+                        <barcode-scanner :qrbox="100" :fps="10" style="width: 200px;" @result="onScan"/>
                     </div>
                 </div>
             </div>
@@ -45,18 +52,33 @@
                         </h3>
                     </div>
                 </div>
+                <div v-if="getProductList().length === 0">
+                    Product not found?
+                    <RouterLink :to="{ name: 'product-create', params: { barcode: keyword } }" class="text-dark">
+                        Add this product
+                    </RouterLink>
+                </div>
+
             </div>
             <div v-if="keyword.trim().length < 3">
-                <div v-for="item of getCategoryList()" :key="item.id" class="border p-2 mb-4 row">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item" @click="currentCategoryId=0">Main category</li>
+                        <li class="breadcrumb-item" v-for="breadcrumb of getBreadcrumbs(currentCategoryId)"
+                            :key="breadcrumb.id" @click="currentCategoryId=breadcrumb.id">
+                            {{ breadcrumb.name }}
+                        </li>
+                    </ol>
+                </nav>
+                <div v-for="item of getFilteredCategoryList(currentCategoryId)" :key="item.id"
+                     class="border p-2 mb-4 row">
                     <div class="col-6">
                         <img src="https://via.placeholder.com/50x50.png?text=category" alt="category"/>
                     </div>
                     <div class="col-6">
-                        <h3>
-                            <RouterLink :to="{ name: 'category-details', params: { id: item.id } }" class="text-dark">
-                                {{ item.name }}
-                            </RouterLink>
-                        </h3>
+                        <button @click="clickCategory(item.id)">
+                            {{ item.name }}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -126,17 +148,26 @@ import { IPublicStats } from '@/dal/domain/IPublicStats'
 import { useCategoryStore } from '@/stores/category'
 import { CategoryService } from '@/bll/service/CategoryService'
 import { ICategory } from '@/dal/domain/ICategory'
+import { IBreadcrumb } from '@/dal/domain/IBreadcrumb'
+import { useIdentityStore } from '@/stores/identity'
+import BarcodeScanner from '@/components/BarcodeScanner.vue'
 
 /**
  * @author Ahto Jalak
  * @since 06.02.2023
  */
 @Options({
-    components: {},
+    components: { BarcodeScanner },
     data () {
         return {}
     },
-    methods: {},
+    methods: {
+        onScan (decodedText: string, decodedResult: object) {
+            this.logger.info('onscannn')
+            this.keyword = decodedText
+            this.searchProduct()
+        }
+    },
     props: {}
 })
 export default class HomeView extends Vue {
@@ -145,10 +176,13 @@ export default class HomeView extends Vue {
     private productService = new ProductService()
     private statsService = new StatsService()
     private categoryService = new CategoryService()
+    private identityStore = useIdentityStore()
     private productStore = useProductStore()
     private statsStore = useStatsStore()
     private categoryStore = useCategoryStore()
+    currentCategoryId = 0
     keyword = ''
+    showScanner = 0
     errorMsg: string | null = null
 
     get isAuthenticated (): boolean {
@@ -195,7 +229,7 @@ export default class HomeView extends Vue {
             }
         })
 
-        this.categoryService.getAllByCategoryId(null).then((items) => {
+        this.categoryService.getAll().then((items) => {
             if (items.errorMsg !== undefined) {
                 this.errorMsg = items.errorMsg
             } else {
@@ -216,6 +250,41 @@ export default class HomeView extends Vue {
 
     getCategoryList (): ICategory[] {
         return this.categoryStore.$state.categories
+    }
+
+    getFilteredCategoryList (parentId: number) {
+        return this.getCategoryList()
+            .filter(element => typeof element !== 'undefined' && element.parentCategoryId === parentId)
+    }
+
+    getBreadcrumbs (categoryId: number): ICategory[] {
+        const breadcrumbs = [] as IBreadcrumb[]
+        if (!categoryId) {
+            return breadcrumbs
+        }
+
+        let item = this.getCategoryList()
+            .filter(element => typeof element !== 'undefined' && element.id === categoryId).shift()
+        if (item) {
+            breadcrumbs.push(item)
+        }
+
+        let parentId = item?.parentCategoryId ?? 0
+        while (parentId > 0) {
+            item = this.getCategoryList()
+                .filter(element => typeof element !== 'undefined' && element.id === parentId).shift()
+            if (item) {
+                breadcrumbs.push(item)
+            }
+
+            parentId = item?.parentCategoryId ?? 0
+        }
+
+        return breadcrumbs.reverse()
+    }
+
+    clickCategory (categoryId: number) {
+        this.currentCategoryId = categoryId
     }
 }
 </script>

@@ -4,6 +4,7 @@ import { ILoginInfo } from '@/dal/domain/ILoginInfo'
 import { IdentityService } from '@/bll/service/IdentityService'
 import { IResponseMessage } from '@/dal/domain/IResponseMessage'
 import { IRegisterInfo } from '@/dal/domain/IRegisterInfo'
+import { ICurrentLocation } from '@/dal/domain/ICurrentLocation'
 
 /**
  * @author Ahto Jalak
@@ -12,7 +13,8 @@ import { IRegisterInfo } from '@/dal/domain/IRegisterInfo'
 export const useIdentityStore = defineStore({
     id: 'identity',
     state: () => ({
-        jwt: null as IJwtResponse | null
+        jwt: null as IJwtResponse | null,
+        currentLocation: {} as ICurrentLocation,
     }),
     getters: {},
     actions: {

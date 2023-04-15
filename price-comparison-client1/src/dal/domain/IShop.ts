@@ -7,6 +7,6 @@ export interface IShop {
     name?: string;
     address?: string;
     url?: string;
-    latitude?: string;
-    longitude?: string;
+    latitude?: number;
+    longitude?: number;
 }

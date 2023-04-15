@@ -56,7 +56,7 @@ public class ProductController {
 
         Map<String, Object> responseMap = new HashMap<>();
         try {
-            var productsImported = productService.importProducts(jwt, request.getProductImportItems());
+            var productsImported = productService.importProducts(jwt, request);
             if (productsImported != null) {
                 responseMap.put("error", false);
                 responseMap.put("message", "import_success");

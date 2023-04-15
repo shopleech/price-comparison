@@ -25,4 +25,8 @@ export class CategoryService implements ICategoryService {
     async add (category: ICategory) {
         return this.categoryRepository.add(category)
     }
+
+    async getAll (): Promise<IServiceResult<ICategory[]>> {
+        return this.categoryRepository.getAll()
+    }
 }

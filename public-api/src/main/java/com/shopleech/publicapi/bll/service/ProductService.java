@@ -6,6 +6,7 @@ import com.shopleech.publicapi.dal.repository.OfferRepository;
 import com.shopleech.publicapi.dal.repository.ProductRepository;
 import com.shopleech.publicapi.domain.Offer;
 import com.shopleech.publicapi.domain.Product;
+import com.shopleech.publicapi.dto.v1.ProductImportDTO;
 import com.shopleech.publicapi.dto.v1.ProductImportItemDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,8 @@ public class ProductService implements IProductService {
     @Autowired
     protected UserService userService;
     @Autowired
+    protected ShopService shopService;
+    @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
     @Override
@@ -60,21 +63,21 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public String importProducts(String token, List<ProductImportItemDTO> productImportItems) {
+    public String importProducts(String token, ProductImportDTO productImportItems) {
 
         try {
             logger.info(token);
             var user = userService.getUserByUsername(jwtTokenUtil.getUsernameFromToken(token));
-
+            var shop = shopService.get(productImportItems.getStoreId());
             var customerAccounts = user.getCustomer().getCustomerAccounts();
             var customerAccount = customerAccounts.stream().findFirst();
             if (customerAccount.isEmpty()) {
                 throw new Exception("no accounts");
             }
 
-            for (ProductImportItemDTO productImportItem : productImportItems) {
-
+            for (ProductImportItemDTO productImportItem : productImportItems.getProductImportItems()) {
                 var data = new Offer();
+                data.setShop(shop);
                 data.setBarcode(productImportItem.getProductNo());
                 data.setName(productImportItem.getName());
                 data.setAccount(customerAccount.get().getAccount());
@@ -86,7 +89,6 @@ public class ProductService implements IProductService {
             }
 
             return "success";
-
         } catch (Exception e) {
             logger.info("error with import: " + e.getMessage());
         }

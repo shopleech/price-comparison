@@ -1,5 +1,6 @@
 import { IProduct } from '@/dal/domain/IProduct'
 import { IServiceResult } from '@/bll/service/model/IServiceResult'
+import { IProductImport } from '@/dal/domain/IProductImport'
 
 /**
  * @author Ahto Jalak
@@ -11,4 +12,6 @@ export interface IProductService {
     add (productInfo: IProduct): Promise<IServiceResult<IProduct>>
 
     getAll (): Promise<IServiceResult<IProduct[]>>
+
+    import (entity: IProductImport): Promise<IServiceResult<IProduct[]>>
 }

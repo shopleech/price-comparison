@@ -11,4 +11,6 @@ export interface ICategoryService {
     findByName (searchName: string): Promise<IServiceResult<ICategory[]>>
 
     add (category: ICategory): Promise<IServiceResult<ICategory>>
+
+    getAll (): Promise<IServiceResult<ICategory[]>>
 }

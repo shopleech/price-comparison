@@ -67,6 +67,7 @@ import WatchlistCreate from '@/views/watchlist/WatchlistCreate.vue'
 import WatchlistEdit from '@/views/watchlist/WatchlistEdit.vue'
 import WatchlistDelete from '@/views/watchlist/WatchlistDelete.vue'
 import WatchlistDetails from '@/views/watchlist/WatchlistDetails.vue'
+import ProductImport from '@/views/product/ProductImport.vue'
 
 /**
  * @author Ahto Jalak
@@ -355,6 +356,11 @@ const routes: Array<RouteRecordRaw> = [
         path: '/product/create',
         name: 'product-create',
         component: ProductCreate
+    },
+    {
+        path: '/product/import',
+        name: 'product-import',
+        component: ProductImport
     },
     {
         path: '/product/edit/:id',

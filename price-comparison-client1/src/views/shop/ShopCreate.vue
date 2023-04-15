@@ -27,6 +27,8 @@
                 <div class="form-group">
                     <label className="control-label" htmlFor="firstname">Latitude</label>
                     <input v-model="latitude" className="form-control" type="text"/>
+                    <button @click="clickGeolocation">get current location</button>
+                    <button @click="clickTallinnLocation">get tallinn location</button>
                 </div>
                 <div class="form-group">
                     <label className="control-label" htmlFor="firstname">Longitude</label>
@@ -72,8 +74,8 @@ export default class ShopCreate extends Vue {
     name = ''
     address = ''
     url = ''
-    latitude = '59.436962'
-    longitude = '24.753574'
+    latitude = 0
+    longitude = 0
     errorMsg: string | null = null
 
     submitClicked (): void {
@@ -120,6 +122,27 @@ export default class ShopCreate extends Vue {
 
     getShopList () {
         return this.shopStore.$state.shops
+    }
+
+    clickGeolocation () {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    this.logger.info(`Location: ${position.coords.latitude} ${position.coords.longitude}`)
+                    this.latitude = position.coords.latitude
+                    this.longitude = position.coords.longitude
+                },
+                error => {
+                    this.logger.error(error.message)
+                })
+        } else {
+            this.logger.warn('your browser does not support geolocation')
+        }
+    }
+
+    clickTallinnLocation () {
+        this.latitude = 59.436962
+        this.longitude = 24.753574
     }
 }
 </script>
