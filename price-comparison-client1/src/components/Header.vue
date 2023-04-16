@@ -17,6 +17,7 @@
 <script>
 import { Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
+import Logger from '@/logger'
 
 /**
  * @author Ahto Jalak
@@ -24,6 +25,7 @@ import { useIdentityStore } from '@/stores/identity'
  */
 export default class Header extends Vue {
     identityStore = useIdentityStore()
+    logger = new Logger(Header.name)
 
     clickGeolocation () {
         if (navigator.geolocation) {

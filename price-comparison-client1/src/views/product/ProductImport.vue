@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Import as plain text (barcode;title;price):</label>
-                <textarea v-model="listDataString" rows="20" cols="80"></textarea>
+                <textarea v-model="listDataString" class="form-control" style="min-width: 100%"></textarea>
             </div>
             <div>
                 <div class="form-group">

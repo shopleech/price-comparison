@@ -15,10 +15,6 @@
 
             <div>
                 <div className="form-group">
-                    <label className="control-label" htmlFor="invitation">Invitation code</label>
-                    <input v-model="invitation" className="form-control" type="text"/>
-                </div>
-                <div className="form-group">
                     <label className="control-label" htmlFor="email">E-mail</label>
                     <input v-model="email" className="form-control" type="text"/>
                 </div>
