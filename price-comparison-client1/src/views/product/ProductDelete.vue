@@ -22,7 +22,7 @@
 import { ProductService } from '@/bll/service/ProductService'
 import { useProductStore } from '@/stores/product'
 import { Options, Vue } from 'vue-class-component'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

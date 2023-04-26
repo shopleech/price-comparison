@@ -21,7 +21,7 @@
 import { Options, Vue } from 'vue-class-component'
 import { MetricService } from '@/bll/service/MetricService'
 import { useMetricStore } from '@/stores/metric'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

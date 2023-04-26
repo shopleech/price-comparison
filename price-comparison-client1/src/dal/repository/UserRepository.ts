@@ -4,7 +4,7 @@ import { IServiceResult } from '@/bll/service/model/IServiceResult'
 import { ILoginInfo } from '@/dal/domain/ILoginInfo'
 import { IJwtResponse } from '@/dal/domain/IJwtResponse'
 import { IUserRepository } from '@/dal/repository/model/IUserRepository'
-import httpCLient from '@/http-client'
+import httpCLient from '@/util/http-client'
 import { AxiosError } from 'axios'
 import { IRegisterInfo } from '@/dal/domain/IRegisterInfo'
 

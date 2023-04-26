@@ -11,7 +11,7 @@
 import { Options, Vue } from 'vue-class-component'
 import router from '@/router/index'
 import { useIdentityStore } from '@/stores/identity'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 import Header from '@/components/Header.vue'
 
 /**

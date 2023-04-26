@@ -1,5 +1,6 @@
 import type { IProduct } from '@/dal/domain/IProduct'
 import { defineStore } from 'pinia'
+import { IOffer } from '@/dal/domain/IOffer'
 
 /**
  * @author Ahto Jalak
@@ -10,6 +11,7 @@ export const useProductStore = defineStore({
     state: () => ({
         product: [] as IProduct,
         products: [] as IProduct[],
+        offers: [] as IOffer[],
         rating_text: 'No Rating Selected',
         currentRating: 'No Rating',
         currentSelectedRating: 'No Current Rating',

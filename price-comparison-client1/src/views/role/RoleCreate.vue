@@ -27,7 +27,7 @@ import { Options, Vue } from 'vue-class-component'
 import { CustomerService } from '@/bll/service/CustomerService'
 import { RoleService } from '@/bll/service/RoleService'
 import { useRoleStore } from '@/stores/role'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

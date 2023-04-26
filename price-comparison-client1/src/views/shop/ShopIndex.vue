@@ -37,7 +37,7 @@ import { useIdentityStore } from '@/stores/identity'
 import { IReview } from '@/dal/domain/IReview'
 import { useShopStore } from '@/stores/shop'
 import { ShopService } from '@/bll/service/ShopService'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

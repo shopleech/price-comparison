@@ -9,4 +9,5 @@ export interface IShop {
     url?: string;
     latitude?: number;
     longitude?: number;
+    distance?: number;
 }

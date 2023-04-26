@@ -31,7 +31,7 @@
 import { Options, Vue } from 'vue-class-component'
 import { WatchlistService } from '@/bll/service/WatchlistService'
 import { useWatchlistStore } from '@/stores/watchlist'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 import { IWatchlist } from '@/dal/domain/IWatchlist'
 
 /**

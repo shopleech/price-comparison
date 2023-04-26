@@ -29,7 +29,7 @@
 import { CategoryService } from '@/bll/service/CategoryService'
 import { useCategoryStore } from '@/stores/category'
 import { Options, Vue } from 'vue-class-component'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

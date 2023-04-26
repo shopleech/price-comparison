@@ -54,11 +54,11 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import HttpClient from '@/http-client'
+import HttpClient from '@/util/http-client'
 import Papa from 'papaparse'
 import { OfferService } from '@/bll/service/OfferService'
 import { useOfferStore } from '@/stores/offer'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

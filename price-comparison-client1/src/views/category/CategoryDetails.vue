@@ -56,7 +56,7 @@ import { ProductService } from '@/bll/service/ProductService'
 import { useIdentityStore } from '@/stores/identity'
 import { ICategory } from '@/dal/domain/ICategory'
 import { IProduct } from '@/dal/domain/IProduct'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

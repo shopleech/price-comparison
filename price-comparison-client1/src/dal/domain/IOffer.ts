@@ -11,4 +11,5 @@ export interface IOffer {
     name?: string;
     description?: string;
     url?: string;
+    minPrice?: number;
 }

@@ -27,7 +27,7 @@ import { AccountService } from '@/bll/service/AccountService'
 import { useAccountStore } from '@/stores/account'
 import { Options, Vue } from 'vue-class-component'
 import { CustomerService } from '@/bll/service/CustomerService'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

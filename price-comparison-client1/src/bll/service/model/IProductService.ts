@@ -14,4 +14,6 @@ export interface IProductService {
     getAll (): Promise<IServiceResult<IProduct[]>>
 
     import (entity: IProductImport): Promise<IServiceResult<IProduct[]>>
+
+    getById (productId: number): Promise<IServiceResult<IProduct>>
 }

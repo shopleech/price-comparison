@@ -88,8 +88,8 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import HttpClient from '@/http-client'
-import Logger from '@/logger'
+import HttpClient from '@/util/http-client'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

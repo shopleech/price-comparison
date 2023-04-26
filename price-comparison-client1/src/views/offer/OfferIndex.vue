@@ -46,7 +46,7 @@ import { OfferService } from '@/bll/service/OfferService'
 import { Options, Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
 import { useOfferStore } from '@/stores/offer'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

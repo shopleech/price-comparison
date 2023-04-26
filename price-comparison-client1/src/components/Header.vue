@@ -8,7 +8,7 @@
             </div>
             <div class="col-6">
                 My location: {{ getCoords().latitude }} {{ getCoords().longitude }}
-                <button @click="clickGeolocation">Get location</button>
+                <button @click="clickGeolocation"><i class="bi bi-geo-alt"></i></button>
             </div>
         </div>
     </header>
@@ -17,7 +17,7 @@
 <script>
 import { Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

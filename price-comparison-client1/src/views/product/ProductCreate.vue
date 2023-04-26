@@ -46,7 +46,7 @@ import { ProductService } from '@/bll/service/ProductService'
 import { Options, Vue } from 'vue-class-component'
 import { IProduct } from '@/dal/domain/IProduct'
 import { ICategory } from '@/dal/domain/ICategory'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 import router from '@/router'
 import { useCategoryStore } from '@/stores/category'
 

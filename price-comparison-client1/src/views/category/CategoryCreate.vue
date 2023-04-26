@@ -38,7 +38,7 @@ import { useCategoryStore } from '@/stores/category'
 import { Options, Vue } from 'vue-class-component'
 import { ICategory } from '@/dal/domain/ICategory'
 import router from '@/router'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

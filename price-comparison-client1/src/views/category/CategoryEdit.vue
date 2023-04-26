@@ -34,7 +34,7 @@
 import { Options, Vue } from 'vue-class-component'
 import { useCategoryStore } from '@/stores/category'
 import { CategoryService } from '@/bll/service/CategoryService'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

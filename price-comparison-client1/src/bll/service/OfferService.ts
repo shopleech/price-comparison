@@ -1,6 +1,6 @@
 import type { IOffer } from '@/dal/domain/IOffer'
 import { BaseService } from './BaseService'
-import HttpClient from '@/http-client'
+import HttpClient from '@/util/http-client'
 
 /**
  * @author Ahto Jalak

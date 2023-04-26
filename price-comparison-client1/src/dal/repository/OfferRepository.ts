@@ -1,25 +1,25 @@
 import { BaseRepository } from '@/dal/repository/BaseRepository'
-import { IServiceResult } from '@/bll/service/model/IServiceResult'
+import { IOfferRepository } from '@/dal/repository/model/IOfferRepository'
 import httpCLient from '@/util/http-client'
 import { AxiosError } from 'axios'
-import { ICategory } from '@/dal/domain/ICategory'
-import { ICategoryRepository } from '@/dal/repository/model/ICategoryRepository'
+import { IOffer } from '@/dal/domain/IOffer'
+import { IServiceResult } from '@/bll/service/model/IServiceResult'
 
 /**
  * @author Ahto Jalak
  * @since 12.04.2023
  */
-export class CategoryRepository extends BaseRepository<ICategory> implements ICategoryRepository {
+export class OfferRepository extends BaseRepository<IOffer> implements IOfferRepository {
     constructor () {
-        super('v1/category')
+        super('v1/offer')
     }
 
-    async findByName (entity: ICategory): Promise<IServiceResult<ICategory[]>> {
+    async getOfferListById (productId: number): Promise<IServiceResult<IOffer[]>> {
         this.logger.info('findByName')
 
         let response
         try {
-            response = await httpCLient.post(`/${this._path}/search`, entity, {
+            response = await httpCLient.get(`/${this._path}/product/${productId}`, {
                 headers: {
                     Authorization: 'Bearer ' + this.identityStore.$state.jwt?.token,
                 }

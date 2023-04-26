@@ -21,7 +21,7 @@
 import { Options, Vue } from 'vue-class-component'
 import { useShopStore } from '@/stores/shop'
 import { ShopService } from '@/bll/service/ShopService'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

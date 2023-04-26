@@ -31,7 +31,7 @@
 import { Options, Vue } from 'vue-class-component'
 import { PriceService } from '@/bll/service/PriceService'
 import { usePriceStore } from '@/stores/price'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

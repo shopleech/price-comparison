@@ -58,7 +58,7 @@ import { Options, Vue } from 'vue-class-component'
 import router from '@/router'
 import { IResponseMessage } from '@/dal/domain/IResponseMessage'
 import { IRegisterInfo } from '@/dal/domain/IRegisterInfo'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

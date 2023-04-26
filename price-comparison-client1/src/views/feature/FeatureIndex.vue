@@ -31,7 +31,7 @@
 import { Options, Vue } from 'vue-class-component'
 import { useFeatureStore } from '@/stores/feature'
 import { FeatureService } from '@/bll/service/FeatureService'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

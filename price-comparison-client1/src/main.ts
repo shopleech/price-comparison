@@ -8,6 +8,7 @@ import router from './router'
 // import 'popper.js'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 // import "bootstrap/dist/js/bootstrap.js"
 

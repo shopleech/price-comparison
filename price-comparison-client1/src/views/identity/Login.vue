@@ -40,7 +40,7 @@ import { Options, Vue } from 'vue-class-component'
 import { ILoginInfo } from '@/dal/domain/ILoginInfo'
 import router from '@/router'
 import { IResponseMessage } from '@/dal/domain/IResponseMessage'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

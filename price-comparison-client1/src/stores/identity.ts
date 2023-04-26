@@ -74,5 +74,8 @@ export const useIdentityStore = defineStore({
         clearJwt (): void {
             this.setJwt(null)
         },
+        getCoords (): ICurrentLocation {
+            return this.currentLocation
+        },
     },
 })

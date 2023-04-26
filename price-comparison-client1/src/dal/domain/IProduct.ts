@@ -10,4 +10,5 @@ export interface IProduct {
     barcodeTypeCode?: string;
     name?: string;
     description?: string;
+    minPrice?: number;
 }

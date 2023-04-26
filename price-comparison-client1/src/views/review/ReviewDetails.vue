@@ -21,7 +21,7 @@
 import { Options, Vue } from 'vue-class-component'
 import { ReviewService } from '@/bll/service/ReviewService'
 import { useReviewStore } from '@/stores/review'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

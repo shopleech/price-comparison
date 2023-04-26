@@ -1,7 +1,7 @@
 import { BaseRepository } from '@/dal/repository/BaseRepository'
 import { IServiceResult } from '@/bll/service/model/IServiceResult'
 import { IProductRepository } from '@/dal/repository/model/IProductRepository'
-import httpCLient from '@/http-client'
+import httpCLient from '@/util/http-client'
 import { AxiosError } from 'axios'
 import { IProduct } from '@/dal/domain/IProduct'
 import { IProductImport } from '@/dal/domain/IProductImport'

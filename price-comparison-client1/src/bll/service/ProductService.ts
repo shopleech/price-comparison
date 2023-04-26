@@ -3,6 +3,7 @@ import { IServiceResult } from '@/bll/service/model/IServiceResult'
 import { ProductRepository } from '@/dal/repository/ProductRepository'
 import { IProductService } from '@/bll/service/model/IProductService'
 import { IProductImport } from '@/dal/domain/IProductImport'
+import { OfferRepository } from '@/dal/repository/OfferRepository'
 
 /**
  * @author Ahto Jalak
@@ -10,6 +11,7 @@ import { IProductImport } from '@/dal/domain/IProductImport'
  */
 export class ProductService implements IProductService {
     private productRepository = new ProductRepository()
+    private offerRepository = new OfferRepository()
 
     async findByName (searchName: string): Promise<IServiceResult<IProduct[]>> {
         return this.productRepository.findByName({
@@ -27,5 +29,13 @@ export class ProductService implements IProductService {
 
     async import (entity: IProductImport): Promise<IServiceResult<IProduct[]>> {
         return this.productRepository.import(entity)
+    }
+
+    async getById (productId: number): Promise<IServiceResult<IProduct>> {
+        return this.productRepository.get(productId)
+    }
+
+    async getOfferListById (id: number) {
+        return this.offerRepository.getOfferListById(id)
     }
 }

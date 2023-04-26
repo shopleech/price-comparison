@@ -80,7 +80,7 @@ import { useIdentityStore } from '@/stores/identity'
 import { ProductService } from '@/bll/service/ProductService'
 import { useProductStore } from '@/stores/product'
 import { IShop } from '@/dal/domain/IShop'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

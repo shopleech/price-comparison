@@ -53,7 +53,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import { ShopService } from '@/bll/service/ShopService'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 import router from '@/router'
 import { IShop } from '@/dal/domain/IShop'
 import { useShopStore } from '@/stores/shop'

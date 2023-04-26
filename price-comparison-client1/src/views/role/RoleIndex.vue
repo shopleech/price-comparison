@@ -31,7 +31,7 @@
 import { Options, Vue } from 'vue-class-component'
 import { RoleService } from '@/bll/service/RoleService'
 import { useRoleStore } from '@/stores/role'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 import { IRole } from '@/dal/domain/IRole'
 
 /**

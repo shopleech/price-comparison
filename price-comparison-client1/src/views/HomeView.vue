@@ -25,15 +25,14 @@
                                aria-label="Product title or barcode" @input="searchProduct">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" @click="searchProduct" type="button">
-                                Search
+                                <i class="bi bi-search"></i>
                             </button>
-                            <button class="btn btn-outline-secondary" @click="showScanner=1" type="button">
-                                Scan
+                            <button class="btn btn-outline-secondary" @click="showScanner=!showScanner" type="button">
+                                <i class="bi bi-qr-code-scan"></i>
                             </button>
                         </div>
                     </div>
                     <div v-if="showScanner">
-                        <button @click="showScanner=0">Close scanner</button>
                         <barcode-scanner :qrbox="100" :fps="10" style="width: 200px;" @result="onScan"/>
                     </div>
                 </div>
@@ -41,15 +40,19 @@
             <div v-if="keyword.trim().length >= 3">
                 Number of products found: {{ getProductList().length }}
                 <div v-for="item of getProductList()" :key="item.id" class="border p-2 mb-4 row">
-                    <div class="col-6">
-                        <img src="https://via.placeholder.com/50x50.png?text=product" alt="product"/>
+                    <div class="col-3">
+                        <img src="https://placehold.co/60x60/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
                     </div>
-                    <div class="col-6">
-                        <h3>
-                            <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
-                                {{ item.name }}
-                            </RouterLink>
-                        </h3>
+                    <div class="col-7">
+                        <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
+                            {{ item.name }}
+                        </RouterLink><br/>
+                        <small>{{ item.barcode }}</small>
+                    </div>
+                    <div class="col-2">
+                        <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
+                            {{ item.minPrice }}
+                        </RouterLink>
                     </div>
                 </div>
                 <div v-if="getProductList().length === 0">
@@ -63,28 +66,41 @@
             <div v-if="keyword.trim().length < 3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item" @click="currentCategoryId=0">Main category</li>
+                        <li class="breadcrumb-item">
+                            <button @click="currentCategoryId=0" class="border-0">
+                                Main category
+                            </button>
+                        </li>
                         <li class="breadcrumb-item" v-for="breadcrumb of getBreadcrumbs(currentCategoryId)"
-                            :key="breadcrumb.id" @click="currentCategoryId=breadcrumb.id">
-                            {{ breadcrumb.name }}
+                            :key="breadcrumb.id">
+                            <button @click="currentCategoryId=breadcrumb.id" class="border-0">
+                                {{ breadcrumb.name }}
+                            </button>
                         </li>
                     </ol>
                 </nav>
                 <div v-for="item of getFilteredCategoryList(currentCategoryId)" :key="item.id"
                      class="border p-2 mb-4 row">
-                    <div class="col-6">
-                        <img src="https://via.placeholder.com/50x50.png?text=category" alt="category"/>
+                    <div class="col-3">
+                        <img src="https://placehold.co/60x60/EEE/31343C?font=playfair-display&text=Category" alt="category"/>
                     </div>
-                    <div class="col-6">
-                        <button @click="clickCategory(item.id)">
+                    <div class="col-9">
+                        <button @click="clickCategory(item.id)" class="border-0">
                             {{ item.name }}
                         </button>
                     </div>
                 </div>
             </div>
             <div class="row fixed-bottom p-3">
-                <div class="col-6">
-                    <a @click="logoutClicked()" class="btn btn-secondary btn-lg w-100">Logout</a>
+                <div class="row fixed-bottom p-3 col-xl-4 col-lg-5 col-md-6 col-sm-7">
+                    <div class="col-6">
+                        <button @click="logoutClicked()" class="btn btn-secondary btn-lg w-100">
+                            Logout
+                        </button>
+                    </div>
+                    <div class="col-6">
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -141,7 +157,7 @@ import { ProductService } from '@/bll/service/ProductService'
 import { IProduct } from '@/dal/domain/IProduct'
 import { StatsService } from '@/bll/service/StatsService'
 import { IdentityService } from '@/bll/service/IdentityService'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 import { useProductStore } from '@/stores/product'
 import { useStatsStore } from '@/stores/stats'
 import { IPublicStats } from '@/dal/domain/IPublicStats'
@@ -182,7 +198,7 @@ export default class HomeView extends Vue {
     private categoryStore = useCategoryStore()
     currentCategoryId = 0
     keyword = ''
-    showScanner = 0
+    showScanner = false
     errorMsg: string | null = null
 
     get isAuthenticated (): boolean {

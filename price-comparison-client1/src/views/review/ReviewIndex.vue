@@ -38,7 +38,7 @@ import { IReview } from '@/dal/domain/IReview'
 import router from '@/router'
 import { ReviewService } from '@/bll/service/ReviewService'
 import { useReviewStore } from '@/stores/review'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak

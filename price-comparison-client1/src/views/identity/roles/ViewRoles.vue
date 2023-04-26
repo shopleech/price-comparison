@@ -14,7 +14,7 @@
 <script>
 import { Vue } from 'vue-class-component'
 import { useIdentityStore } from '@/stores/identity'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 export default class EditRoles extends Vue {
     private logger = new Logger(EditRoles.name)

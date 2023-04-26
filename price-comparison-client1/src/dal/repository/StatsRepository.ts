@@ -1,6 +1,6 @@
 import { BaseRepository } from '@/dal/repository/BaseRepository'
 import { IServiceResult } from '@/bll/service/model/IServiceResult'
-import httpCLient from '@/http-client'
+import httpCLient from '@/util/http-client'
 import { AxiosError } from 'axios'
 import { IPublicStats } from '@/dal/domain/IPublicStats'
 import { IStatsRepository } from '@/dal/repository/model/IStatsRepository'

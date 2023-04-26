@@ -28,7 +28,7 @@ import { useWatchlistStore } from '@/stores/watchlist'
 import { Options, Vue } from 'vue-class-component'
 import { CustomerService } from '@/bll/service/CustomerService'
 import { IWatchlist } from '@/dal/domain/IWatchlist'
-import Logger from '@/logger'
+import Logger from '@/util/logger'
 
 /**
  * @author Ahto Jalak
