@@ -35,6 +35,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'price-comparison-client1/**'
+
+      - name: Check if changes are necessery
+        if: steps.changes.outputs.src != 'true'
+        run: exit_with_success
+
       - name: Run install
         working-directory: ${{ env.WORK_DIR }}
         run: npm install
