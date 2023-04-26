@@ -15,15 +15,13 @@ on:
       - main
 
 env:
-  WORK_DIR: ./price-comparison-client1
-  AWS_REGION: eu-west-1                       # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: sl-client                   # set this to your Amazon ECR repository name
-  ECS_SERVICE: sl-ecs-dev_client-service      # set this to your Amazon ECS service name
-  ECS_CLUSTER: sl-ecs-dev                     # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: sl-ecs-dev_client      # set this to the path to your Amazon ECS task definition
-                                              # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: sl-ecs-dev_task_container3  # set this to the name of the container in the
-                                              # containerDefinitions section of your task definition
+  WORK_DIR: price-comparison-client1
+  AWS_REGION: eu-west-1
+  ECR_REPOSITORY: sl-client
+  ECS_SERVICE: sl-ecs-dev_client-service
+  ECS_CLUSTER: sl-ecs-dev
+  ECS_TASK_DEFINITION: sl-ecs-dev_client
+  CONTAINER_NAME: sl-ecs-dev_task_container3
 
 jobs:
   deploy:
@@ -40,11 +38,15 @@ jobs:
         with:
           filters: |
             src:
-              - 'price-comparison-client1/**'
+              - "${{ env.WORK_DIR }}/**"
 
-      - name: Check if changes are necessery
+      - name: Early exit
         if: steps.changes.outputs.src != 'true'
-        run: exit_with_success
+        run: |
+          gh run cancel ${{ github.run_id }}
+          gh run watch ${{ github.run_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run install
         working-directory: ${{ env.WORK_DIR }}
