@@ -42,9 +42,13 @@ jobs:
             src:
               - 'public-api/**'
 
-      - name: Check if deploy is necessery
+      - name: Early exit
         if: steps.changes.outputs.src != 'true'
-        run: exit_with_success
+        run: |
+          gh run cancel ${{ github.run_id }}
+          gh run watch ${{ github.run_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-java@v3
         with:
