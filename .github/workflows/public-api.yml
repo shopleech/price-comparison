@@ -15,15 +15,13 @@ on:
       - main
 
 env:
-  WORK_DIR: ./public-api
-  AWS_REGION: eu-west-1                       # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: sl-public-api               # set this to your Amazon ECR repository name
-  ECS_SERVICE: sl-ecs-dev_public-api-service  # set this to your Amazon ECS service name
-  ECS_CLUSTER: sl-ecs-dev                     # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: sl-ecs-dev_public-api  # set this to the path to your Amazon ECS task definition
-                                              # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: sl-ecs-dev_task_container2  # set this to the name of the container in the
-                                              # containerDefinitions section of your task definition
+  WORK_DIR: public-api
+  AWS_REGION: eu-west-1
+  ECR_REPOSITORY: sl-public-api
+  ECS_SERVICE: sl-ecs-dev_public-api-service
+  ECS_CLUSTER: sl-ecs-dev
+  ECS_TASK_DEFINITION: sl-ecs-dev_public-api
+  CONTAINER_NAME: sl-ecs-dev_task_container2
 
 jobs:
   deploy:
@@ -40,7 +38,7 @@ jobs:
         with:
           filters: |
             src:
-              - 'public-api/**'
+              - "${{ env.WORK_DIR }}/**"
 
       - name: Early exit
         if: steps.changes.outputs.src != 'true'
@@ -114,9 +112,6 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         working-directory: ${{ env.WORK_DIR }}
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
@@ -127,8 +122,6 @@ jobs:
           TASK_DEF: ${{ env.ECS_TASK_DEFINITION }}
         run: |
           aws ecs describe-task-definition --task-definition $TASK_DEF --query taskDefinition > task-definition.json
-          ls -la
-          cat task-definition.json
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
