@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div v-if="showScanner">
-                        <barcode-scanner :qrbox="100" :fps="10" style="width: 200px;" @result="onScan"/>
+                        <barcode-scanner :qrbox="100" :fps="10" @result="onScan"/>
                     </div>
                 </div>
             </div>
