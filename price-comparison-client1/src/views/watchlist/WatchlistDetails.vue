@@ -31,14 +31,14 @@ import { IWatchlist } from '@/dal/domain/IWatchlist'
 @Options({
     components: {},
     props: {
-        id: String
+        id: Number,
     },
     emits: [],
 })
 export default class WatchlistDetails extends Vue {
     private logger = new Logger(WatchlistDetails.name)
 
-    id = ''
+    id!: number
     watchlistStore = useWatchlistStore()
     watchlistService = new WatchlistService()
 

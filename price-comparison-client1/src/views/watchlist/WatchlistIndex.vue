@@ -2,23 +2,30 @@
     <Header v-if="isAuthenticated" title="" back="home"/>
 
     <h4>Jälgimisnimekiri</h4>
+    <div v-if="errorMsg != null" class="text-danger validation-summary-errors" data-valmsg-summary="true">
+        <ul>
+            <li>{{ errorMsg }}</li>
+        </ul>
+    </div>
     <div v-for="item of getWatchlist()" :key="item.id" class="border p-2 mb-4 row">
         <div class="col-2">
             <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
+            <button class="small" @click="clickRemove(item.id)">x</button>
         </div>
         <div class="col-6">
             <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
                 {{ item.product.name }}
-            </RouterLink><br/>
-            <small>{{ item.product.barcode }}</small>
+            </RouterLink>
+            <div class="small">{{ item.product.barcode }}</div>
         </div>
         <div class="col-2">
             <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
-                {{ item.product.minPrice }}
+                €{{ item.product.minPrice }}
             </RouterLink>
         </div>
         <div class="col-2">
-            <button @click="addAlarm(item.productId)">
+            <button @click="addAlarm(item.productId)"
+                    :style="{backgroundColor: alarmIsActive(item.productId) ? 'green' : 'white'}">
                 <i class="bi bi-bell"></i>
             </button>
         </div>
@@ -34,6 +41,9 @@ import { IWatchlist } from '@/dal/domain/IWatchlist'
 import Header from '@/components/Header.vue'
 import { IdentityService } from '@/bll/service/IdentityService'
 import router from '@/router'
+import { IAlarm } from '@/dal/domain/IAlarm'
+import { useAlarmStore } from '@/stores/alarm'
+import { AlarmService } from '@/bll/service/AlarmService'
 
 /**
  * @author Ahto Jalak
@@ -49,9 +59,12 @@ import router from '@/router'
 export default class WatchlistIndex extends Vue {
     private logger = new Logger(WatchlistIndex.name)
     private identityService = new IdentityService()
-
     watchlistStore = useWatchlistStore()
     watchlistService = new WatchlistService()
+    alarmStore = useAlarmStore()
+    alarmService = new AlarmService()
+
+    errorMsg: string | null = null
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
@@ -70,6 +83,30 @@ export default class WatchlistIndex extends Vue {
     addAlarm (productId: number) {
         this.logger.info('addAlarm')
         router.push('/alarm/create/' + productId)
+    }
+
+    clickRemove (watchlistId: number) {
+        this.watchlistService.delete(watchlistId).then((item) => {
+            if (item.errorMsg !== undefined) {
+                this.errorMsg = item.errorMsg
+            } else {
+                if (item.data) {
+                    this.watchlistStore.remove(item.data)
+                }
+            }
+        })
+    }
+
+    alarmIsActive (id: number) {
+        this.logger.info('alarmIsActive')
+        for (let i = 0; i < this.alarmStore.alarmCount; i++) {
+            const x = this.alarmStore.$state.alarms[i] as IAlarm
+            if (id === x.productId) {
+                return true
+            }
+        }
+
+        return false
     }
 }
 

@@ -8,7 +8,7 @@ import { IReview } from '@/dal/domain/IReview'
 export const useReviewStore = defineStore({
     id: 'reviews',
     state: () => ({
-        review: [] as IReview,
+        review: {} as IReview,
         reviews: [] as IReview[],
     }),
     getters: {
@@ -17,6 +17,11 @@ export const useReviewStore = defineStore({
     actions: {
         add (review: IReview) {
             this.reviews.push(review)
-        }
+        },
+        remove (reviewId: number) {
+            this.reviews = this.reviews.filter((item) => {
+                return item.id !== reviewId
+            })
+        },
     },
 })

@@ -3,6 +3,6 @@
  * @since 06.02.2023
  */
 export interface ILoginInfo {
-    email: string;
-    password: string;
+    email: string
+    password: string
 }

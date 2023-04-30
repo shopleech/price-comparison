@@ -8,7 +8,7 @@ import { defineStore } from 'pinia'
 export const usePriceStore = defineStore({
     id: 'prices',
     state: () => ({
-        price: [] as IPrice,
+        price: {} as IPrice,
         prices: [] as IPrice[],
         rating_text: 'No Rating Selected',
         currentRating: 'No Rating',

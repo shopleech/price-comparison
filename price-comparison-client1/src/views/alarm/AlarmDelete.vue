@@ -35,13 +35,13 @@ import Logger from '@/util/logger'
 @Options({
     components: {},
     props: {
-        id: String
+        id: Number,
     },
     emits: [],
 })
 export default class AlarmDelete extends Vue {
     private logger = new Logger(AlarmDelete.name)
-    id!: string
+    id!: number
     alarmsStore = useAlarmStore()
     alarmService = new AlarmService()
 

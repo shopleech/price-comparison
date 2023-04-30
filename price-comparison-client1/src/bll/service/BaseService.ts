@@ -44,7 +44,7 @@ export class BaseService<TEntity> {
         }
     }
 
-    async get (id: string): Promise<IServiceResult<TEntity>> {
+    async get (id: number): Promise<IServiceResult<TEntity>> {
         this.logger.info('get')
         let response
         try {
@@ -69,7 +69,7 @@ export class BaseService<TEntity> {
         }
     }
 
-    async add (entity: TEntity): Promise<IServiceResult<void>> {
+    async add (entity: TEntity): Promise<IServiceResult<TEntity>> {
         this.logger.info('add')
 
         let response
@@ -122,7 +122,7 @@ export class BaseService<TEntity> {
     //     return { status: response.status }
     // }
 
-    async update (id: string, entity: TEntity): Promise<IServiceResult<void>> {
+    async update (id: number, entity: TEntity): Promise<IServiceResult<TEntity>> {
         this.logger.info('add')
 
         let response
@@ -147,7 +147,7 @@ export class BaseService<TEntity> {
         }
     }
 
-    async delete (id: string): Promise<IServiceResult<TEntity>> {
+    async delete (id: number): Promise<IServiceResult<number>> {
         this.logger.info('delete')
         let response
         try {

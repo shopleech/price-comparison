@@ -7,6 +7,26 @@
             <li>{{ errorMsg }}</li>
         </ul>
     </div>
+    <div v-if="id !== undefined">
+        <div class="row">
+            <div class="col-4">Toote nimi</div>
+            <div class="col-8"></div>
+        </div>
+        <div class="row">
+            <div class="col-4">Triipkood</div>
+            <div class="col-8"></div>
+        </div>
+    </div>
+    <div v-if="id === undefined">
+        <div class="form-group">
+            <label class="col-4 control-label">Toote nimi</label>
+            <input type="text" class="col-8" v-model="name"/>
+        </div>
+        <div class="form-group">
+            <label class="col-4 control-label">Triipkood</label>
+            <input type="text" class="col-8" v-model="barcode"/>
+        </div>
+    </div>
     <div class="form-group">
         <label class="col-4 control-label">Shop</label>
         <select class="col-8" v-model="shopId">
@@ -73,12 +93,16 @@ export default class OfferCreate extends Vue {
     parsed = false
     shopId: number | undefined = undefined
     price: number | undefined = undefined
+    name: string | undefined = undefined
+    barcode: string | undefined = undefined
     id!: number
 
     async submitClicked (): Promise<void> {
         this.logger.info('submitClicked')
 
         const obj: IOffer = {
+            name: this.name,
+            barcode: this.barcode,
             productId: this.id,
             shopId: this.shopId,
             price: {
@@ -92,7 +116,7 @@ export default class OfferCreate extends Vue {
                 this.errorMsg = item.errorMsg
             } else {
                 if (item.data) {
-                    router.push('/product/details/' + this.id)
+                    router.push('/product/details/' + item.data.productId)
                 }
             }
         })
@@ -126,6 +150,14 @@ export default class OfferCreate extends Vue {
                 }
             }
         })
+
+        const initialOffer = this.offerStore.$state.offer
+        if (initialOffer.name) {
+            this.name = initialOffer.name
+        }
+        if (initialOffer.barcode) {
+            this.barcode = initialOffer.barcode
+        }
     }
 
     getShopList (): IShop[] {

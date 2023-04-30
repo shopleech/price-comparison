@@ -20,10 +20,14 @@ public class ReviewService implements IReviewService {
 
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<Review> getAll() {
-        return reviewRepository.findAll();
+        var customerId = userService.getCurrentUser().getCustomer().getId();
+
+        return reviewRepository.findAllByCustomerId(customerId);
     }
 
     @Override
@@ -56,7 +60,14 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public Integer remove(Integer id) {
+    public Integer remove(Integer id) throws Exception {
+        reviewRepository.deleteById(id);
+
+        var item = reviewRepository.findById(id);
+        if (item.isPresent()) {
+            throw new Exception("review removal failed");
+        }
+
         return id;
     }
 }

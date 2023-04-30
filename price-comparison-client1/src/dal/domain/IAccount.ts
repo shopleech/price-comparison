@@ -3,7 +3,6 @@
  * @since 06.02.2023
  */
 export interface IAccount {
-    id?: string;
-    customerId?: string;
-    status?: string;
+    id?: number
+    status?: string
 }

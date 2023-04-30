@@ -3,11 +3,11 @@
  * @since 01.04.2023
  */
 export interface IShop {
-    id?: number;
-    name?: string;
-    address?: string;
-    url?: string;
-    latitude?: number;
-    longitude?: number;
-    distance?: number;
+    id?: number
+    name?: string
+    address?: string
+    url?: string
+    latitude?: number
+    longitude?: number
+    distance?: number
 }

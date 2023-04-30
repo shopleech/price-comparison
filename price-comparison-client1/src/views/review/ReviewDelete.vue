@@ -36,13 +36,13 @@ import Logger from '@/util/logger'
 @Options({
     components: {},
     props: {
-        id: String
+        id: Number,
     },
     emits: [],
 })
 export default class ReviewDelete extends Vue {
     private logger = new Logger(ReviewDelete.name)
-    id!: string
+    id!: number
     ratingsStore = useReviewStore()
     ratingService = new ReviewService()
 

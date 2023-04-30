@@ -31,13 +31,13 @@ import { IUser } from '@/dal/domain/IUser'
 @Options({
     components: {},
     props: {
-        id: String
+        id: Number,
     },
     emits: [],
 })
 export default class UserDetails extends Vue {
     private logger = new Logger(UserDetails.name)
-    id!: string
+    id!: number
     userStore = useUserStore()
     userService = new UserService()
 

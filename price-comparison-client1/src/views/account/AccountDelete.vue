@@ -35,13 +35,13 @@ import Logger from '@/util/logger'
 @Options({
     components: {},
     props: {
-        id: String
+        id: Number,
     },
     emits: [],
 })
 export default class AccountDelete extends Vue {
     private logger = new Logger(AccountDelete.name)
-    id!: string
+    id!: number
     accountsStore = useAccountStore()
     accountService = new AccountService()
 

@@ -24,6 +24,8 @@ public class ReviewMapper {
     UserService userService;
     @Autowired
     ProductService productService;
+    @Autowired
+    private ProductMapper productMapper;
 
     public List<ReviewDTO> mapToDto(List<Review> entities) {
         return entities.stream()
@@ -33,8 +35,12 @@ public class ReviewMapper {
     public ReviewDTO mapToDto(Review c) {
         ReviewDTO dto = new ReviewDTO();
         dto.setId(c.getId());
-        if (c.getProduct() != null) {
+        try {
             dto.setProductId(c.getProduct().getId());
+            dto.setProduct(productMapper.mapToDto(
+                    productService.get(c.getProduct().getId())));
+        } catch (Exception e) {
+            logger.error("review mapper failed");
         }
         dto.setReviewTypeCode(c.getReviewTypeCode());
         dto.setScore(c.getScore());

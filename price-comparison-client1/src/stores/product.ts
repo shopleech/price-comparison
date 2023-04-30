@@ -9,7 +9,7 @@ import { IOffer } from '@/dal/domain/IOffer'
 export const useProductStore = defineStore({
     id: 'products',
     state: () => ({
-        product: [] as IProduct,
+        product: {} as IProduct,
         products: [] as IProduct[],
         offers: [] as IOffer[],
         rating_text: 'No Rating Selected',

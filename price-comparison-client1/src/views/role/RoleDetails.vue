@@ -31,12 +31,12 @@ import { IWatchlist } from '@/dal/domain/IWatchlist'
 @Options({
     components: {},
     props: {
-        id: String
+        id: Number,
     },
     emits: [],
 })
 export default class RoleDetails extends Vue {
-    id!: string
+    id!: number
 
     private logger = new Logger(RoleDetails.name)
 

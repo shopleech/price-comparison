@@ -8,7 +8,7 @@ import { defineStore } from 'pinia'
 export const useWatchlistStore = defineStore({
     id: 'watchlists',
     state: () => ({
-        watchlist: [] as IWatchlist,
+        watchlist: {} as IWatchlist,
         watchlists: [] as IWatchlist[],
     }),
     getters: {
@@ -17,6 +17,11 @@ export const useWatchlistStore = defineStore({
     actions: {
         add (watchlist: IWatchlist) {
             this.watchlists.push(watchlist)
-        }
+        },
+        remove (watchlistId: number) {
+            this.watchlists = this.watchlists.filter((item) => {
+                return item.id !== watchlistId
+            })
+        },
     },
 })

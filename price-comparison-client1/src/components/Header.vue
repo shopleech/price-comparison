@@ -21,6 +21,7 @@
                             <i class="bi bi-broadcast"></i> Minu koordinaadid</a>
                         <a class="dropdown-item" href="#" @click="clickWatchlist">Minu jälgimisnimekiri</a>
                         <a class="dropdown-item" href="#" @click="clickReviews">Minu hinnangud</a>
+                        <a class="dropdown-item" href="#" @click="clickAlarms">Minu teavitused</a>
                         <a class="dropdown-item" href="#" @click="clickNewOffer">Uute pakkumiste lisamine</a>
                         <a class="dropdown-item" href="#" @click="clickNewShop">Uue kaupluse lisamine</a>
                     </div>
@@ -124,6 +125,10 @@ export default class Header extends Vue {
 
     clickReviews () {
         router.push('/review')
+    }
+
+    clickAlarms () {
+        router.push('/alarm')
     }
 
     clickWatchlist () {

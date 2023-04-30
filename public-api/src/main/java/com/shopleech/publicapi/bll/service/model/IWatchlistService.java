@@ -15,7 +15,7 @@ public interface IWatchlistService {
 
     List<Watchlist> getAll();
 
-    Integer remove(Integer id);
+    Integer remove(Integer id) throws Exception;
 
     Watchlist update(Integer id, Watchlist newItem) throws Exception;
 }

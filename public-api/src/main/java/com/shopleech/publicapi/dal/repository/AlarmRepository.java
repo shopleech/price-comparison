@@ -16,4 +16,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Integer>, AlarmRep
     @Query(value = "SELECT * FROM alarm where product_id = :productId " +
             "AND customer_id = :customerId", nativeQuery = true)
     Alarm findByProduct(Integer customerId, Integer productId);
+
+    @Query(value = "SELECT * FROM alarm where customer_id = :customerId", nativeQuery = true)
+    List<Alarm> findAllByCustomerId(Integer customerId);
 }

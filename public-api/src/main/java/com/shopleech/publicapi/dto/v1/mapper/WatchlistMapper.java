@@ -41,17 +41,21 @@ public class WatchlistMapper {
             dto.setProduct(productMapper.mapToDto(
                     productService.get(c.getProduct().getId())));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("watchlist mapper failed");
         }
 
         return dto;
     }
 
-    public Watchlist mapToEntity(WatchlistDTO newWatchlist) throws Exception {
+    public Watchlist mapToEntity(WatchlistDTO newWatchlist) {
         Watchlist entity = new Watchlist();
         entity.setId(newWatchlist.getId());
         entity.setCustomer(userService.getCurrentUser().getCustomer());
-        entity.setProduct(productService.get(newWatchlist.getProductId()));
+        try {
+            entity.setProduct(productService.get(newWatchlist.getProductId()));
+        } catch (Exception e) {
+            logger.error("watchlist mapper failed");
+        }
         entity.setWatchlistTypeCode(newWatchlist.getWatchlistTypeCode());
 
         return entity;

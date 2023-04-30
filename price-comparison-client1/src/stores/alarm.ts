@@ -17,6 +17,11 @@ export const useAlarmStore = defineStore({
     actions: {
         add (alarm: IAlarm) {
             this.alarms.push(alarm)
-        }
+        },
+        remove (alarmId: number) {
+            this.alarms = this.alarms.filter((item) => {
+                return item.id !== alarmId
+            })
+        },
     },
 })

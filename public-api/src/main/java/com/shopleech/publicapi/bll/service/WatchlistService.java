@@ -63,8 +63,13 @@ public class WatchlistService implements IWatchlistService {
     }
 
     @Override
-    public Integer remove(Integer id) {
+    public Integer remove(Integer id) throws Exception {
         watchlistRepository.deleteById(id);
+
+        var item = watchlistRepository.findById(id);
+        if (item.isPresent()) {
+            throw new Exception("watchlist removal failed");
+        }
 
         return id;
     }

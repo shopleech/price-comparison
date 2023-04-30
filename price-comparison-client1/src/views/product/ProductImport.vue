@@ -1,9 +1,7 @@
 <template>
-    <RouterLink :to="{ name: 'home' }">
-        <img src="https://via.placeholder.com/40x40.png?text=back" alt="back"/>
-    </RouterLink>
+    <Header v-if="isAuthenticated" title="" back="home"/>
 
-    <h2>Create Import</h2>
+    <h4>Create Import</h4>
     <div class="row">
         <div class="col-md-12">
             <div v-if="errorMsg != null" class="text-danger validation-summary-errors" data-valmsg-summary="true">
@@ -43,13 +41,17 @@ import { useShopStore } from '@/stores/shop'
 import { ShopService } from '@/bll/service/ShopService'
 import DistanceUtil from '@/util/distance-util'
 import { useIdentityStore } from '@/stores/identity'
+import { IdentityService } from '@/bll/service/IdentityService'
+import Header from '@/components/Header.vue'
 
 /**
  * @author Ahto Jalak
  * @since 15.04.2023
  */
 @Options({
-    components: {},
+    components: {
+        Header,
+    },
     props: {
         barcode: String,
     },
@@ -61,6 +63,7 @@ export default class ProductImport extends Vue {
     private shopService = new ShopService()
     private shopStore = useShopStore()
     private identityStore = useIdentityStore()
+    private identityService = new IdentityService()
 
     listDataString = 'barcode;name;description;url;price'
     storeId = 0
@@ -129,6 +132,10 @@ export default class ProductImport extends Vue {
         })
 
         return output
+    }
+
+    get isAuthenticated (): boolean {
+        return this.identityService.isAuthenticated()
     }
 }
 </script>

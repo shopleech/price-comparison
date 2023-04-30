@@ -31,7 +31,8 @@
                         </RouterLink>
                     </div>
                     <div class="col-2">
-                        <button @click="addBookmark(item.id)">
+                        <button @click="addBookmark(item.id)"
+                                :style="{backgroundColor: bookmarkIsActive(item.id) ? 'green' : 'white'}">
                             <i class="bi bi-bookmark-plus"></i>
                         </button>
                     </div>
@@ -80,11 +81,12 @@
                         </div>
                         <div class="col-2">
                             <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
-                                {{ item.minPrice }}
+                                €{{ item.minPrice }}
                             </RouterLink>
                         </div>
                         <div class="col-2">
-                            <button @click="addBookmark(item.id)">
+                            <button @click="addBookmark(item.id)"
+                                    :style="{backgroundColor: bookmarkIsActive(item.id) ? 'green' : 'white'}">
                                 <i class="bi bi-bookmark-plus"></i>
                             </button>
                         </div>
@@ -169,6 +171,8 @@ import { useIdentityStore } from '@/stores/identity'
 import Header from '@/components/Header.vue'
 import { IWatchlist } from '@/dal/domain/IWatchlist'
 import { WatchlistService } from '@/bll/service/WatchlistService'
+import { useWatchlistStore } from '@/stores/watchlist'
+import { useOfferStore } from '@/stores/offer'
 
 /**
  * @author Ahto Jalak
@@ -196,6 +200,8 @@ export default class HomeView extends Vue {
     private productStore = useProductStore()
     private statsStore = useStatsStore()
     private categoryStore = useCategoryStore()
+    private watchlistStore = useWatchlistStore()
+    private offerStore = useOfferStore()
     private watchlistService = new WatchlistService()
 
     currentCategoryId = 0
@@ -232,6 +238,16 @@ export default class HomeView extends Vue {
             } else {
                 if (items.data) {
                     this.categoryStore.$state.categories = items.data
+                }
+            }
+        })
+
+        this.watchlistService.getAll().then((items) => {
+            if (items.errorMsg !== undefined) {
+                this.errorMsg = items.errorMsg
+            } else {
+                if (items.data) {
+                    this.watchlistStore.$state.watchlists = items.data
                 }
             }
         })
@@ -317,14 +333,23 @@ export default class HomeView extends Vue {
     }
 
     getKeyword () {
-        return this.productStore.$state.keyword
+        const keyword = this.productStore.$state.keyword
+        return keyword.trim()
+    }
+
+    isNumeric(value: string) {
+        return /^-?\d+$/.test(value)
     }
 
     addOffer () {
-        /*                <RouterLink :to="{ name: 'product-create', params: { barcode: getKeyword() } }" class="text-dark">
-                    Add this product
-                </RouterLink> */
         this.logger.info('addOffer')
+        this.offerStore.$state.offer = {
+            name: !this.isNumeric(this.getKeyword()) ? this.getKeyword() : '',
+            barcode: this.isNumeric(this.getKeyword()) ? this.getKeyword() : '',
+        }
+        router.push({
+            name: 'offer-create',
+        })
     }
 
     addBookmark (id: number) {
@@ -337,10 +362,22 @@ export default class HomeView extends Vue {
                 this.errorMsg = item.errorMsg
             } else {
                 if (item.data) {
-                    this.logger.info(item.data)
+                    this.watchlistStore.add(item.data)
                 }
             }
         })
+    }
+
+    bookmarkIsActive (id: number) {
+        this.logger.info('bookmarkIsActive')
+        for (let i = 0; i < this.watchlistStore.watchlistCount; i++) {
+            const x = this.watchlistStore.$state.watchlists[i] as IWatchlist
+            if (id === x.productId) {
+                return true
+            }
+        }
+
+        return false
     }
 }
 </script>

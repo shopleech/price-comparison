@@ -8,7 +8,7 @@ import { defineStore } from 'pinia'
 export const useRoleStore = defineStore({
     id: 'roles',
     state: () => ({
-        role: [] as IRole,
+        role: {} as IRole,
         roles: [] as IRole[],
     }),
     getters: {

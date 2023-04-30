@@ -8,7 +8,7 @@ import { defineStore } from 'pinia'
 export const useShopStore = defineStore({
     id: 'shops',
     state: () => ({
-        shop: [] as IShop,
+        shop: {} as IShop,
         shops: [] as IShop[],
     }),
     getters: {

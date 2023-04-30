@@ -48,21 +48,6 @@ export default class AccountCreate extends Vue {
 
     async submitClicked (): Promise<void> {
         this.logger.info('submitClicked')
-
-        const res = await this.accountService.add(
-            {
-                customerId: '123'
-            }
-        )
-
-        if (res.status == null || res.status >= 300) {
-            this.errorMsg = res.status + ' ' + res.errorMsg
-        } else {
-            // this.accountsStore.$state.accounts =
-            //     await this.accountService.getAll()
-
-            this.$router.push('/accounts')
-        }
     }
 }
 </script>

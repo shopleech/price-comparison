@@ -1,7 +1,5 @@
 <template>
-    <RouterLink :to="{ name: 'home' }">
-        <img src="https://via.placeholder.com/40x40.png?text=back" alt="back"/>
-    </RouterLink>
+    <Header v-if="isAuthenticated" title="" back="home"/>
 
     <h4>Create shop</h4>
     <div class="row">
@@ -57,13 +55,17 @@ import Logger from '@/util/logger'
 import router from '@/router'
 import { IShop } from '@/dal/domain/IShop'
 import { useShopStore } from '@/stores/shop'
+import Header from '@/components/Header.vue'
+import { IdentityService } from '@/bll/service/IdentityService'
 
 /**
  * @author Ahto Jalak
  * @since 31.03.2023
  */
 @Options({
-    components: {},
+    components: {
+        Header,
+    },
     props: {},
     emits: [],
 })
@@ -71,11 +73,13 @@ export default class ShopCreate extends Vue {
     private logger = new Logger(ShopCreate.name)
     private shopStore = useShopStore()
     private shopService = new ShopService()
+    private identityService = new IdentityService()
     name = ''
     address = ''
     url = ''
     latitude = 0
     longitude = 0
+
     errorMsg: string | null = null
 
     submitClicked (): void {
@@ -143,6 +147,10 @@ export default class ShopCreate extends Vue {
     clickTallinnLocation () {
         this.latitude = 59.436962
         this.longitude = 24.753574
+    }
+
+    get isAuthenticated (): boolean {
+        return this.identityService.isAuthenticated()
     }
 }
 </script>

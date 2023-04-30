@@ -24,6 +24,8 @@ public class AlarmMapper {
     private UserService userService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ProductMapper productMapper;
 
     public List<AlarmDTO> mapToDto(List<Alarm> alarms) {
         return alarms.stream()
@@ -33,8 +35,12 @@ public class AlarmMapper {
     public AlarmDTO mapToDto(Alarm c) {
         var dto = new AlarmDTO();
         dto.setId(c.getId());
-        if (c.getProduct() != null) {
+        try {
             dto.setProductId(c.getProduct().getId());
+            dto.setProduct(productMapper.mapToDto(
+                    productService.get(c.getProduct().getId())));
+        } catch (Exception e) {
+            logger.error("alarm mapper failed");
         }
         dto.setAlarmTypeCode(c.getAlarmTypeCode());
         dto.setMinValue(c.getMinValue());

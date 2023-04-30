@@ -3,6 +3,6 @@
  * @since 15.04.2023
  */
 export interface IProductImport {
-    storeId?: number;
-    productImportItems?: Array<object>;
+    storeId?: number
+    productImportItems?: Array<object>
 }

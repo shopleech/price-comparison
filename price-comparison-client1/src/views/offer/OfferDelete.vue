@@ -35,13 +35,13 @@ import Logger from '@/util/logger'
 @Options({
     components: {},
     props: {
-        id: String
+        id: Number,
     },
     emits: [],
 })
 export default class OfferDelete extends Vue {
     private logger = new Logger(OfferDelete.name)
-    id!: string
+    id!: number
     merchandisesStore = useOfferStore()
     merchandiseService = new OfferService()
 

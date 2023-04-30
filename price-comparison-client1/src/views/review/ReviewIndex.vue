@@ -3,21 +3,23 @@
 
     <h4>Hinnangud</h4>
     <div v-for="item of getReviews()" :key="item.id" class="border p-2 mb-4 row">
-        <div class="col-2">
-            <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
-        </div>
-        <div class="col-6">
-            <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
-                {{ item.id }}
-            </RouterLink><br/>
-            <small>{{ item.productId }}</small>
-        </div>
-        <div class="col-2">
-            <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
-                {{ item.productId }}
-            </RouterLink>
-        </div>
-        <div class="col-2">
+        <div class="row">
+            <div class="col-2">
+                <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
+                <button class="small" @click="clickRemove(item.id)">x</button>
+            </div>
+            <div class="col-8">
+                <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
+                    {{ item.product.name }}
+                </RouterLink>
+                <div class="small">{{ item.product.barcode }}</div>
+                <div>
+                    Hinne: {{ item.score }}
+                </div>
+                <div>
+                    {{ item.description }}
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -54,6 +56,8 @@ export default class ReviewIndex extends Vue {
     public ratings: IReview[] = []
     private identityService = new IdentityService()
 
+    errorMsg: string | null = null
+
     get isAdmin (): boolean {
         return this.identityStore.isAdmin()
     }
@@ -72,7 +76,7 @@ export default class ReviewIndex extends Vue {
         //     })
     }
 
-    clickToReviewDelete (ratingId: string): void {
+    clickToReviewDelete (ratingId: number): void {
         this.reviewService.delete(ratingId)
             .then(() => {
                 router.push('/review')
@@ -85,6 +89,18 @@ export default class ReviewIndex extends Vue {
 
     get isAuthenticated (): boolean {
         return this.identityService.isAuthenticated()
+    }
+
+    clickRemove (reviewId: number) {
+        this.reviewService.delete(reviewId).then((item) => {
+            if (item.errorMsg !== undefined) {
+                this.errorMsg = item.errorMsg
+            } else {
+                if (item.data) {
+                    this.reviewStore.remove(item.data)
+                }
+            }
+        })
     }
 }
 

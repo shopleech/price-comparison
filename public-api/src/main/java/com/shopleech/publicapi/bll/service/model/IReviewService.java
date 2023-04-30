@@ -17,5 +17,5 @@ public interface IReviewService {
 
     Review update(Integer id, Review mapToEntity) throws Exception;
 
-    Integer remove(Integer id);
+    Integer remove(Integer id) throws Exception;
 }

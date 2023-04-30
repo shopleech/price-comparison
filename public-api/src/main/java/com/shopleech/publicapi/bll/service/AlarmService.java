@@ -3,6 +3,7 @@ package com.shopleech.publicapi.bll.service;
 import com.shopleech.publicapi.bll.service.model.IAlarmService;
 import com.shopleech.publicapi.dal.repository.AlarmRepository;
 import com.shopleech.publicapi.domain.Alarm;
+import com.shopleech.publicapi.domain.Watchlist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class AlarmService implements IAlarmService {
 
     @Autowired
     protected AlarmRepository alarmRepository;
+    @Autowired
+    protected UserService userService;
 
     @Override
     public Alarm add(Alarm data) throws Exception {
@@ -46,7 +49,9 @@ public class AlarmService implements IAlarmService {
 
     @Override
     public List<Alarm> getAll() {
-        return alarmRepository.findAll();
+        var customerId = userService.getCurrentUser().getCustomer().getId();
+
+        return alarmRepository.findAllByCustomerId(customerId);
     }
 
     @Override
@@ -55,7 +60,14 @@ public class AlarmService implements IAlarmService {
     }
 
     @Override
-    public Integer remove(Integer id) {
+    public Integer remove(Integer id) throws Exception {
+        alarmRepository.deleteById(id);
+
+        var item = alarmRepository.findById(id);
+        if (item.isPresent()) {
+            throw new Exception("alarm removal failed");
+        }
+
         return id;
     }
 }

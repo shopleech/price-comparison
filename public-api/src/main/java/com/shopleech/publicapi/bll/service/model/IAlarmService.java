@@ -17,5 +17,5 @@ public interface IAlarmService {
 
     Alarm update(Integer id, Alarm alarm);
 
-    Integer remove(Integer id);
+    Integer remove(Integer id) throws Exception;
 }

@@ -8,7 +8,7 @@ import { defineStore } from 'pinia'
 export const useMetricStore = defineStore({
     id: 'metrics',
     state: () => ({
-        metric: [] as IMetric,
+        metric: {} as IMetric,
         metrics: [] as IMetric[],
     }),
     getters: {

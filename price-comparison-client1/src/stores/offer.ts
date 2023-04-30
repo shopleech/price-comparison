@@ -8,7 +8,7 @@ import { defineStore } from 'pinia'
 export const useOfferStore = defineStore({
     id: 'offers',
     state: () => ({
-        offer: [] as IOffer,
+        offer: {} as IOffer,
         offers: [] as IOffer[],
     }),
     getters: {

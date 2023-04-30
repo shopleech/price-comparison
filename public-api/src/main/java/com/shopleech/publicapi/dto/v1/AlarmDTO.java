@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class AlarmDTO {
     private Integer id;
     private Integer productId;
+    private ProductDTO product;
     private AlarmTypeCode alarmTypeCode;
     private Double minValue;
     private Double maxValue;

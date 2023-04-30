@@ -19,7 +19,8 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Import as plain text</label>
-                <textarea v-model="listDataString" class="form-control" style="min-width: 100%"></textarea>
+                <textarea v-model="listDataString" class="form-control" rows="4"
+                          style="min-width: 100%"></textarea>
             </div>
             <div>
                 <div class="form-group">

@@ -3,17 +3,19 @@
 
     <div class="row">
         <div class="col-4">
-            <button @click="clickAddReview(getProduct().id)">
+            <button @click="clickAddReview(getProduct().id)" class="small"
+                    :style="{backgroundColor: reviewIsActive(getProduct().id) ? 'green' : 'white'}">
                 <i class="bi bi-star"></i> lisa hinnang
             </button>
         </div>
         <div class="col-4">
-            <button @click="clickAddBookmark(getProduct().id)">
+            <button @click="clickAddBookmark(getProduct().id)" class="small"
+                    :style="{backgroundColor: bookmarkIsActive(getProduct().id) ? 'green' : 'white'}">
                 <i class="bi bi-bookmark-plus"></i> lisa nimekirja
             </button>
         </div>
         <div class="col-4">
-            <button @click="clickAddOffer(getProduct().id)">
+            <button @click="clickAddOffer(getProduct().id)" class="small">
                 <i class="bi bi-database-add"></i> lisa pakkumine
             </button>
         </div>
@@ -21,7 +23,7 @@
     <div class="row">
         <div class="col-3">Pilt</div>
         <div class="col-9">
-            <img src="https://via.placeholder.com/350x200.png?text=product" class="img-fluid" alt=""/>
+            <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
         </div>
     </div>
     <div class="row">
@@ -43,7 +45,7 @@
     <div v-for="item of getOffersDetails()" :key="item.id" class="border" @click="setItemDetails(item.id)">
         <div class="row">
             <div class="col-2">
-                <img src="https://via.placeholder.com/50x50.png?text=company" class="img-fluid" alt=""/>
+                <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Shop" alt="shop"/>
             </div>
             <div class="col-7">
                 <div>{{ item.name }}</div>
@@ -91,6 +93,9 @@ import router from '@/router'
 import { IWatchlist } from '@/dal/domain/IWatchlist'
 import { IOfferResults } from '@/dal/domain/IOfferResults'
 import { IOffer } from '@/dal/domain/IOffer'
+import { useWatchlistStore } from '@/stores/watchlist'
+import { IReview } from '@/dal/domain/IReview'
+import { useReviewStore } from '@/stores/review'
 
 /**
  * @author Ahto Jalak
@@ -116,6 +121,8 @@ export default class ProductDetails extends Vue {
     private shopStore = useShopStore()
     private identityStore = useIdentityStore()
     private productStore = useProductStore()
+    private watchlistStore = useWatchlistStore()
+    private reviewStore = useReviewStore()
     private identityService = new IdentityService()
     distanceUtil = new DistanceUtil()
 
@@ -246,7 +253,7 @@ export default class ProductDetails extends Vue {
                 this.errorMsg = item.errorMsg
             } else {
                 if (item.data) {
-                    this.logger.info(item.data)
+                    this.watchlistStore.add(item.data)
                 }
             }
         })
@@ -255,6 +262,30 @@ export default class ProductDetails extends Vue {
     clickAddOffer (id: number) {
         this.logger.info(id.toString())
         router.push('/offer/create/' + id)
+    }
+
+    bookmarkIsActive (id: number) {
+        this.logger.info('bookmarkIsActive')
+        for (let i = 0; i < this.watchlistStore.watchlistCount; i++) {
+            const x = this.watchlistStore.$state.watchlists[i] as IWatchlist
+            if (id === x.productId) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    reviewIsActive (id: number) {
+        this.logger.info('reviewIsActive')
+        for (let i = 0; i < this.reviewStore.reviewCount; i++) {
+            const x = this.reviewStore.$state.reviews[i] as IReview
+            if (id === x.productId) {
+                return true
+            }
+        }
+
+        return false
     }
 }
 </script>
