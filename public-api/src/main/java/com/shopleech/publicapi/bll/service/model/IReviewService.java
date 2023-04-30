@@ -13,7 +13,7 @@ public interface IReviewService {
 
     Review get(Integer id) throws Exception;
 
-    Review add(Review review);
+    Review add(Review review) throws Exception;
 
     Review update(Integer id, Review mapToEntity) throws Exception;
 

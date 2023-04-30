@@ -1,7 +1,6 @@
 <template>
     <div class="container-fluid h-100 row">
-        <main class="h-100 main-border col-xl-4 col-lg-5 col-md-6 col-sm-7">
-            <Header/>
+        <main class="h-100 col-xl-4 col-lg-5 col-md-6 col-sm-7 bg-white">
             <router-view/>
         </main>
     </div>
@@ -12,7 +11,6 @@ import { Options, Vue } from 'vue-class-component'
 import router from '@/router/index'
 import { useIdentityStore } from '@/stores/identity'
 import Logger from '@/util/logger'
-import Header from '@/components/Header.vue'
 
 /**
  * @author Ahto Jalak
@@ -20,7 +18,6 @@ import Header from '@/components/Header.vue'
  */
 @Options({
     components: {
-        Header
     },
 })
 export default class App extends Vue {

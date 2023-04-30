@@ -39,6 +39,7 @@ public class PriceService implements IPriceService {
 
     @Override
     public Price add(Price price) {
+        priceRepository.save(price);
         return price;
     }
 
@@ -50,5 +51,15 @@ public class PriceService implements IPriceService {
     @Override
     public Integer remove(Integer id) {
         return id;
+    }
+
+    @Override
+    public Double getMinPriceByBarcode(String barcode) {
+        return priceRepository.getMinPriceByBarcode(barcode);
+    }
+
+    @Override
+    public Price getLastPriceByOfferId(Integer offerId) {
+        return priceRepository.getLastPriceByOfferId(offerId);
     }
 }

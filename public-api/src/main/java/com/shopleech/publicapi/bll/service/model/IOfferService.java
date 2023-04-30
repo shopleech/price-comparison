@@ -13,9 +13,11 @@ public interface IOfferService {
 
     Offer get(Integer id) throws Exception;
 
-    Offer add(Offer offer);
+    Offer add(Offer offer) throws Exception;
 
     Offer update(Integer id, Offer offer);
 
     Integer remove(Integer id);
+
+    List<Offer> getAllByProductId(Integer id);
 }

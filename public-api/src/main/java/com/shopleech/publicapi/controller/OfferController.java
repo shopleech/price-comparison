@@ -1,8 +1,11 @@
 package com.shopleech.publicapi.controller;
 
 import com.shopleech.publicapi.bll.service.OfferService;
+import com.shopleech.publicapi.bll.service.PriceService;
 import com.shopleech.publicapi.dto.v1.OfferDTO;
+import com.shopleech.publicapi.dto.v1.PriceDTO;
 import com.shopleech.publicapi.dto.v1.mapper.OfferMapper;
+import com.shopleech.publicapi.dto.v1.mapper.PriceMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +29,11 @@ public class OfferController {
     @Autowired
     private OfferService offerService;
     @Autowired
+    private PriceService priceService;
+    @Autowired
     private OfferMapper offerMapper;
+    @Autowired
+    private PriceMapper priceMapper;
 
     @GetMapping
     public ResponseEntity<?> getAll() {
@@ -35,6 +42,21 @@ public class OfferController {
             var item = offerService.getAll();
             responseMap.put("error", false);
             responseMap.put("details", offerMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @GetMapping("/product/{id}")
+    public ResponseEntity<?> getAllByProductId(@PathVariable(value = "id") Integer id) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var items = offerService.getAllByProductId(id);
+            responseMap.put("error", false);
+            responseMap.put("details", offerMapper.mapToDto(items));
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);
@@ -64,6 +86,11 @@ public class OfferController {
         try {
             var item = offerService.add(
                     offerMapper.mapToEntity(offerDTO));
+            var newPrice = new PriceDTO();
+            newPrice.setOfferId(item.getId());
+            newPrice.setAmount(offerDTO.getPrice().getAmount());
+            var priceItem = priceService.add(
+                    priceMapper.mapToEntity(newPrice));
             responseMap.put("error", false);
             responseMap.put("details", offerMapper.mapToDto(item));
             return ResponseEntity.ok(responseMap);

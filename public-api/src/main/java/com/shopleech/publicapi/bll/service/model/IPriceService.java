@@ -18,4 +18,8 @@ public interface IPriceService {
     Price update(Integer id, Price price);
 
     Integer remove(Integer id);
+
+    Double getMinPriceByBarcode(String barcode);
+
+    Price getLastPriceByOfferId(Integer offerId);
 }

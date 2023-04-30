@@ -25,9 +25,6 @@
                         Login
                     </button>
                 </div>
-                <div>
-                    Forgot your password?
-                </div>
             </div>
         </div>
     </div>

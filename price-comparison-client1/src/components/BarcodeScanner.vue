@@ -26,15 +26,15 @@ import { Html5QrcodeScanner } from 'html5-qrcode'
             type: Number,
             default: 10
         },
-    }
+    },
 })
 export default class BarcodeScanner extends Vue {
     mounted () {
         const config = {
             fps: this.fps,
             qrbox: this.qrbox,
-        };
-        const html5QrcodeScanner = new Html5QrcodeScanner('qr-code-full-region', config);
+        }
+        const html5QrcodeScanner = new Html5QrcodeScanner('qr-code-full-region', config)
         html5QrcodeScanner.render(this.onScanSuccess)
     }
 }

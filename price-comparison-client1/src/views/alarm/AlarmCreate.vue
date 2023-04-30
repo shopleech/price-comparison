@@ -1,4 +1,6 @@
 <template>
+    <Header v-if="isAuthenticated" title="" back="home"/>
+
     <h4>Create alarm</h4>
     <div class="row">
         <div class="col-md-12">
@@ -27,21 +29,29 @@ import { AlarmService } from '@/bll/service/AlarmService'
 import { useAlarmStore } from '@/stores/alarm'
 import { Options, Vue } from 'vue-class-component'
 import Logger from '@/util/logger'
+import Header from '@/components/Header.vue'
+import { IdentityService } from '@/bll/service/IdentityService'
 
 /**
  * @author Ahto Jalak
  * @since 06.02.2023
  */
 @Options({
-    components: {},
-    props: {},
+    components: {
+        Header,
+    },
+    props: {
+        id: Number,
+    },
     emits: [],
 })
 export default class AlarmCreate extends Vue {
     private logger = new Logger(AlarmCreate.name)
+    id!: number
     alarmsStore = useAlarmStore()
     alarmService = new AlarmService()
     // alarmService = new AlarmService()
+    private identityService = new IdentityService()
 
     errorMsg: string | null = null
 
@@ -60,6 +70,10 @@ export default class AlarmCreate extends Vue {
 
             this.$router.push('/alarms')
         }
+    }
+
+    get isAuthenticated (): boolean {
+        return this.identityService.isAuthenticated()
     }
 }
 </script>

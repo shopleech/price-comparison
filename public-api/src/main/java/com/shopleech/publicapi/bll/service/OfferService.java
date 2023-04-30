@@ -38,8 +38,18 @@ public class OfferService implements IOfferService {
     }
 
     @Override
-    public Offer add(Offer offer) {
-        return offer;
+    public Offer add(Offer entity) throws Exception {
+        var offer = offerRepository.findByProduct(
+                entity.getAccount().getId(),
+                entity.getProduct().getId(),
+                entity.getShop().getId()
+        );
+
+        if (offer != null) {
+            return offer;
+        }
+
+        return offerRepository.save(entity);
     }
 
     @Override
@@ -50,5 +60,10 @@ public class OfferService implements IOfferService {
     @Override
     public Integer remove(Integer id) {
         return id;
+    }
+
+    @Override
+    public List<Offer> getAllByProductId(Integer id) {
+        return offerRepository.getAllByProductId(id);
     }
 }

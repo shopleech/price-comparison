@@ -22,7 +22,14 @@ public class AlarmService implements IAlarmService {
     protected AlarmRepository alarmRepository;
 
     @Override
-    public Alarm add(Alarm data) {
+    public Alarm add(Alarm data) throws Exception {
+        var check = alarmRepository.findByProduct(
+                data.getCustomer().getId(), data.getProduct().getId());
+
+        if (check != null) {
+            throw new Exception("alarm item exists");
+        }
+
         return alarmRepository.save(data);
     }
 

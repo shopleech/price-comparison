@@ -1,31 +1,23 @@
 <template>
-    <div class="row">
-        <div class="col-lg-3 border p-2">
-            <p>What now?</p>
+    <Header v-if="isAuthenticated" title="" back="home"/>
+
+    <h4>Hinnangud</h4>
+    <div v-for="item of getReviews()" :key="item.id" class="border p-2 mb-4 row">
+        <div class="col-2">
+            <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
         </div>
-        <div class="col-lg-9">
-            <h3>Your product reviews</h3>
-            <div v-if="isAuthenticated">
-                <div v-for="item of ratings" :key="item.id" class="row p-2">
-                    <div class="col-3">
-                        <a href="#" @click="clickToProduct(item.merchandiseId)">
-                            <img src="https://via.placeholder.com/200x50.png?text=product" alt="product"/>
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <h3>{{ item.productName }}</h3>
-                        <p>
-                            {{ item.description }}
-                        </p>
-                        <p>Score: {{ item.score }}</p>
-                    </div>
-                    <div class="col-3">
-                        <a href="#" @click="clickToReviewDelete(item.id)">
-                            Delete
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <div class="col-6">
+            <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
+                {{ item.id }}
+            </RouterLink><br/>
+            <small>{{ item.productId }}</small>
+        </div>
+        <div class="col-2">
+            <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
+                {{ item.productId }}
+            </RouterLink>
+        </div>
+        <div class="col-2">
         </div>
     </div>
 </template>
@@ -39,27 +31,28 @@ import router from '@/router'
 import { ReviewService } from '@/bll/service/ReviewService'
 import { useReviewStore } from '@/stores/review'
 import Logger from '@/util/logger'
+import { IdentityService } from '@/bll/service/IdentityService'
+import Header from '@/components/Header.vue'
 
 /**
  * @author Ahto Jalak
  * @since 06.02.2023
  */
 @Options({
-    components: {},
+    components: {
+        Header,
+    },
     props: {},
     emits: [],
 })
 export default class ReviewIndex extends Vue {
     private logger = new Logger(ReviewIndex.name)
-    private ratingsStore = useReviewStore()
-    private ratingService = new ReviewService()
+    private reviewStore = useReviewStore()
+    private reviewService = new ReviewService()
     private merchandiseService = new OfferService()
     private identityStore = useIdentityStore()
     public ratings: IReview[] = []
-
-    get isAuthenticated (): boolean {
-        return this.identityStore.getJwt() !== null
-    }
+    private identityService = new IdentityService()
 
     get isAdmin (): boolean {
         return this.identityStore.isAdmin()
@@ -67,8 +60,8 @@ export default class ReviewIndex extends Vue {
 
     async mounted (): Promise<void> {
         this.logger.info('mounted')
-        // this.ratings =
-        //     await this.ratingService.getAll()
+        const items = await this.reviewService.getAll()
+        this.reviewStore.$state.reviews = items.data as IReview[]
     }
 
     clickToProduct (merchandiseId: string): void {
@@ -80,10 +73,18 @@ export default class ReviewIndex extends Vue {
     }
 
     clickToReviewDelete (ratingId: string): void {
-        this.ratingService.delete(ratingId)
+        this.reviewService.delete(ratingId)
             .then(() => {
                 router.push('/review')
             })
+    }
+
+    getReviews(): IReview[] {
+        return this.reviewStore.$state.reviews
+    }
+
+    get isAuthenticated (): boolean {
+        return this.identityService.isAuthenticated()
     }
 }
 

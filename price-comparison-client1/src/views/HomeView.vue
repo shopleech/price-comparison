@@ -1,49 +1,25 @@
 <template>
+    <Header v-if="isAuthenticated" title=""/>
     <div class="row" v-if="isAuthenticated">
         <div class="col-12 p-3">
-            <div class="row">
-                <div class="col-3">
-                    <RouterLink :to="{ name: 'shop-create' }" class="text-dark">
-                        Add store
-                    </RouterLink>
-                </div>
-                <div class="col-3">
-                    <RouterLink :to="{ name: 'product-import' }" class="text-dark">
-                        Import products
-                    </RouterLink>
-                </div>
-            </div>
             <div v-if="errorMsg != null" class="text-danger validation-summary-errors" data-valmsg-summary="true">
                 <ul>
                     <li>{{ errorMsg }}</li>
                 </ul>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="input-group mb-3">
-                        <input v-model="keyword" type="text" class="form-control" placeholder="Product barcode"
-                               aria-label="Product title or barcode" @input="searchProduct">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" @click="searchProduct" type="button">
-                                <i class="bi bi-search"></i>
-                            </button>
-                            <button class="btn btn-outline-secondary" @click="showScanner=!showScanner" type="button">
-                                <i class="bi bi-qr-code-scan"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div v-if="showScanner">
-                        <barcode-scanner :qrbox="100" :fps="10" @result="onScan"/>
-                    </div>
+            <div v-if="getKeyword().trim().length >= 3">
+                <div class="text-right">
+                    <button @click="addOffer">
+                        <i class="bi bi-database-add"></i> lisa pakkumine
+                    </button>
                 </div>
-            </div>
-            <div v-if="keyword.trim().length >= 3">
-                Number of products found: {{ getProductList().length }}
+                <h4>Tooted</h4>
+                <small>Leitud tooteid: {{ getProductList().length }}</small>
                 <div v-for="item of getProductList()" :key="item.id" class="border p-2 mb-4 row">
-                    <div class="col-3">
-                        <img src="https://placehold.co/60x60/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
+                    <div class="col-2">
+                        <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
                     </div>
-                    <div class="col-7">
+                    <div class="col-6">
                         <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
                             {{ item.name }}
                         </RouterLink><br/>
@@ -54,21 +30,19 @@
                             {{ item.minPrice }}
                         </RouterLink>
                     </div>
+                    <div class="col-2">
+                        <button @click="addBookmark(item.id)">
+                            <i class="bi bi-bookmark-plus"></i>
+                        </button>
+                    </div>
                 </div>
-                <div v-if="getProductList().length === 0">
-                    Product not found?
-                    <RouterLink :to="{ name: 'product-create', params: { barcode: keyword } }" class="text-dark">
-                        Add this product
-                    </RouterLink>
-                </div>
-
             </div>
-            <div v-if="keyword.trim().length < 3">
+            <div v-if="getKeyword().trim().length < 3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
                             <button @click="currentCategoryId=0" class="border-0">
-                                Main category
+                                Kataloog
                             </button>
                         </li>
                         <li class="breadcrumb-item" v-for="breadcrumb of getBreadcrumbs(currentCategoryId)"
@@ -90,26 +64,60 @@
                         </button>
                     </div>
                 </div>
+                <div v-if="currentCategoryId > 0 && getProductList().length > 0">
+                    <h4>Tooted</h4>
+                    <div v-for="item of getProductList()" :key="item.id" class="border p-2 mb-4 row">
+                        <div class="col-2">
+                            <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
+                        </div>
+                        <div class="col-6">
+                            <div>
+                                <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
+                                    {{ item.name }}
+                                </RouterLink>
+                            </div>
+                            <small>{{ item.barcode }}</small>
+                        </div>
+                        <div class="col-2">
+                            <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
+                                {{ item.minPrice }}
+                            </RouterLink>
+                        </div>
+                        <div class="col-2">
+                            <button @click="addBookmark(item.id)">
+                                <i class="bi bi-bookmark-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row fixed-bottom p-3">
                 <div class="row fixed-bottom p-3 col-xl-4 col-lg-5 col-md-6 col-sm-7">
                     <div class="col-6">
                         <button @click="logoutClicked()" class="btn btn-secondary btn-lg w-100">
-                            Logout
+                            Logi välja
                         </button>
                     </div>
                     <div class="col-6">
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row" v-if="!isAuthenticated">
-        <div class="col-12 p-3">
+        <div class="col-12 p-3 bg-light">
+            <h4>Location-based Product Price Comparison Web Application</h4>
             <div class="row">
                 <div class="col-6">
-                    Number of products
+                    Users
+                </div>
+                <div class="col-6">
+                    {{ getStats().numOfUsers }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    Products
                 </div>
                 <div class="col-6">
                     {{ getStats().numOfProducts }}
@@ -117,22 +125,14 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    Number of price updates
+                    Offers
                 </div>
                 <div class="col-6">
                     {{ getStats().numOfPriceUpdates }}
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
-                    Number of users
-                </div>
-                <div class="col-6">
-                    {{ getStats().numOfUsers }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12"></div>
+                <div class="col-12 p-5"></div>
             </div>
             <div class="row fixed-bottom p-3 col-xl-4 col-lg-5 col-md-6 col-sm-7">
                 <div class="col-6">
@@ -166,25 +166,25 @@ import { CategoryService } from '@/bll/service/CategoryService'
 import { ICategory } from '@/dal/domain/ICategory'
 import { IBreadcrumb } from '@/dal/domain/IBreadcrumb'
 import { useIdentityStore } from '@/stores/identity'
-import BarcodeScanner from '@/components/BarcodeScanner.vue'
+import Header from '@/components/Header.vue'
+import { IWatchlist } from '@/dal/domain/IWatchlist'
+import { WatchlistService } from '@/bll/service/WatchlistService'
 
 /**
  * @author Ahto Jalak
  * @since 06.02.2023
  */
 @Options({
-    components: { BarcodeScanner },
+    components: {
+        Header,
+    },
     data () {
         return {}
     },
     methods: {
-        onScan (decodedText: string, decodedResult: object) {
-            this.logger.info('onscannn')
-            this.keyword = decodedText
-            this.searchProduct()
-        }
     },
-    props: {}
+    props: {
+    },
 })
 export default class HomeView extends Vue {
     private logger = new Logger(HomeView.name)
@@ -196,9 +196,10 @@ export default class HomeView extends Vue {
     private productStore = useProductStore()
     private statsStore = useStatsStore()
     private categoryStore = useCategoryStore()
+    private watchlistService = new WatchlistService()
+
     currentCategoryId = 0
-    keyword = ''
-    showScanner = false
+    keyword: string | null = ''
     errorMsg: string | null = null
 
     get isAuthenticated (): boolean {
@@ -209,26 +210,6 @@ export default class HomeView extends Vue {
         this.logger.info('trying to logout')
         await this.identityService.logout()
         await router.push('/')
-    }
-
-    searchProduct () {
-        this.logger.info('searchShop')
-
-        if (this.keyword.trim().length < 3) {
-            this.productStore.$reset()
-            return
-        }
-
-        this.productService.findByName(this.keyword).then((items) => {
-            this.logger.info('found something')
-            if (items.errorMsg !== undefined) {
-                this.errorMsg = items.errorMsg
-            } else {
-                if (items.data) {
-                    this.productStore.$state.products = items.data
-                }
-            }
-        })
     }
 
     mounted (): void {
@@ -254,6 +235,25 @@ export default class HomeView extends Vue {
                 }
             }
         })
+
+        /*
+        if (this.keyword != null && this.keyword.length > 0) {
+            if (this.keyword.trim().length < 3) {
+                this.productStore.$reset()
+                return
+            }
+
+            this.productService.findByName(this.keyword).then((items) => {
+                this.logger.info('found something')
+                if (items.errorMsg !== undefined) {
+                    this.errorMsg = items.errorMsg
+                } else {
+                    if (items.data) {
+                        this.productStore.$state.products = items.data
+                    }
+                }
+            })
+        } */
     }
 
     getProductList (): IProduct[] {
@@ -301,6 +301,46 @@ export default class HomeView extends Vue {
 
     clickCategory (categoryId: number) {
         this.currentCategoryId = categoryId
+
+        // get products by category id
+        this.productService.findByCategoryId(categoryId).then((items) => {
+            this.logger.info('found something')
+            if (items.errorMsg !== undefined) {
+                this.errorMsg = items.errorMsg
+            } else {
+                if (items.data) {
+                    this.productStore.$state.products = items.data
+                }
+            }
+        })
+        // end
+    }
+
+    getKeyword () {
+        return this.productStore.$state.keyword
+    }
+
+    addOffer () {
+        /*                <RouterLink :to="{ name: 'product-create', params: { barcode: getKeyword() } }" class="text-dark">
+                    Add this product
+                </RouterLink> */
+        this.logger.info('addOffer')
+    }
+
+    addBookmark (id: number) {
+        this.logger.info('addBookmark')
+        const entity = {
+            productId: id,
+        } as IWatchlist
+        this.watchlistService.add(entity).then((item) => {
+            if (item.errorMsg !== undefined) {
+                this.errorMsg = item.errorMsg
+            } else {
+                if (item.data) {
+                    this.logger.info(item.data)
+                }
+            }
+        })
     }
 }
 </script>

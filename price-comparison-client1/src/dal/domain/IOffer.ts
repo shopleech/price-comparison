@@ -1,15 +1,19 @@
+import { IShop } from '@/dal/domain/IShop'
+import { IPrice } from '@/dal/domain/IPrice'
+
 /**
  * @author Ahto Jalak
  * @since 06.02.2023
  */
 export interface IOffer {
-    id?: number;
-    accountId?: number;
-    productId?: number;
-    shopId?: number;
-    barcode?: string;
-    name?: string;
-    description?: string;
-    url?: string;
-    minPrice?: number;
+    id?: number
+    productId?: number
+    shopId?: number
+    shop?: IShop
+    barcode?: string
+    name?: string
+    description?: string
+    url?: string
+    price?: IPrice
+    minPrice?: number
 }

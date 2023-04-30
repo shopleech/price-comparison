@@ -38,7 +38,14 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public Review add(Review review) {
+    public Review add(Review review) throws Exception {
+        var check = reviewRepository.findByProduct(
+                review.getCustomer().getId(), review.getProduct().getId());
+
+        if (check != null) {
+            throw new Exception("review item exists");
+        }
+
         return reviewRepository.save(review);
     }
 

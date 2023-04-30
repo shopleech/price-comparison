@@ -16,4 +16,5 @@ public class WatchlistDTO {
     private Integer id;
     private WatchlistTypeCode watchlistTypeCode;
     private Integer productId;
+    private ProductDTO product;
 }

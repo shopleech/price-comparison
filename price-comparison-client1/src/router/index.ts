@@ -78,6 +78,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/',
         name: 'home',
         component: HomeView,
+        props: true,
     },
     {
         path: '/about',
@@ -133,9 +134,10 @@ const routes: Array<RouteRecordRaw> = [
         component: AlarmIndex
     },
     {
-        path: '/alarm/create',
+        path: '/alarm/create/:id',
         name: 'alarm-create',
-        component: AlarmCreate
+        component: AlarmCreate,
+        props: true,
     },
     {
         path: '/alarm/edit/:id',
@@ -288,6 +290,12 @@ const routes: Array<RouteRecordRaw> = [
         component: OfferCreate
     },
     {
+        path: '/offer/create/:id',
+        name: 'offer-create-with-product',
+        component: OfferCreate,
+        props: true,
+    },
+    {
         path: '/offer/edit/:id',
         name: 'offer-edit',
         component: OfferEdit,
@@ -386,10 +394,15 @@ const routes: Array<RouteRecordRaw> = [
         component: ReviewIndex
     },
     {
-        path: '/review/create/:id',
+        path: '/review/create',
         name: 'review-create',
         component: ReviewCreate,
-        props: true
+    },
+    {
+        path: '/review/create/:id',
+        name: 'review-create-with-product',
+        component: ReviewCreate,
+        props: true,
     },
     {
         path: '/review/edit/:id',

@@ -1,44 +1,73 @@
 <template>
-    <RouterLink :to="{ name: 'home' }">
-        <img src="https://via.placeholder.com/40x40.png?text=back" alt="back"/>
-    </RouterLink>
+    <Header v-if="isAuthenticated" title="" back="home"/>
 
-    <h2>View Product details</h2>
     <div class="row">
-        <div class="col-md-12">
-
+        <div class="col-4">
+            <button @click="clickAddReview(getProduct().id)">
+                <i class="bi bi-star"></i> lisa hinnang
+            </button>
         </div>
-        <div class="col-10 p-4">
-            <div class="row">
-                <div class="col-md-4">
-                    <img src="https://via.placeholder.com/350x200.png?text=product" class="img-fluid" alt=""/>
-                </div>
-                <div class="col-md-8">
-                    <a href="#" @click="clickToAddProductToWishlist()">Add product to wishlist</a>
-                    <div>
-                        <h3>{{ getProduct().name }}</h3>
-                        <p>
-                            Description: {{ getProduct().description }}
-                        </p>
-                    </div>
+        <div class="col-4">
+            <button @click="clickAddBookmark(getProduct().id)">
+                <i class="bi bi-bookmark-plus"></i> lisa nimekirja
+            </button>
+        </div>
+        <div class="col-4">
+            <button @click="clickAddOffer(getProduct().id)">
+                <i class="bi bi-database-add"></i> lisa pakkumine
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">Pilt</div>
+        <div class="col-9">
+            <img src="https://via.placeholder.com/350x200.png?text=product" class="img-fluid" alt=""/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">Nimi</div>
+        <div class="col-9">
+            {{ getProduct().name }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">Triipkood</div>
+        <div class="col-9">{{ getProduct().barcode }}</div>
+    </div>
+    <div class="row">
+        <div class="col-3">Kirjeldus</div>
+        <div class="col-9">{{ getProduct().description }}</div>
+    </div>
+
+    <h4>Pakkumised</h4>
+    <div v-for="item of getOffersDetails()" :key="item.id" class="border" @click="setItemDetails(item.id)">
+        <div class="row">
+            <div class="col-2">
+                <img src="https://via.placeholder.com/50x50.png?text=company" class="img-fluid" alt=""/>
+            </div>
+            <div class="col-7">
+                <div>{{ item.name }}</div>
+                <div>{{
+                        distanceUtil.round(
+                            distanceUtil.calculateDistance(
+                                this.identityStore.getCoords().latitude ?? 59.436962,
+                                this.identityStore.getCoords().longitude ?? 24.753574,
+                                item.latitude, item.longitude))
+                    }}km
                 </div>
             </div>
-
-            <div class="p-4">
-                <h4>Merch</h4>
-                <div v-for="item of getOffers()" :key="item.id" class="row border">
-                    <div class="col-md-2 p-2">
-                        <img src="https://via.placeholder.com/100x50.png?text=company" class="img-fluid" alt=""/>
-                    </div>
-                    <div class="col-md-3 p-2">
-                        {{ item.name }}
-                    </div>
-                    <div class="col-md-5">
-                        <a href="#" @click="clickToAddRating(item.id)">Add rating</a>
-                    </div>
-                    <div class="col-md-2 p-2">
-                        €{{ item.lastPrice }}
-                    </div>
+            <div class="col-md-2 p-2">
+                €{{ item.offers.sort((a, b) => a.price.amount - b.price.amount)[0].price.amount }}
+            </div>
+        </div>
+        <div class="bg-light" v-if="showItemDetails(item.id)">
+            <div class="row" v-for="subItem of item.offers" :key="subItem.id">
+                <div class="col-8">
+                    <div>Toote nimi: {{ subItem.name }}</div>
+                    <div>Lisatud: unknown</div>
+                </div>
+                <div class="col-4">
+                    €{{ subItem.price.amount }}
                 </div>
             </div>
         </div>
@@ -55,31 +84,44 @@ import { ShopService } from '@/bll/service/ShopService'
 import { useIdentityStore } from '@/stores/identity'
 import { useProductStore } from '@/stores/product'
 import DistanceUtil from '@/util/distance-util'
+import { IdentityService } from '@/bll/service/IdentityService'
+import Header from '@/components/Header.vue'
+import { WatchlistService } from '@/bll/service/WatchlistService'
+import router from '@/router'
+import { IWatchlist } from '@/dal/domain/IWatchlist'
+import { IOfferResults } from '@/dal/domain/IOfferResults'
+import { IOffer } from '@/dal/domain/IOffer'
 
 /**
  * @author Ahto Jalak
  * @since 15.04.2023
  */
 @Options({
-    components: {},
+    components: {
+        Header,
+    },
     props: {
         id: Number,
     },
     emits: [],
 })
-export default class ProductImport extends Vue {
+export default class ProductDetails extends Vue {
     id!: number
 
-    private logger = new Logger(ProductImport.name)
+    private logger = new Logger(ProductDetails.name)
     private productService = new ProductService()
     private offerService = new ProductService()
     private shopService = new ShopService()
+    private watchlistService = new WatchlistService()
     private shopStore = useShopStore()
     private identityStore = useIdentityStore()
     private productStore = useProductStore()
+    private identityService = new IdentityService()
+    distanceUtil = new DistanceUtil()
 
     productId = 0
     errorMsg: string | null = null
+    private itemDetails: any = []
 
     submitClicked (): void {
         this.logger.info('submitClicked')
@@ -121,13 +163,13 @@ export default class ProductImport extends Vue {
                             this.identityStore.getCoords().longitude ?? 24.753574,
                             uniqueNodes[i].latitude ?? 59.436962,
                             uniqueNodes[i].longitude ?? 24.753574,
-                            "K"
-                        );
+                            'K'
+                        )
                     }
 
-                    uniqueNodes.sort(function(a, b) {
-                        return (a.distance ?? 0) - (b.distance ?? 0);
-                    });
+                    uniqueNodes.sort(function (a, b) {
+                        return (a.distance ?? 0) - (b.distance ?? 0)
+                    })
 
                     this.shopStore.$state.shops = uniqueNodes
                 }
@@ -139,12 +181,80 @@ export default class ProductImport extends Vue {
         return this.shopStore.$state.shops
     }
 
-    getProduct() {
-        return this.productStore.$state.product;
+    getProduct () {
+        return this.productStore.$state.product
     }
 
-    getOffers() {
-        return this.productStore.$state.offers;
+    getOffers () {
+        return this.productStore.$state.offers
+    }
+
+    getOffersDetails () {
+        const offers = [] as IOfferResults[]
+        const shops = []
+
+        for (let i = 0; i < this.getOffers().length; i++) {
+            const item = this.getOffers()[i] as IOffer
+            if (item.shopId && shops.indexOf(item.shopId) === -1) {
+                shops.push(item.shopId)
+                const shop = item.shop as IShop
+                offers.push({
+                    id: shop.id,
+                    name: shop.name,
+                    latitude: shop.latitude,
+                    longitude: shop.longitude,
+                    offers: this.getOffers().filter(o => {
+                        return o.shopId === shop.id
+                    })
+                } as IOfferResults)
+            }
+        }
+        this.logger.info(offers.length.toString())
+
+        return offers
+    }
+
+    get isAuthenticated (): boolean {
+        return this.identityService.isAuthenticated()
+    }
+
+    setItemDetails (id: number) {
+        const x = this.itemDetails.indexOf(id)
+        if (x === -1) {
+            this.itemDetails.push(id)
+            return true
+        } else {
+            this.itemDetails.splice(this.itemDetails.indexOf(id))
+            return false
+        }
+    }
+
+    showItemDetails (id: number) {
+        return this.itemDetails.indexOf(id) !== -1
+    }
+
+    clickAddReview (id: number) {
+        router.push('/review/create/' + id)
+    }
+
+    clickAddBookmark (id: number) {
+        const entity = {
+            productId: id,
+        } as IWatchlist
+        this.watchlistService.add(entity).then((item) => {
+            if (item.errorMsg !== undefined) {
+                this.errorMsg = item.errorMsg
+            } else {
+                if (item.data) {
+                    this.logger.info(item.data)
+                }
+            }
+        })
+    }
+
+    clickAddOffer (id: number) {
+        this.logger.info(id.toString())
+        router.push('/offer/create/' + id)
     }
 }
 </script>

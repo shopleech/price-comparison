@@ -4,6 +4,7 @@ import com.shopleech.publicapi.bll.service.CategoryService;
 import com.shopleech.publicapi.bll.service.ProductService;
 import com.shopleech.publicapi.dto.v1.ProductDTO;
 import com.shopleech.publicapi.dto.v1.ProductImportDTO;
+import com.shopleech.publicapi.dto.v1.mapper.OfferMapper;
 import com.shopleech.publicapi.dto.v1.mapper.ProductMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -31,6 +32,8 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private ProductMapper productMapper;
+    @Autowired
+    private OfferMapper offerMapper;
 
     @PostMapping("/search")
     public ResponseEntity<?> search(@RequestBody ProductDTO request) {
@@ -60,6 +63,7 @@ public class ProductController {
             if (productsImported != null) {
                 responseMap.put("error", false);
                 responseMap.put("message", "import_success");
+                responseMap.put("details", offerMapper.mapToDto(productsImported));
                 return ResponseEntity.ok(responseMap);
             } else {
                 responseMap.put("error", true);

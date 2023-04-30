@@ -38,4 +38,11 @@ export class ProductService implements IProductService {
     async getOfferListById (id: number) {
         return this.offerRepository.getOfferListById(id)
     }
+
+    async findByCategoryId (categoryId: number) {
+        const entity: IProduct = {
+            categoryId
+        }
+        return this.productRepository.findByName(entity)
+    }
 }

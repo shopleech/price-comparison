@@ -29,9 +29,18 @@ public class WatchlistService implements IWatchlistService {
     protected UserRepository userRepository;
     @Autowired
     protected ProductRepository productRepository;
+    @Autowired
+    protected UserService userService;
 
     @Override
     public Watchlist add(Watchlist data) throws Exception {
+        var check = watchlistRepository.findByProduct(
+                data.getCustomer().getId(), data.getProduct().getId());
+
+        if (check != null) {
+            throw new Exception("watchlist item exists");
+        }
+
         return watchlistRepository.save(data);
     }
 
@@ -48,7 +57,9 @@ public class WatchlistService implements IWatchlistService {
 
     @Override
     public List<Watchlist> getAll() {
-        return watchlistRepository.findAll();
+        var customerId = userService.getCurrentUser().getCustomer().getId();
+
+        return watchlistRepository.findAllByCustomerId(customerId);
     }
 
     @Override

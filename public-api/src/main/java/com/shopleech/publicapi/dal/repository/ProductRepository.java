@@ -22,4 +22,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, Prod
 
     @Query(value = "SELECT COUNT(*) FROM product", nativeQuery = true)
     int getProductCount();
+
+    @Query(value = "SELECT * FROM product where barcode = :barcode", nativeQuery = true)
+    Product findByBarcode(String barcode);
+
+    @Query(value = "SELECT * FROM product where category_id = :id", nativeQuery = true)
+    List<Product> getAllProductsByCategoryId(Integer id);
 }

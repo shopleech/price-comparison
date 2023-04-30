@@ -1,8 +1,6 @@
 package com.shopleech.publicapi.dto.v1.mapper;
 
-import com.shopleech.publicapi.bll.service.AccountService;
-import com.shopleech.publicapi.bll.service.ProductService;
-import com.shopleech.publicapi.bll.service.ShopService;
+import com.shopleech.publicapi.bll.service.*;
 import com.shopleech.publicapi.domain.Offer;
 import com.shopleech.publicapi.dto.v1.OfferDTO;
 import org.slf4j.Logger;
@@ -26,7 +24,15 @@ public class OfferMapper {
     @Autowired
     ProductService productService;
     @Autowired
+    PriceService priceService;
+    @Autowired
     ShopService shopService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    ShopMapper shopMapper;
+    @Autowired
+    PriceMapper priceMapper;
 
     public List<OfferDTO> mapToDto(List<Offer> entities) {
         return entities.stream()
@@ -36,20 +42,20 @@ public class OfferMapper {
     public OfferDTO mapToDto(Offer c) {
         OfferDTO dto = new OfferDTO();
         dto.setId(c.getId());
-        if (c.getAccount() != null) {
-            dto.setAccountId(c.getAccount().getId());
-        }
         if (c.getProduct() != null) {
             dto.setProductId(c.getProduct().getId());
         }
         if (c.getShop() != null) {
             dto.setShopId(c.getShop().getId());
+            dto.setShop(shopMapper.mapToDto(c.getShop()));
         }
         dto.setBarcode(c.getBarcode());
         dto.setBarcodeTypeCode(c.getBarcodeTypeCode());
         dto.setName(c.getName());
         dto.setDescription(c.getDescription());
         dto.setUrl(c.getUrl());
+        dto.setPrice(priceMapper.mapToDto(
+                priceService.getLastPriceByOfferId(c.getId())));
 
         return dto;
     }
@@ -63,7 +69,11 @@ public class OfferMapper {
         Offer c = new Offer();
         c.setId(entity.getId());
         try {
-            c.setAccount(accountService.get(entity.getAccountId()));
+            var account = userService.getCurrentUser().getCustomer()
+                    .getCustomerAccounts().stream().findFirst();
+            if (account.isPresent()) {
+                c.setAccount(account.get().getAccount());
+            }
             c.setProduct(productService.get(entity.getProductId()));
             c.setShop(shopService.get(entity.getShopId()));
         } catch (Exception e) {

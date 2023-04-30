@@ -21,4 +21,5 @@ public class ProductDTO {
     private BarcodeTypeCode barcodeTypeCode;
     private String name;
     private String description;
+    private Double minPrice;
 }

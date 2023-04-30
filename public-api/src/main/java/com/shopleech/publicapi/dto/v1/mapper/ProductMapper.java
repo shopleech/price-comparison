@@ -1,6 +1,7 @@
 package com.shopleech.publicapi.dto.v1.mapper;
 
 import com.shopleech.publicapi.bll.service.CategoryService;
+import com.shopleech.publicapi.bll.service.PriceService;
 import com.shopleech.publicapi.domain.Product;
 import com.shopleech.publicapi.dto.v1.ProductDTO;
 import org.slf4j.Logger;
@@ -21,6 +22,8 @@ public class ProductMapper {
 
     @Autowired
     CategoryService categoryService;
+    @Autowired
+    PriceService priceService;
 
     public List<ProductDTO> mapToDto(List<Product> products) {
         return products.stream()
@@ -38,6 +41,7 @@ public class ProductMapper {
         dto.setBarcodeTypeCode(c.getBarcodeTypeCode());
         dto.setName(c.getName());
         dto.setDescription(c.getDescription());
+        dto.setMinPrice(priceService.getMinPriceByBarcode(c.getBarcode()));
 
         return dto;
     }

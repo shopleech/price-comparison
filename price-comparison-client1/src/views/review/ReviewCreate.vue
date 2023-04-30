@@ -1,5 +1,7 @@
 <template>
-    <h4>Create rating {{ id }}</h4>
+    <Header v-if="isAuthenticated" title="" back="home"/>
+
+    <h4>Uue pakkumise lisamine</h4>
     <div class="row">
         <div class="col-md-12">
 
@@ -16,10 +18,6 @@
             </div>
         </div>
     </div>
-
-    <div>
-        <RouterLink :to="{ name: 'ratings' }">Back to Reviews</RouterLink>
-    </div>
 </template>
 
 <script lang="ts">
@@ -27,25 +25,30 @@ import { Options, Vue } from 'vue-class-component'
 import { useReviewStore } from '@/stores/review'
 import { ReviewService } from '@/bll/service/ReviewService'
 import Logger from '@/util/logger'
+import { IdentityService } from '@/bll/service/IdentityService'
+import Header from '@/components/Header.vue'
 
 /**
  * @author Ahto Jalak
  * @since 06.02.2023
  */
 @Options({
-    components: {},
+    components: {
+        Header
+    },
     props: {
-        id: String,
+        id: Number,
     },
     emits: [],
 })
 export default class ReviewCreate extends Vue {
     private logger = new Logger(ReviewCreate.name)
-    id!: string
+    id!: number
 
     ratingsStore = useReviewStore()
     ratingService = new ReviewService()
     // ratingService = new ReviewService()
+    private identityService = new IdentityService()
 
     errorMsg: string | null = null
 
@@ -62,8 +65,12 @@ export default class ReviewCreate extends Vue {
             // this.ratingsStore.$state.ratings =
             //     await this.ratingService.getAll()
 
-            this.$router.push('/ratings')
+            // this.$router.push('/ratings')
         }
+    }
+
+    get isAuthenticated (): boolean {
+        return this.identityService.isAuthenticated()
     }
 }
 </script>

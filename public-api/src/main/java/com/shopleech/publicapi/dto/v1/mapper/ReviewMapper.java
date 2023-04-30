@@ -1,6 +1,5 @@
 package com.shopleech.publicapi.dto.v1.mapper;
 
-import com.shopleech.publicapi.bll.service.CustomerService;
 import com.shopleech.publicapi.bll.service.ProductService;
 import com.shopleech.publicapi.bll.service.UserService;
 import com.shopleech.publicapi.domain.Review;

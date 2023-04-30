@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PriceDTO {
     private Integer id;
+    private Integer offerId;
     private PriceTypeCode priceTypeCode;
     private Double quantity;
     private Double amount;

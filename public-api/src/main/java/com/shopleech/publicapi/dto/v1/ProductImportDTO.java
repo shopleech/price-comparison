@@ -15,5 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductImportDTO {
     Integer storeId;
+
     List<ProductImportItemDTO> productImportItems;
 }

@@ -28,20 +28,22 @@ public class PriceMapper {
     }
 
     public PriceDTO mapToDto(Price c) {
-        return new PriceDTO(
-                c.getId(),
-                c.getPriceTypeCode(),
-                c.getQuantity(),
-                c.getAmount(),
-                c.getCurrency()
-        );
+        var dto = new PriceDTO();
+        dto.setId(c.getId());
+        dto.setPriceTypeCode(c.getPriceTypeCode());
+        dto.setQuantity(c.getQuantity());
+        dto.setAmount(c.getAmount());
+        dto.setCurrency(c.getCurrency());
+        dto.setOfferId(c.getOffer().getId());
+
+        return dto;
     }
 
     public Price mapToEntity(PriceDTO newPrice) {
         Price entity = new Price();
         entity.setId(newPrice.getId());
         try {
-            entity.setOffer(offerService.get(newPrice.getId()));
+            entity.setOffer(offerService.get(newPrice.getOfferId()));
         } catch (Exception e) {
             logger.error("price mapper failed");
         }

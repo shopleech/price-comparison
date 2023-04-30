@@ -2,9 +2,12 @@ package com.shopleech.publicapi.bll.service;
 
 import com.shopleech.publicapi.bll.service.model.IProductService;
 import com.shopleech.publicapi.bll.util.JwtTokenUtil;
+import com.shopleech.publicapi.dal.repository.CategoryRepository;
 import com.shopleech.publicapi.dal.repository.OfferRepository;
+import com.shopleech.publicapi.dal.repository.PriceRepository;
 import com.shopleech.publicapi.dal.repository.ProductRepository;
 import com.shopleech.publicapi.domain.Offer;
+import com.shopleech.publicapi.domain.Price;
 import com.shopleech.publicapi.domain.Product;
 import com.shopleech.publicapi.dto.v1.ProductImportDTO;
 import com.shopleech.publicapi.dto.v1.ProductImportItemDTO;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +37,10 @@ public class ProductService implements IProductService {
     protected ProductRepository productRepository;
     @Autowired
     protected OfferRepository offerRepository;
+    @Autowired
+    protected PriceRepository priceRepository;
+    @Autowired
+    protected CategoryRepository categoryRepository;
     @Autowired
     protected UserService userService;
     @Autowired
@@ -63,10 +71,9 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public String importProducts(String token, ProductImportDTO productImportItems) {
-
+    public List<Offer> importProducts(String token, ProductImportDTO productImportItems) {
         try {
-            logger.info(token);
+            List<Offer> imported = new ArrayList<>();
             var user = userService.getUserByUsername(jwtTokenUtil.getUsernameFromToken(token));
             var shop = shopService.get(productImportItems.getStoreId());
             var customerAccounts = user.getCustomer().getCustomerAccounts();
@@ -76,19 +83,35 @@ public class ProductService implements IProductService {
             }
 
             for (ProductImportItemDTO productImportItem : productImportItems.getProductImportItems()) {
+                var product = productRepository.findByBarcode(productImportItem.getBarcode());
+                if (product == null) {
+                    var newProduct = new Product();
+                    newProduct.setBarcode(productImportItem.getBarcode());
+                    newProduct.setName(productImportItem.getName());
+                    newProduct.setCategory(categoryRepository.findById(10).get());
+                    product = productRepository.save(newProduct);
+                }
+
                 var data = new Offer();
                 data.setShop(shop);
-                data.setBarcode(productImportItem.getProductNo());
+                data.setBarcode(productImportItem.getBarcode());
                 data.setName(productImportItem.getName());
                 data.setAccount(customerAccount.get().getAccount());
+                data.setProduct(product);
                 data.setValidFrom(Timestamp.from(Instant.now()));
                 data.setCreatedAt(Timestamp.from(Instant.now()));
                 data.setUpdatedAt(Timestamp.from(Instant.now()));
                 var offerAdded = offerRepository.save(data);
-                logger.info(offerAdded.toString());
+
+                var newPrice = new Price();
+                newPrice.setOffer(offerAdded);
+                newPrice.setAmount(productImportItem.getPrice());
+                var priceAdded = priceRepository.save(newPrice);
+
+                imported.add(offerAdded);
             }
 
-            return "success";
+            return imported;
         } catch (Exception e) {
             logger.info("error with import: " + e.getMessage());
         }
@@ -113,6 +136,11 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getAllByProduct(Product product) {
+        if (product.getCategory() != null) {
+            return productRepository.getAllProductsByCategoryId(
+                    product.getCategory().getId());
+        }
+
         return productRepository.getAllProductsByKeyword(product.getName());
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
  * @since 05.04.2023
  */
 public interface IAlarmService {
-    Alarm add(Alarm data);
+    Alarm add(Alarm data) throws Exception;
 
     Alarm get(int id) throws Exception;
 

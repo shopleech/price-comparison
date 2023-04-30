@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductImportItemDTO {
+    private String barcode;
     private String productNo;
     private String name;
-    private String price;
-    private String shopName;
-    private String shopAddress;
+    private String description;
+    private Double price;
+    private String url;
 }

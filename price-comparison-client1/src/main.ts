@@ -4,13 +4,12 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-// import 'jquery'
-// import 'popper.js'
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
-// import "bootstrap/dist/js/bootstrap.js"
+import 'jquery/src/jquery'
+import 'popper.js/dist/popper.js'
+import "bootstrap/dist/js/bootstrap.js"
 
 createApp(App)
     .use(createPinia())

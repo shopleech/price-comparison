@@ -24,6 +24,8 @@ public class WatchlistMapper {
     private ProductService productService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ProductMapper productMapper;
 
     public List<WatchlistDTO> mapToDto(List<Watchlist> watchlists) {
         return watchlists.stream()
@@ -34,8 +36,12 @@ public class WatchlistMapper {
         var dto = new WatchlistDTO();
         dto.setId(c.getId());
         dto.setWatchlistTypeCode(c.getWatchlistTypeCode());
-        if (c.getProduct() != null) {
+        try {
             dto.setProductId(c.getProduct().getId());
+            dto.setProduct(productMapper.mapToDto(
+                    productService.get(c.getProduct().getId())));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return dto;
