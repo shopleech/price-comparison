@@ -24,13 +24,13 @@
                 </div>
                 <div class="form-group">
                     <label className="control-label" htmlFor="firstname">Latitude</label>
-                    <input v-model="latitude" className="form-control" type="text"/>
-                    <button @click="clickGeolocation">get current location</button>
-                    <button @click="clickTallinnLocation">get tallinn location</button>
+                    <input v-model="latitude" className="form-control" type="text" style="width: 100px;"/>
+                    <button @click="clickGeolocation"><i class="bi bi-broadcast"></i> Minu asukoht</button>
+                    <button @click="clickTallinnLocation"><i class="bi bi-broadcast"></i> Tallinn</button>
                 </div>
                 <div class="form-group">
                     <label className="control-label" htmlFor="firstname">Longitude</label>
-                    <input v-model="longitude" className="form-control" type="text"/>
+                    <input v-model="longitude" className="form-control" type="text" style="width: 100px;"/>
                 </div>
                 <div class="form-group">
                     <input @click="submitClicked()" type="submit" value="Create" class="btn btn-primary"/>
@@ -98,6 +98,7 @@ export default class ShopCreate extends Vue {
             } else {
                 if (item.data) {
                     this.shopStore.$state.shop = item.data
+                    this.shopStore.add(item.data)
                 }
                 router.push('/')
             }
@@ -151,6 +152,18 @@ export default class ShopCreate extends Vue {
 
     get isAuthenticated (): boolean {
         return this.identityService.isAuthenticated()
+    }
+
+    getCategoryImageByType (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/category/${id}.png`
+    }
+
+    getShopImageByType (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/shop/${id}`
+    }
+
+    getProductImageByBarcode (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.png`
     }
 }
 </script>

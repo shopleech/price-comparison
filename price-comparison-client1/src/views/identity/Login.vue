@@ -1,6 +1,6 @@
 <template>
     <RouterLink :to="{ name: 'home' }">
-        <img src="https://via.placeholder.com/40x40.png?text=back" alt="back"/>
+        <i class="bi bi-backspace"></i>
     </RouterLink>
 
     <h2>Login</h2>
@@ -11,17 +11,17 @@
                     <li>{{ errorMsg }}</li>
                 </ul>
             </div>
-            <div>
-                <div class="form-group">
-                    <label className="control-label" htmlFor="firstname">email</label>
-                    <input v-model="email" className="form-control" type="text"/>
-                </div>
-                <div className="form-group">
-                    <label className="control-label" htmlFor="lastname">password</label>
-                    <input v-model="password" className="form-control" type="password"/>
-                </div>
-                <div class="form-group">
-                    <button @click="loginClicked" class="btn btn-primary">
+            <div class="form-group">
+                <label className="control-label" htmlFor="firstname">email</label>
+                <input v-model="email" className="form-control" type="text"/>
+            </div>
+            <div className="form-group">
+                <label className="control-label" htmlFor="lastname">password</label>
+                <input v-model="password" className="form-control" type="password"/>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button @click="loginClicked" class="btn btn-primary w-100">
                         Login
                     </button>
                 </div>

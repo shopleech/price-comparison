@@ -1,6 +1,6 @@
 <template>
     <RouterLink :to="{ name: 'home' }">
-        <img src="https://via.placeholder.com/40x40.png?text=back" alt="back"/>
+        <i class="bi bi-backspace"></i>
     </RouterLink>
 
     <h2>Register</h2>
@@ -13,36 +13,36 @@
                 </ul>
             </div>
 
-            <div>
-                <div className="form-group">
-                    <label className="control-label" htmlFor="email">E-mail</label>
-                    <input v-model="email" className="form-control" type="text"/>
+            <div className="form-group">
+                <label className="control-label" htmlFor="email">E-mail</label>
+                <input v-model="email" className="form-control" type="text"/>
+            </div>
+            <div className="form-group">
+                <label className="control-label" htmlFor="firstname">First name</label>
+                <input v-model="firstname" className="form-control" type="text"/>
+            </div>
+            <div className="form-group">
+                <label className="control-label" htmlFor="lastname">Last name</label>
+                <input v-model="lastname" className="form-control" type="text"/>
+            </div>
+            <div className="form-group">
+                <label className="control-label" htmlFor="password">Password</label>
+                <input v-model="password" className="form-control" type="password"/>
+            </div>
+            <div className="form-group">
+                <label className="control-label" htmlFor="passwordRepeat">Password repeat</label>
+                <input v-model="passwordRepeat" className="form-control" type="password"/>
+            </div>
+            <div className="form-group">
+                <div class="form-check form-switch">
+                    <input v-model="consent" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">I agree with terms and
+                        conditions</label>
                 </div>
-                <div className="form-group">
-                    <label className="control-label" htmlFor="firstname">First name</label>
-                    <input v-model="firstname" className="form-control" type="text"/>
-                </div>
-                <div className="form-group">
-                    <label className="control-label" htmlFor="lastname">Last name</label>
-                    <input v-model="lastname" className="form-control" type="text"/>
-                </div>
-                <div className="form-group">
-                    <label className="control-label" htmlFor="password">Password</label>
-                    <input v-model="password" className="form-control" type="password"/>
-                </div>
-                <div className="form-group">
-                    <label className="control-label" htmlFor="passwordRepeat">Password repeat</label>
-                    <input v-model="passwordRepeat" className="form-control" type="password"/>
-                </div>
-                <div className="form-group">
-                    <div class="form-check form-switch">
-                        <input v-model="consent" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                        <label class="form-check-label" for="flexSwitchCheckDefault">I agree with terms and
-                            conditions</label>
-                    </div>
-                </div>
-                <div className="form-group">
-                    <button @click="registerClicked()" class="btn btn-primary">
+            </div>
+            <div class="row">
+                <div className="col-6">
+                    <button @click="registerClicked()" class="btn btn-primary w-100">
                         Register
                     </button>
                 </div>

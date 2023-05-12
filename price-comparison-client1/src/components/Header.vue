@@ -1,22 +1,23 @@
 <template>
-    <header>
+    <header style="background-color: silver;">
         <RouterLink :to="{ name: back }" v-if="back != null && back !== ''">
-            <img src="https://via.placeholder.com/40x40.png?text=back" alt="back"/>
+            <i class="bi bi-backspace"></i>
         </RouterLink>
         <h1>{{ title }}</h1>
         <div class="row">
             <div class="col-9 small">
                 <div v-if="getCoords().latitude">
-                    Minu koordinaadid: {{ getCoords().latitude }} {{ getCoords().longitude }}
+                    Koordinaadid: {{ getCoords().latitude }} {{ getCoords().longitude }}
                 </div>
             </div>
             <div class="col-3 text-right">
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="bi bi-menu-down"></i>
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" @click="clickStart">Kategooriad</a>
                         <a class="dropdown-item" href="#" @click="clickGeolocation">
                             <i class="bi bi-broadcast"></i> Minu koordinaadid</a>
                         <a class="dropdown-item" href="#" @click="clickWatchlist">Minu jälgimisnimekiri</a>
@@ -24,6 +25,7 @@
                         <a class="dropdown-item" href="#" @click="clickAlarms">Minu teavitused</a>
                         <a class="dropdown-item" href="#" @click="clickNewOffer">Uute pakkumiste lisamine</a>
                         <a class="dropdown-item" href="#" @click="clickNewShop">Uue kaupluse lisamine</a>
+                        <a class="dropdown-item" href="#" @click="logoutClicked">Logi välja</a>
                     </div>
                 </div>
             </div>
@@ -168,6 +170,18 @@ export default class Header extends Vue {
 
     getKeyword () {
         return this.productStore.$state.keyword
+    }
+
+    clickStart () {
+        this.productStore.$state.keyword = ''
+        router.push({
+            name: 'home'
+        })
+    }
+
+    logoutClicked () {
+        this.identityStore.clearJwt()
+        router.push('/')
     }
 }
 </script>

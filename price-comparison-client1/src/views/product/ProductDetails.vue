@@ -45,7 +45,7 @@
     <div v-for="item of getOffersDetails()" :key="item.id" class="border" @click="setItemDetails(item.id)">
         <div class="row">
             <div class="col-2">
-                <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Shop" alt="shop"/>
+                <img :src="getShopImageByType(item.shop.url)" alt="" width="32" height="32"/>
             </div>
             <div class="col-7">
                 <div>{{ item.name }}</div>
@@ -286,6 +286,18 @@ export default class ProductDetails extends Vue {
         }
 
         return false
+    }
+
+    getCategoryImageByType (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/category/${id}.png`
+    }
+
+    getShopImageByType (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/shop/${id}`
+    }
+
+    getProductImageByBarcode (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.png`
     }
 }
 </script>

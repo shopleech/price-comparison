@@ -1,7 +1,8 @@
 <template>
     <Header v-if="isAuthenticated" title=""/>
+
     <div class="row" v-if="isAuthenticated">
-        <div class="col-12 p-3">
+        <div class="col-12">
             <div v-if="errorMsg != null" class="text-danger validation-summary-errors" data-valmsg-summary="true">
                 <ul>
                     <li>{{ errorMsg }}</li>
@@ -17,7 +18,7 @@
                 <small>Leitud tooteid: {{ getProductList().length }}</small>
                 <div v-for="item of getProductList()" :key="item.id" class="border p-2 mb-4 row">
                     <div class="col-2">
-                        <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
+                        <img :src="getProductImageByBarcode(item.barcode)" alt="" height="32"/>
                     </div>
                     <div class="col-6">
                         <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
@@ -25,7 +26,7 @@
                         </RouterLink><br/>
                         <small>{{ item.barcode }}</small>
                     </div>
-                    <div class="col-2">
+                    <div class="col-2 text-right">
                         <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
                             {{ item.minPrice }}
                         </RouterLink>
@@ -39,7 +40,7 @@
                 </div>
             </div>
             <div v-if="getKeyword().trim().length < 3">
-                <nav aria-label="breadcrumb">
+                <nav aria-label="breadcrumb small">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
                             <button @click="currentCategoryId=0" class="border-0">
@@ -57,10 +58,11 @@
                 <div v-for="item of getFilteredCategoryList(currentCategoryId)" :key="item.id"
                      class="border p-2 mb-4 row">
                     <div class="col-3">
-                        <img src="https://placehold.co/60x60/EEE/31343C?font=playfair-display&text=Category" alt="category"/>
+                        <img :src="getCategoryImageByType(item.categoryTypeCode)" alt="" height="64"/>
                     </div>
                     <div class="col-9">
-                        <button @click="clickCategory(item.id)" class="border-0">
+                        <button @click="clickCategory(item.id)" class="border-0"
+                                style="font-size: 22px;background-color: white;">
                             {{ item.name }}
                         </button>
                     </div>
@@ -69,7 +71,7 @@
                     <h4>Tooted</h4>
                     <div v-for="item of getProductList()" :key="item.id" class="border p-2 mb-4 row">
                         <div class="col-2">
-                            <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
+                            <img :src="getProductImageByBarcode(item.barcode)" alt="" height="64"/>
                         </div>
                         <div class="col-6">
                             <div>
@@ -93,22 +95,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row fixed-bottom p-3">
-                <div class="row fixed-bottom p-3 col-xl-4 col-lg-5 col-md-6 col-sm-7">
-                    <div class="col-6">
-                        <button @click="logoutClicked()" class="btn btn-secondary btn-lg w-100">
-                            Logi välja
-                        </button>
-                    </div>
-                    <div class="col-6">
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <div class="row" v-if="!isAuthenticated">
-        <div class="col-12 p-3 bg-light">
-            <h4>Location-based Product Price Comparison Web Application</h4>
+        <div class="col-12 bg-light custom-home-size">
+            <h1 class="custom-home-head">Location-based Product Price Comparison Web Application</h1>
             <div class="row">
                 <div class="col-6">
                     Users
@@ -133,20 +124,22 @@
                     {{ getStats().numOfPriceUpdates }}
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12 p-5"></div>
+            <div class="row custom-home-head">
+                <div class="col-6"></div>
             </div>
-            <div class="row fixed-bottom p-3 col-xl-4 col-lg-5 col-md-6 col-sm-7">
-                <div class="col-6">
-                    <RouterLink :to="{ name: 'identity-login'}" class="btn btn-secondary btn-lg w-100">
-                        Login
-                    </RouterLink>
-                </div>
-                <div class="col-6">
-                    <RouterLink :to="{ name: 'identity-register'}" class="btn btn-primary btn-lg w-100">
-                        Get started
-                    </RouterLink>
-                </div>
+        </div>
+    </div>
+    <div class="row" v-if="!isAuthenticated">
+        <div class="row fixed-bottom p-3 col-xl-4 col-lg-5 col-md-6 col-sm-7">
+            <div class="col-6">
+                <RouterLink :to="{ name: 'identity-login'}" class="btn btn-secondary btn-lg w-100">
+                    Login
+                </RouterLink>
+            </div>
+            <div class="col-6">
+                <RouterLink :to="{ name: 'identity-register'}" class="btn btn-primary btn-lg w-100">
+                    Get started
+                </RouterLink>
             </div>
         </div>
     </div>
@@ -379,5 +372,26 @@ export default class HomeView extends Vue {
 
         return false
     }
+
+    getCategoryImageByType (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/category/${id}.png`
+    }
+
+    getShopImageByType (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/shop/${id}`
+    }
+
+    getProductImageByBarcode (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.png`
+    }
 }
 </script>
+
+<style scoped>
+.custom-home-head {
+    padding: 40px 0 30px 0;
+}
+.custom-home-size {
+    font-size: 170%;
+}
+</style>

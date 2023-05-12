@@ -2,7 +2,10 @@ package com.shopleech.publicapi.domain;
 
 import com.shopleech.base.config.type.CategoryTypeCode;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
@@ -28,6 +31,8 @@ public class Category {
     private Category parentCategory;
 
     private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category_type_code")
     private CategoryTypeCode categoryTypeCode;
 
     private Timestamp validFrom;
@@ -37,9 +42,9 @@ public class Category {
     private Timestamp updatedAt;
     private String updatedBy;
 
-    @OneToMany(mappedBy="category")
+    @OneToMany(mappedBy = "category")
     private Set<Product> products = new HashSet<>();
 
-    @OneToMany(mappedBy="parentCategory")
+    @OneToMany(mappedBy = "parentCategory")
     private Set<Category> categories = new HashSet<>();
 }
