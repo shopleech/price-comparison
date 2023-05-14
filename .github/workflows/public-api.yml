@@ -86,6 +86,44 @@ jobs:
           property: 'spring.datasource.hikari.schema'
           value: ${{ secrets.DB_SCHEMA }}
 
+
+
+
+      - name: Write value to Properties-file
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: "${{ env.WORK_DIR }}/src/main/resources/application.properties"
+          property: 'aws.access-key'
+          value: ${{ secrets.AWS_ACCESS_KEY_ID }}
+
+      - name: Write value to Properties-file
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: "${{ env.WORK_DIR }}/src/main/resources/application.properties"
+          property: 'aws.access-secret-key'
+          value: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Write value to Properties-file
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: "${{ env.WORK_DIR }}/src/main/resources/application.properties"
+          property: 'aws.region'
+          value: ${{ env.AWS_REGION }}
+
+      - name: Write value to Properties-file
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: "${{ env.WORK_DIR }}/src/main/resources/application.properties"
+          property: 'aws.bucket.name'
+          value: ${{ secrets.AWS_BUCKET_NAME }}
+
+      - name: Write value to Properties-file
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: "${{ env.WORK_DIR }}/src/main/resources/application.properties"
+          property: 'aws.bucket.folder'
+          value: ${{ secrets.AWS_BUCKET_FOLDER }}
+
       - name: Run build with Gradle Wrapper
         working-directory: ${{ env.WORK_DIR }}
         run: ./gradlew build
