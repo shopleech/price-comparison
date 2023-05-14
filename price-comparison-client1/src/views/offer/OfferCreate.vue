@@ -9,35 +9,63 @@
     </div>
     <div v-if="id !== undefined">
         <div class="row">
-            <div class="col-4">Toote nimi</div>
-            <div class="col-8"></div>
+            <div class="col-12 text-center">
+                <img :src="getProductImageByBarcode(getProduct().barcode)" alt="" height="164"/>
+            </div>
         </div>
         <div class="row">
-            <div class="col-4">Triipkood</div>
-            <div class="col-8"></div>
+            <div class="col-4 p-2">Toote nimi</div>
+            <div class="col-8 p-2">{{ getProduct().name }}</div>
+        </div>
+        <div class="row">
+            <div class="col-4 p-2">Triipkood</div>
+            <div class="col-8 p-2">{{ getProduct().barcode }}</div>
         </div>
     </div>
     <div v-if="id === undefined">
         <div class="form-group">
-            <label class="col-4 control-label">Toote nimi</label>
+            <label class="col-4 p-2 control-label">Toote nimi</label>
             <input type="text" class="col-8" v-model="name"/>
         </div>
         <div class="form-group">
-            <label class="col-4 control-label">Triipkood</label>
-            <input type="text" class="col-8" v-model="barcode"/>
+            <div class="row">
+                <label class="col-4 p-2 control-label">Triipkood</label>
+                <div class="col-8 p-2">
+                    <div class="input-group mb-3">
+                        <input v-model="barcode" type="text" class="form-control" aria-label="triipkood">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" @click="showScanner=!showScanner" type="button">
+                                <i class="bi bi-qr-code-scan"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div v-if="showScanner">
+                        <barcode-scanner :qrbox="100" :fps="10" @result="onScan"/>
+                    </div>
+                </div>
+            </div>
         </div>
+        <div class="form-group">
+            <label class="col-4 p-2 control-label">Category</label>
+            <select class="col-8" v-model="categoryId">
+                <option v-for="option in getCategoryList()" v-bind:key="option.id" :value="option.id">
+                    {{ option.name }}
+                </option>
+            </select>
+        </div>
+        <upload-image></upload-image>
     </div>
     <div class="form-group">
-        <label class="col-4 control-label">Shop</label>
+        <label class="col-4 p-2 control-label">Shop</label>
         <select class="col-8" v-model="shopId">
             <option v-for="option in getShopList()" v-bind:key="option.id" :value="option.id">
-                {{ option.name }} ({{ distanceUtil.round(option.distance) }}km)
+                {{ option.name }} <span v-if="option.distance"> &nbsp; {{ distanceUtil.round(option.distance) }}km</span>
             </option>
         </select>
     </div>
     <div class="form-group">
-        <label class="col-4 control-label">Price</label>
-        <input type="text" class="col-8" v-model="price"/>
+        <label class="col-4 p-2 control-label">Price</label>
+        <input type="text" class="col-8" v-model="price" style="width: 100px;"/>
     </div>
     <div>
         <div class="form-group">
@@ -63,6 +91,12 @@ import { IShop } from '@/dal/domain/IShop'
 import { ShopService } from '@/bll/service/ShopService'
 import { useShopStore } from '@/stores/shop'
 import { useIdentityStore } from '@/stores/identity'
+import { useProductStore } from '@/stores/product'
+import { ProductService } from '@/bll/service/ProductService'
+import UploadImage from '@/components/UploadImage.vue'
+import { ICategory } from '@/dal/domain/ICategory'
+import { CategoryService } from '@/bll/service/CategoryService'
+import { useCategoryStore } from '@/stores/category'
 
 /**
  * @author Ahto Jalak
@@ -71,11 +105,24 @@ import { useIdentityStore } from '@/stores/identity'
 @Options({
     components: {
         Header,
+        UploadImage,
     },
     props: {
         id: Number,
     },
     emits: [],
+    data() {
+        return {
+        }
+    },
+    methods: {
+        onScan (decodedText: any, decodedResult: any) {
+            this.logger.info('onscannn')
+            this.barcode = decodedText
+            this.logger.info(decodedResult)
+            this.showScanner = false
+        },
+    },
 })
 export default class OfferCreate extends Vue {
     private logger = new Logger(OfferCreate.name)
@@ -84,17 +131,25 @@ export default class OfferCreate extends Vue {
     private identityStore = useIdentityStore()
     private identityService = new IdentityService()
     private shopService = new ShopService()
+    private productService = new ProductService()
+    private categoryService = new CategoryService()
     private shopStore = useShopStore()
+    private productStore = useProductStore()
+    private categoryStore = useCategoryStore()
     distanceUtil = new DistanceUtil()
 
+    showScanner = false
+    showScanner2 = false
     errorMsg: string | null = null
     uploadFile = ''
     content = []
     parsed = false
     shopId: number | undefined = undefined
+    categoryId: number | undefined = undefined
     price: number | undefined = undefined
     name: string | undefined = undefined
     barcode: string | undefined = undefined
+    productImage: string | undefined = undefined
     id!: number
 
     async submitClicked (): Promise<void> {
@@ -105,9 +160,11 @@ export default class OfferCreate extends Vue {
             barcode: this.barcode,
             productId: this.id,
             shopId: this.shopId,
+            categoryId: this.categoryId,
             price: {
                 amount: this.price
-            } as IPrice
+            } as IPrice,
+            productImage: this.productImage,
         }
         this.logger.info(obj as string)
 
@@ -126,12 +183,24 @@ export default class OfferCreate extends Vue {
         this.logger.info('mounted')
         const distanceUtil = new DistanceUtil()
 
+        if (this.id) {
+            this.productService.getById(this.id).then((item) => {
+                if (item.errorMsg !== undefined) {
+                    this.errorMsg = item.errorMsg
+                } else {
+                    if (item.data) {
+                        this.productStore.$state.product = item.data
+                    }
+                }
+            })
+        }
+
         this.shopService.getAll().then((items) => {
             if (items.errorMsg !== undefined) {
                 this.errorMsg = items.errorMsg
             } else {
                 const uniqueNodes = items.data
-                if (uniqueNodes) {
+                if (uniqueNodes && this.identityStore.getCoords()) {
                     for (let i = 0; i < uniqueNodes.length; i++) {
                         uniqueNodes[i].distance = distanceUtil.calculateDistance(
                             this.identityStore.getCoords().latitude ?? 59.436962,
@@ -151,6 +220,16 @@ export default class OfferCreate extends Vue {
             }
         })
 
+        this.categoryService.getAll().then((item) => {
+            if (item.errorMsg !== undefined) {
+                this.errorMsg = item.errorMsg
+            } else {
+                if (item.data) {
+                    this.categoryStore.$state.categories = item.data
+                }
+            }
+        })
+
         const initialOffer = this.offerStore.$state.offer
         if (initialOffer.name) {
             this.name = initialOffer.name
@@ -162,6 +241,10 @@ export default class OfferCreate extends Vue {
 
     getShopList (): IShop[] {
         return this.shopStore.$state.shops
+    }
+
+    getCategoryList (): ICategory[] {
+        return this.categoryStore.$state.categories
     }
 
     parseFile () {
@@ -190,12 +273,30 @@ export default class OfferCreate extends Vue {
         )
     }
 
-    async submitUpdates () {
-        this.offerService.upload(this.content)
-    }
-
     get isAuthenticated (): boolean {
         return this.identityService.isAuthenticated()
     }
+
+    getProduct() {
+        return this.productStore.$state.product
+    }
+
+    getCategoryImageByType (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/category/${id}.png`
+    }
+
+    getShopImageByType (url: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/shop/${url}`
+    }
+
+    getProductImageByBarcode (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.png`
+    }
 }
 </script>
+
+<style>
+.custom-offer-create-image #qr-code-full-region__header_message {
+    display: none;
+}
+</style>

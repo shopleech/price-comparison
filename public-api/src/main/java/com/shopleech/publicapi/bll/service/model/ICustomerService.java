@@ -20,4 +20,6 @@ public interface ICustomerService {
     Customer update(Integer id, Customer customer);
 
     Customer getCustomerByUserId(Integer id) throws Exception;
+
+    Customer getCustomerByAccountId(Integer id) throws Exception;
 }

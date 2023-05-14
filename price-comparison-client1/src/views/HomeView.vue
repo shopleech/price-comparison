@@ -10,57 +10,57 @@
             </div>
             <div v-if="getKeyword().trim().length >= 3">
                 <div class="text-right">
-                    <button @click="addOffer">
+                    <button @click="addOffer" class="border-0">
                         <i class="bi bi-database-add"></i> lisa pakkumine
                     </button>
                 </div>
-                <h4>Tooted</h4>
                 <small>Leitud tooteid: {{ getProductList().length }}</small>
-                <div v-for="item of getProductList()" :key="item.id" class="border p-2 mb-4 row">
-                    <div class="col-2">
-                        <img :src="getProductImageByBarcode(item.barcode)" alt="" height="32"/>
+                <div v-for="item of getProductList()" :key="item.id" class="row">
+                    <div class="col-2 p-2">
+                        <img :src="getProductImageByBarcode(item.barcode)" alt="" height="86"/>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 p-2">
                         <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
                             {{ item.name }}
-                        </RouterLink><br/>
+                        </RouterLink>
+                        <br/>
                         <small>{{ item.barcode }}</small>
                     </div>
-                    <div class="col-2 text-right">
+                    <div class="col-2 p-2 text-right">
                         <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
                             {{ item.minPrice }}
                         </RouterLink>
                     </div>
-                    <div class="col-2">
-                        <button @click="addBookmark(item.id)"
-                                :style="{backgroundColor: bookmarkIsActive(item.id) ? 'green' : 'white'}">
+                    <div class="col-2 p-2 text-right">
+                        <button @click="addBookmark(item.id)" class="border-0"
+                                :style="{backgroundColor: bookmarkIsActive(item.id) ? 'lightgreen' : 'lightgray'}">
                             <i class="bi bi-bookmark-plus"></i>
                         </button>
                     </div>
                 </div>
             </div>
             <div v-if="getKeyword().trim().length < 3">
-                <nav aria-label="breadcrumb small">
+                <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <button @click="currentCategoryId=0" class="border-0">
-                                Kataloog
+                            <button @click="currentCategoryId=0" class="border-0 small">
+                                <i class="bi bi-chevron-compact-right"></i> Kataloog
                             </button>
                         </li>
                         <li class="breadcrumb-item" v-for="breadcrumb of getBreadcrumbs(currentCategoryId)"
                             :key="breadcrumb.id">
-                            <button @click="currentCategoryId=breadcrumb.id" class="border-0">
+                            <button @click="currentCategoryId=breadcrumb.id" class="border-0 small">
                                 {{ breadcrumb.name }}
                             </button>
                         </li>
                     </ol>
                 </nav>
                 <div v-for="item of getFilteredCategoryList(currentCategoryId)" :key="item.id"
-                     class="border p-2 mb-4 row">
-                    <div class="col-3">
-                        <img :src="getCategoryImageByType(item.categoryTypeCode)" alt="" height="64"/>
+                     class="border row">
+                    <div class="col-3 p-2">
+                        <img :src="getCategoryImageByType(item.categoryTypeCode)" alt="" height="86"/>
                     </div>
-                    <div class="col-9">
+                    <div class="col-9 p-2">
                         <button @click="clickCategory(item.id)" class="border-0"
                                 style="font-size: 22px;background-color: white;">
                             {{ item.name }}
@@ -68,27 +68,27 @@
                     </div>
                 </div>
                 <div v-if="currentCategoryId > 0 && getProductList().length > 0">
-                    <h4>Tooted</h4>
-                    <div v-for="item of getProductList()" :key="item.id" class="border p-2 mb-4 row">
-                        <div class="col-2">
-                            <img :src="getProductImageByBarcode(item.barcode)" alt="" height="64"/>
+                    <div v-for="item of getProductList()" :key="item.id" class="border row">
+                        <div class="col-3 p-2">
+                            <img :src="getProductImageByBarcode(item.barcode)" alt="" height="86"/>
                         </div>
-                        <div class="col-6">
+                        <div class="col-5 p-2">
                             <div>
-                                <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
+                                <RouterLink :to="{ name: 'product-details', params: { id: item.id } }"
+                                            class="text-dark">
                                     {{ item.name }}
                                 </RouterLink>
                             </div>
                             <small>{{ item.barcode }}</small>
                         </div>
-                        <div class="col-2">
+                        <div class="col-2 p-2">
                             <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
                                 €{{ item.minPrice }}
                             </RouterLink>
                         </div>
-                        <div class="col-2">
-                            <button @click="addBookmark(item.id)"
-                                    :style="{backgroundColor: bookmarkIsActive(item.id) ? 'green' : 'white'}">
+                        <div class="col-2 p-2 text-right">
+                            <button @click="addBookmark(item.id)" class="border-0"
+                                    :style="{backgroundColor: bookmarkIsActive(item.id) ? 'green' : 'lightgray'}">
                                 <i class="bi bi-bookmark-plus"></i>
                             </button>
                         </div>
@@ -178,10 +178,8 @@ import { useOfferStore } from '@/stores/offer'
     data () {
         return {}
     },
-    methods: {
-    },
-    props: {
-    },
+    methods: {},
+    props: {},
 })
 export default class HomeView extends Vue {
     private logger = new Logger(HomeView.name)
@@ -231,16 +229,6 @@ export default class HomeView extends Vue {
             } else {
                 if (items.data) {
                     this.categoryStore.$state.categories = items.data
-                }
-            }
-        })
-
-        this.watchlistService.getAll().then((items) => {
-            if (items.errorMsg !== undefined) {
-                this.errorMsg = items.errorMsg
-            } else {
-                if (items.data) {
-                    this.watchlistStore.$state.watchlists = items.data
                 }
             }
         })
@@ -311,6 +299,17 @@ export default class HomeView extends Vue {
     clickCategory (categoryId: number) {
         this.currentCategoryId = categoryId
 
+        //
+        this.watchlistService.getAll().then((items) => {
+            if (items.errorMsg !== undefined) {
+                this.errorMsg = items.errorMsg
+            } else {
+                if (items.data) {
+                    this.watchlistStore.$state.watchlists = items.data
+                }
+            }
+        })
+
         // get products by category id
         this.productService.findByCategoryId(categoryId).then((items) => {
             this.logger.info('found something')
@@ -330,7 +329,7 @@ export default class HomeView extends Vue {
         return keyword.trim()
     }
 
-    isNumeric(value: string) {
+    isNumeric (value: string) {
         return /^-?\d+$/.test(value)
     }
 
@@ -347,18 +346,32 @@ export default class HomeView extends Vue {
 
     addBookmark (id: number) {
         this.logger.info('addBookmark')
-        const entity = {
-            productId: id,
-        } as IWatchlist
-        this.watchlistService.add(entity).then((item) => {
-            if (item.errorMsg !== undefined) {
-                this.errorMsg = item.errorMsg
-            } else {
-                if (item.data) {
-                    this.watchlistStore.add(item.data)
+        if (this.bookmarkIsActive(id)) {
+            this.watchlistService.delete(this.getWatchlistIdFromProductId(id)).then((item) => {
+                if (item.errorMsg !== undefined) {
+                    this.errorMsg = item.errorMsg
+                } else {
+                    if (item.data) {
+                        this.logger.info(item.data.toString())
+                        this.watchlistStore.remove(item.data)
+                        this.clickCategory(this.currentCategoryId)
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            const entity = {
+                productId: id,
+            } as IWatchlist
+            this.watchlistService.add(entity).then((item) => {
+                if (item.errorMsg !== undefined) {
+                    this.errorMsg = item.errorMsg
+                } else {
+                    if (item.data) {
+                        this.watchlistStore.add(item.data)
+                    }
+                }
+            })
+        }
     }
 
     bookmarkIsActive (id: number) {
@@ -373,6 +386,18 @@ export default class HomeView extends Vue {
         return false
     }
 
+    getWatchlistIdFromProductId (id: number): number {
+        this.logger.info('bookmarkIsActive')
+        for (let i = 0; i < this.watchlistStore.watchlistCount; i++) {
+            const x = this.watchlistStore.$state.watchlists[i] as IWatchlist
+            if (id === x.productId) {
+                return x.id ?? 0
+            }
+        }
+
+        return 0
+    }
+
     getCategoryImageByType (id: string) {
         return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/category/${id}.png`
     }
@@ -384,6 +409,17 @@ export default class HomeView extends Vue {
     getProductImageByBarcode (id: string) {
         return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.png`
     }
+
+    getWatchlistId (): number {
+        if (this.getWatchlist().id) {
+            return this.getWatchlist().id ?? 0
+        }
+        return 0
+    }
+
+    getWatchlist (): IWatchlist {
+        return this.watchlistStore.$state.watchlist
+    }
 }
 </script>
 
@@ -391,6 +427,7 @@ export default class HomeView extends Vue {
 .custom-home-head {
     padding: 40px 0 30px 0;
 }
+
 .custom-home-size {
     font-size: 170%;
 }

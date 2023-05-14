@@ -1,5 +1,8 @@
 package com.shopleech.publicapi.bll.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.shopleech.publicapi.bll.service.model.IOfferService;
 import com.shopleech.publicapi.dal.repository.CategoryRepository;
 import com.shopleech.publicapi.dal.repository.OfferRepository;
@@ -9,8 +12,14 @@ import com.shopleech.publicapi.domain.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -21,6 +30,13 @@ import java.util.List;
 public class OfferService implements IOfferService {
     Logger logger = LoggerFactory.getLogger(OfferService.class);
 
+    @Value("${aws.bucket.name}")
+    private String bucketName;
+    @Value("${aws.bucket.folder}")
+    private String folderName;
+
+    @Autowired
+    private AmazonS3 getAmazonS3Client;
     @Autowired
     protected OfferRepository offerRepository;
     @Autowired
@@ -87,5 +103,35 @@ public class OfferService implements IOfferService {
     @Override
     public List<Offer> getAllByProductId(Integer id) {
         return offerRepository.getAllByProductId(id);
+    }
+
+    @Override
+    public Integer upload(MultipartFile multipartfile) {
+        if (multipartfile != null && !multipartfile.isEmpty()) {
+            String filePathName = multipartfile.getOriginalFilename();
+            File file = new File(filePathName);
+
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+
+                fos.write(multipartfile.getBytes());
+                fos.flush();
+
+                getAmazonS3Client.putObject(
+                        new PutObjectRequest(bucketName, folderName + "/" + file.getName(), file)
+                        .withCannedAcl(CannedAccessControlList.PublicRead)
+                );
+
+                file.delete();
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return 100;
     }
 }

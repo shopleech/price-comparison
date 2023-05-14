@@ -27,4 +27,5 @@ public class OfferDTO {
     private String description;
     private String url;
     private PriceDTO price;
+    private String addedBy;
 }

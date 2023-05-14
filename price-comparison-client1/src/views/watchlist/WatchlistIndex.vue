@@ -7,25 +7,29 @@
             <li>{{ errorMsg }}</li>
         </ul>
     </div>
-    <div v-for="item of getWatchlist()" :key="item.id" class="border p-2 mb-4 row">
-        <div class="col-2">
-            <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
-            <button class="small" @click="clickRemove(item.id)">x</button>
+    <div v-for="item of getWatchlist()" :key="item.id" class="border row">
+        <div class="col-2 p-2">
+            <img :src="getProductImageByBarcode(item.product.barcode)" alt="" height="64"/>
         </div>
-        <div class="col-6">
+        <div class="col-6 p-2">
             <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
                 {{ item.product.name }}
             </RouterLink>
-            <div class="small">{{ item.product.barcode }}</div>
+            <div class="small">
+                {{ item.product.barcode }}
+                <button class="border-0 small" @click="clickRemove(item.id)">x</button>
+            </div>
         </div>
-        <div class="col-2">
-            <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
-                €{{ item.product.minPrice }}
-            </RouterLink>
+        <div class="col-2 p-2">
+            <div>
+                <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
+                    €{{ item.product.minPrice }}
+                </RouterLink>
+            </div>
         </div>
-        <div class="col-2">
-            <button @click="addAlarm(item.productId)"
-                    :style="{backgroundColor: alarmIsActive(item.productId) ? 'green' : 'white'}">
+        <div class="col-2 p-2 text-right">
+            <button @click="addAlarm(item.productId)" class="border-0"
+                    :style="{backgroundColor: alarmIsActive(item.productId) ? 'green' : 'lightgray'}">
                 <i class="bi bi-bell"></i>
             </button>
         </div>
@@ -107,6 +111,10 @@ export default class WatchlistIndex extends Vue {
         }
 
         return false
+    }
+
+    getProductImageByBarcode (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.png`
     }
 }
 

@@ -30,6 +30,8 @@ public class OfferMapper {
     @Autowired
     UserService userService;
     @Autowired
+    CustomerService customerService;
+    @Autowired
     ShopMapper shopMapper;
     @Autowired
     PriceMapper priceMapper;
@@ -56,6 +58,11 @@ public class OfferMapper {
         dto.setUrl(c.getUrl());
         dto.setPrice(priceMapper.mapToDto(
                 priceService.getLastPriceByOfferId(c.getId())));
+        try {
+            dto.setAddedBy(customerService.getCustomerByAccountId(c.getAccount().getId()).getFirstName());
+        } catch (Exception e) {
+            logger.info("offer mapper error");
+        }
 
         return dto;
     }

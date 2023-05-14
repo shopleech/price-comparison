@@ -9,6 +9,7 @@ export interface IOfferResults {
     id?: number
     name?: string
     shop?: IShop
+    url?: string
     latitude?: number
     longitude?: number
     minPrice?: number

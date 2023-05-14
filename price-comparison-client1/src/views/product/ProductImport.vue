@@ -1,7 +1,7 @@
 <template>
     <Header v-if="isAuthenticated" title="" back="home"/>
 
-    <h4>Create Import</h4>
+    <h4>Uute pakkumiste lisamine</h4>
     <div class="row">
         <div class="col-md-12">
             <div v-if="errorMsg != null" class="text-danger validation-summary-errors" data-valmsg-summary="true">

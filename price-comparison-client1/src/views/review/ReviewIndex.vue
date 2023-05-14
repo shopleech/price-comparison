@@ -2,23 +2,29 @@
     <Header v-if="isAuthenticated" title="" back="home"/>
 
     <h4>Hinnangud</h4>
-    <div v-for="item of getReviews()" :key="item.id" class="border p-2 mb-4 row">
+    <div v-for="item of getReviews()" :key="item.id" class="border">
         <div class="row">
-            <div class="col-2">
-                <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
-                <button class="small" @click="clickRemove(item.id)">x</button>
+            <div class="col-3 p-2 text-right">
+                <img :src="getProductImageByBarcode(item.product.barcode)" alt="" height="64"/>
             </div>
-            <div class="col-8">
+            <div class="col-7 p-2">
                 <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
                     {{ item.product.name }}
                 </RouterLink>
-                <div class="small">{{ item.product.barcode }}</div>
-                <div>
-                    Hinne: {{ item.score }}
+                <div class="small">
+                    {{ item.product.barcode }}
+                    <button class="border-0 small" @click="clickRemove(item.id)">x</button>
                 </div>
-                <div>
-                    {{ item.description }}
-                </div>
+            </div>
+            <div class="col-2 p-2">
+                <RouterLink :to="{ name: 'product-details', params: { id: item.productId } }" class="text-dark">
+                    <i class="bi bi-star-fill"></i> {{ item.score }}
+                </RouterLink>
+            </div>
+        </div>
+        <div class="row" v-if="item.description">
+            <div class="col-12 p-4">
+                {{ item.description }}
             </div>
         </div>
     </div>
@@ -101,6 +107,10 @@ export default class ReviewIndex extends Vue {
                 }
             }
         })
+    }
+
+    getProductImageByBarcode (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.png`
     }
 }
 

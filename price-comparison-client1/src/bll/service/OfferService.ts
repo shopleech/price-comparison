@@ -29,13 +29,17 @@ export class OfferService extends BaseService<IOffer> {
         return res
     }
 
-    async upload (content: any[]) {
-        await HttpClient.post(`${this._path}`,
-            content
-        ).then(function () {
-            return true
-        }).catch(function () {
-            return true
-        })
+    upload(barcode: string, file : any, onUploadProgress : any) {
+        const formData = new FormData();
+
+        formData.append("multipartfile", file);
+        formData.append("barcode", barcode);
+
+        return HttpClient.post("/v1/offer/upload", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            onUploadProgress
+        });
     }
 }

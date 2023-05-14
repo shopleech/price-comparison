@@ -16,4 +16,7 @@ export interface IOffer {
     url?: string
     price?: IPrice
     minPrice?: number
+    addedBy?: string
+    productImage?: string
+    categoryId?: number
 }

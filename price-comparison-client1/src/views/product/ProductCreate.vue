@@ -57,7 +57,7 @@ import { useCategoryStore } from '@/stores/category'
 @Options({
     components: {},
     props: {
-        barcode: String,
+        id: Number,
     },
     emits: [],
 })

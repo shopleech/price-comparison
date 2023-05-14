@@ -1,6 +1,7 @@
 package com.shopleech.publicapi.bll.service.model;
 
 import com.shopleech.publicapi.domain.Offer;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface IOfferService {
     Integer remove(Integer id);
 
     List<Offer> getAllByProductId(Integer id);
+
+    Integer upload(MultipartFile file);
 }

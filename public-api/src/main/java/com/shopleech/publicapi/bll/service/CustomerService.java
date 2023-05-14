@@ -3,6 +3,7 @@ package com.shopleech.publicapi.bll.service;
 import com.shopleech.publicapi.bll.mapper.CustomerBLLMapper;
 import com.shopleech.publicapi.bll.service.model.ICustomerService;
 import com.shopleech.publicapi.dal.mapper.CustomerDALMapper;
+import com.shopleech.publicapi.dal.repository.CustomerAccountRepository;
 import com.shopleech.publicapi.dal.repository.CustomerRepository;
 import com.shopleech.publicapi.dal.repository.UserRepository;
 import com.shopleech.publicapi.domain.Customer;
@@ -23,6 +24,8 @@ public class CustomerService implements ICustomerService {
 
     @Autowired
     protected CustomerRepository customerRepository;
+    @Autowired
+    protected CustomerAccountRepository customerAccountRepository;
     @Autowired
     protected UserRepository userRepository;
     @Autowired
@@ -70,5 +73,14 @@ public class CustomerService implements ICustomerService {
         }
 
         return get(user.get().getCustomer().getId());
+    }
+
+    @Override
+    public Customer getCustomerByAccountId(Integer id) throws Exception {
+        var customerAccounts = customerAccountRepository.findAllByAccountId(id);
+        if (customerAccounts.size() == 0) {
+            throw new Exception("customer account not found");
+        }
+        return customerAccounts.get(0).getCustomer();
     }
 }

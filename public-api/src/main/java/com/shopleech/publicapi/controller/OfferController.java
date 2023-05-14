@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -93,6 +94,21 @@ public class OfferController {
                     priceMapper.mapToEntity(newPrice));
             responseMap.put("error", false);
             responseMap.put("details", offerMapper.mapToDto(item));
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            responseMap.put("error", true);
+            responseMap.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(responseMap);
+        }
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> upload(@RequestPart(name = "multipartfile", required = true) MultipartFile multipartfile) {
+        Map<String, Object> responseMap = new HashMap<>();
+        try {
+            var item = offerService.upload(multipartfile);
+            responseMap.put("error", false);
+            responseMap.put("details", item);
             return ResponseEntity.ok(responseMap);
         } catch (Exception e) {
             responseMap.put("error", true);

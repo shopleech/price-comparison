@@ -1,14 +1,13 @@
 <template>
-    <header style="background-color: silver;">
-        <RouterLink :to="{ name: back }" v-if="back != null && back !== ''">
-            <i class="bi bi-backspace"></i>
-        </RouterLink>
-        <h1>{{ title }}</h1>
-        <div class="row">
-            <div class="col-9 small">
-                <div v-if="getCoords().latitude">
-                    Koordinaadid: {{ getCoords().latitude }} {{ getCoords().longitude }}
-                </div>
+    <header>
+        <div class="row custom-header-bg">
+            <div class="col-3 p-2">
+                <RouterLink :to="{ name: back }" v-if="back != null && back !== ''">
+                    <i class="bi bi-backspace"></i>
+                </RouterLink>
+            </div>
+            <div class="col-6 p-2 text-center">
+                {{ headerText }}
             </div>
             <div class="col-3 text-right">
                 <div class="dropdown">
@@ -17,20 +16,48 @@
                         <i class="bi bi-menu-down"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#" @click="clickStart">Kategooriad</a>
-                        <a class="dropdown-item" href="#" @click="clickGeolocation">
-                            <i class="bi bi-broadcast"></i> Minu koordinaadid</a>
-                        <a class="dropdown-item" href="#" @click="clickWatchlist">Minu jälgimisnimekiri</a>
-                        <a class="dropdown-item" href="#" @click="clickReviews">Minu hinnangud</a>
-                        <a class="dropdown-item" href="#" @click="clickAlarms">Minu teavitused</a>
-                        <a class="dropdown-item" href="#" @click="clickNewOffer">Uute pakkumiste lisamine</a>
-                        <a class="dropdown-item" href="#" @click="clickNewShop">Uue kaupluse lisamine</a>
-                        <a class="dropdown-item" href="#" @click="logoutClicked">Logi välja</a>
+                        <a class="dropdown-item" href="#" @click="clickStart">
+                            <i class="bi bi-arrow-left-circle"></i> Avaleht
+                        </a>
+                        <a class="dropdown-item" href="#" @click="clickWatchlist">
+                            <i class="bi bi-bookmark-plus"></i> Jälgimisnimekiri
+                        </a>
+                        <a class="dropdown-item" href="#" @click="clickReviews">
+                            <i class="bi bi-star"></i> Arvustused
+                        </a>
+                        <a class="dropdown-item" href="#" @click="clickAlarms">
+                            <i class="bi bi-bell"></i> Hinnateavitused
+                        </a>
+                        <a class="dropdown-item" href="#" @click="clickNewOffer">
+                            <i class="bi bi-database-add"></i> Uus pakkumine
+                        </a>
+                        <a class="dropdown-item" href="#" @click="clickNewShop">
+                            <i class="bi bi-shop-window"></i> Uus pood
+                        </a>
+                        <a class="dropdown-item" href="#" @click="logoutClicked">
+                            <i class="bi bi-power"></i> Logi välja
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row custom-header-bg p-2 small">
+            <div class="col-4">
+                Minu asukoht
+            </div>
+            <div class="col-8">
+                <div v-if="getCoords().latitude">
+                    <button @click="clickGeolocation">
+                        <i class="bi bi-broadcast"></i>
+                        {{ getCoords().latitude }} {{ getCoords().longitude }}
+                    </button>
+                </div>
+                <div v-else>
+                    <button @click="clickGeolocation"><i class="bi bi-broadcast"></i> Uuenda</button>
+                </div>
+            </div>
+        </div>
+        <div class="row custom-header-search">
             <div class="col-12">
                 <div class="input-group mb-3">
                     <input v-model="keyword" type="text" class="form-control" placeholder="Toote nimi või triipkood"
@@ -49,6 +76,7 @@
                 </div>
             </div>
         </div>
+        <h1>{{ title }}</h1>
     </header>
 </template>
 
@@ -60,6 +88,7 @@ import router from '@/router'
 import BarcodeScanner from '@/components/BarcodeScanner.vue'
 import { useProductStore } from '@/stores/product'
 import { ProductService } from '@/bll/service/ProductService'
+import DistanceUtil from '@/util/distance-util'
 
 /**
  * @author Ahto Jalak
@@ -90,9 +119,12 @@ export default class Header extends Vue {
     showScanner = false
     productService = new ProductService()
     keyword = ''
+    headerText = ''
+    distanceUtil = new DistanceUtil()
 
     mounted () {
         this.keyword = this.getKeyword()
+        this.headerText = this.getFirstname()
     }
 
     clickGeolocation () {
@@ -104,6 +136,31 @@ export default class Header extends Vue {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude
                     }
+
+                    this.shopService.getAll().then((items) => {
+                        if (items.errorMsg !== undefined) {
+                            this.errorMsg = items.errorMsg
+                        } else {
+                            const uniqueNodes = items.data
+                            if (uniqueNodes && this.identityStore.getCoords()) {
+                                for (let i = 0; i < uniqueNodes.length; i++) {
+                                    uniqueNodes[i].distance = this.distanceUtil.calculateDistance(
+                                        this.identityStore.getCoords().latitude ?? 59.436962,
+                                        this.identityStore.getCoords().longitude ?? 24.753574,
+                                        uniqueNodes[i].latitude ?? 59.436962,
+                                        uniqueNodes[i].longitude ?? 24.753574,
+                                        'K'
+                                    )
+                                }
+
+                                uniqueNodes.sort(function (a, b) {
+                                    return (a.distance ?? 0) - (b.distance ?? 0)
+                                })
+
+                                this.shopStore.$state.shops = uniqueNodes
+                            }
+                        }
+                    })
                 },
                 error => {
                     this.logger.error(error.message)
@@ -117,8 +174,14 @@ export default class Header extends Vue {
         return this.identityStore.$state.currentLocation
     }
 
+    getFirstname () {
+        return 'Ahto'
+    }
+
     clickNewOffer () {
-        router.push('/product/import')
+        router.push({
+            name: 'product-import'
+        })
     }
 
     clickNewShop () {
@@ -187,5 +250,15 @@ export default class Header extends Vue {
 </script>
 
 <style scoped>
+.custom-header-bg {
+    background-color: lightgrey;
+}
 
+.custom-header-bg button {
+    border: 0;
+}
+
+.custom-header-search {
+    padding: 10px;
+}
 </style>

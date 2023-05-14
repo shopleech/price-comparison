@@ -2,31 +2,26 @@
     <Header v-if="isAuthenticated" title="" back="home"/>
 
     <h4>Uute pakkumiste lisamine</h4>
+    <div v-if="errorMsg != null" class="text-danger validation-summary-errors" data-valmsg-summary="true">
+        <ul>
+            <li>{{ errorMsg }}</li>
+        </ul>
+    </div>
     <div class="row">
-        <div class="col-md-12">
-            <div v-if="errorMsg != null" class="text-danger validation-summary-errors" data-valmsg-summary="true">
-                <ul>
-                    <li>{{ errorMsg }}</li>
-                </ul>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Store</label>
-                <select class="col-sm-2" v-model="storeId">
-                    <option v-for="option in getShopList()" v-bind:key="option.id" :value="option.id">
-                        {{ option.name }}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">Import as plain text</label>
-                <textarea v-model="listDataString" class="form-control" rows="4"
-                          style="min-width: 100%"></textarea>
-            </div>
-            <div>
-                <div class="form-group">
-                    <input @click="submitClicked()" type="submit" value="Import" class="btn btn-primary"/>
-                </div>
-            </div>
+        <label class="col-6">Store</label>
+        <select class="col-6" v-model="storeId">
+            <option v-for="option in getShopList()" v-bind:key="option.id" :value="option.id">
+                {{ option.name }}
+            </option>
+        </select>
+    </div>
+    <div class="row">
+        <label class="col-6">Import as plain text</label>
+        <textarea class="col-6" v-model="listDataString"></textarea>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <input @click="submitClicked()" type="submit" value="Import" class="btn btn-primary"/>
         </div>
     </div>
 </template>

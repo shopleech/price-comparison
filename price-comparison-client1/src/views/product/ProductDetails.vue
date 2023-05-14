@@ -3,72 +3,70 @@
 
     <div class="row">
         <div class="col-4">
-            <button @click="clickAddReview(getProduct().id)" class="small"
-                    :style="{backgroundColor: reviewIsActive(getProduct().id) ? 'green' : 'white'}">
-                <i class="bi bi-star"></i> lisa hinnang
+            <button @click="clickAddReview(getProduct().id)" class="small border-0 h-100"
+                    :style="{backgroundColor: reviewIsActive(getProduct().id) ? 'lightgreen' : 'lightgray'}">
+                <i class="bi bi-star"></i> uus hinnang
             </button>
         </div>
         <div class="col-4">
-            <button @click="clickAddBookmark(getProduct().id)" class="small"
-                    :style="{backgroundColor: bookmarkIsActive(getProduct().id) ? 'green' : 'white'}">
+            <button @click="addBookmark(getProduct().id)" class="small border-0 h-100"
+                    :style="{backgroundColor: bookmarkIsActive(getProduct().id) ? 'lightgreen' : 'lightgray'}">
                 <i class="bi bi-bookmark-plus"></i> lisa nimekirja
             </button>
         </div>
         <div class="col-4">
-            <button @click="clickAddOffer(getProduct().id)" class="small">
-                <i class="bi bi-database-add"></i> lisa pakkumine
+            <button @click="clickAddOffer(getProduct().id)" class="small border-0 h-100"
+                    style="background-color: lightgray;">
+                <i class="bi bi-database-add"></i> uus pakkumine
             </button>
         </div>
     </div>
     <div class="row">
-        <div class="col-3">Pilt</div>
-        <div class="col-9">
-            <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
+        <div class="col-12 text-center">
+            <img :src="getProductImageByBarcode(getProduct().barcode)" alt="" height="164"/>
         </div>
     </div>
     <div class="row">
-        <div class="col-3">Nimi</div>
-        <div class="col-9">
-            {{ getProduct().name }}
-        </div>
+        <div class="col-3 p-2">Nimi</div>
+        <div class="col-9 p-2">{{ getProduct().name }}</div>
     </div>
     <div class="row">
-        <div class="col-3">Triipkood</div>
-        <div class="col-9">{{ getProduct().barcode }}</div>
+        <div class="col-3 p-2">Triipkood</div>
+        <div class="col-9 p-2">{{ getProduct().barcode }}</div>
     </div>
-    <div class="row">
-        <div class="col-3">Kirjeldus</div>
-        <div class="col-9">{{ getProduct().description }}</div>
+    <div class="row" v-if="getProduct().description">
+        <div class="col-3 p-2">Kirjeldus</div>
+        <div class="col-9 p-2">{{ getProduct().description }}</div>
     </div>
 
     <h4>Pakkumised</h4>
     <div v-for="item of getOffersDetails()" :key="item.id" class="border" @click="setItemDetails(item.id)">
         <div class="row">
-            <div class="col-2">
-                <img :src="getShopImageByType(item.shop.url)" alt="" width="32" height="32"/>
+            <div class="col-3 p-2">
+                <img :src="getShopImageByType(item.url)" alt="" width="32" height="32" v-if="item.url"/>
             </div>
-            <div class="col-7">
+            <div class="col-7 p-2">
                 <div>{{ item.name }}</div>
-                <div>{{
+                <div v-if="this.identityStore.getCoords().latitude">{{
                         distanceUtil.round(
                             distanceUtil.calculateDistance(
-                                this.identityStore.getCoords().latitude ?? 59.436962,
-                                this.identityStore.getCoords().longitude ?? 24.753574,
+                                this.identityStore.getCoords().latitude,
+                                this.identityStore.getCoords().longitude,
                                 item.latitude, item.longitude))
                     }}km
                 </div>
             </div>
-            <div class="col-md-2 p-2">
+            <div class="col-2 p-2">
                 €{{ item.offers.sort((a, b) => a.price.amount - b.price.amount)[0].price.amount }}
             </div>
         </div>
-        <div class="bg-light" v-if="showItemDetails(item.id)">
+        <div v-if="showItemDetails(item.id)">
             <div class="row" v-for="subItem of item.offers" :key="subItem.id">
                 <div class="col-8">
                     <div>Toote nimi: {{ subItem.name }}</div>
-                    <div>Lisatud: unknown</div>
+                    <div>Lisatud: {{ subItem.addedBy }}</div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" v-if="subItem.price.amount">
                     €{{ subItem.price.amount }}
                 </div>
             </div>
@@ -210,9 +208,10 @@ export default class ProductDetails extends Vue {
                     name: shop.name,
                     latitude: shop.latitude,
                     longitude: shop.longitude,
+                    url: shop.url,
                     offers: this.getOffers().filter(o => {
                         return o.shopId === shop.id
-                    })
+                    }),
                 } as IOfferResults)
             }
         }
@@ -244,24 +243,50 @@ export default class ProductDetails extends Vue {
         router.push('/review/create/' + id)
     }
 
-    clickAddBookmark (id: number) {
-        const entity = {
-            productId: id,
-        } as IWatchlist
-        this.watchlistService.add(entity).then((item) => {
-            if (item.errorMsg !== undefined) {
-                this.errorMsg = item.errorMsg
-            } else {
-                if (item.data) {
-                    this.watchlistStore.add(item.data)
+    addBookmark (id: number) {
+        this.logger.info('addBookmark')
+        if (this.bookmarkIsActive(id)) {
+            this.watchlistService.delete(this.getWatchlistIdFromProductId(id)).then((item) => {
+                if (item.errorMsg !== undefined) {
+                    this.errorMsg = item.errorMsg
+                } else {
+                    if (item.data) {
+                        this.logger.info(item.data.toString())
+                        this.watchlistStore.remove(item.data)
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            const entity = {
+                productId: id,
+            } as IWatchlist
+            this.watchlistService.add(entity).then((item) => {
+                if (item.errorMsg !== undefined) {
+                    this.errorMsg = item.errorMsg
+                } else {
+                    if (item.data) {
+                        this.watchlistStore.add(item.data)
+                    }
+                }
+            })
+        }
     }
 
     clickAddOffer (id: number) {
         this.logger.info(id.toString())
         router.push('/offer/create/' + id)
+    }
+
+    getWatchlistIdFromProductId (id: number): number {
+        this.logger.info('bookmarkIsActive')
+        for (let i = 0; i < this.watchlistStore.watchlistCount; i++) {
+            const x = this.watchlistStore.$state.watchlists[i] as IWatchlist
+            if (id === x.productId) {
+                return x.id ?? 0
+            }
+        }
+
+        return 0
     }
 
     bookmarkIsActive (id: number) {
@@ -292,8 +317,8 @@ export default class ProductDetails extends Vue {
         return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/category/${id}.png`
     }
 
-    getShopImageByType (id: string) {
-        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/shop/${id}`
+    getShopImageByType (url: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/shop/${url}`
     }
 
     getProductImageByBarcode (id: string) {
