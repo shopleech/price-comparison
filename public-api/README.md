@@ -1,5 +1,7 @@
 # price comparison public api
 
+Research project website: https://shopleech.com/
+
 ## Project setup
 
 #### requirements
