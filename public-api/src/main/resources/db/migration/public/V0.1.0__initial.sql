@@ -92,8 +92,7 @@ CREATE TABLE category
     valid_from         timestamp(6) NULL,
     valid_to           timestamp(6) NULL,
     parent_category_id int4         NULL,
-    CONSTRAINT category_pkey PRIMARY KEY (id),
-    CONSTRAINT fks2ride9gvilxy2tcuv7witnxc FOREIGN KEY (parent_category_id) REFERENCES category (id)
+    CONSTRAINT category_pkey PRIMARY KEY (id)
 );
 
 CREATE TABLE customer_account

@@ -62,14 +62,8 @@ jar {
 }
 
 flyway {
-    driver = 'org.postgresql.Driver'
     //url = ''
     //user = ''
     //password = ''
     //schemas = ['']
-    connectRetries = 10
-    baselineOnMigrate = true
-    createSchemas = true
-    table = 'schema_history'
-    locations = ['classpath:db/migrations']
 }
