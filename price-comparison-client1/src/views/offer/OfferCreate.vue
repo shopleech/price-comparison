@@ -13,11 +13,11 @@
                 <img :src="getProductImageByBarcode(getProduct().barcode)" alt="" height="164"/>
             </div>
         </div>
-        <div class="row">
+        <div class="row p-3">
             <div class="col-4 p-2">Toote nimi</div>
             <div class="col-8 p-2">{{ getProduct().name }}</div>
         </div>
-        <div class="row">
+        <div class="row p-3">
             <div class="col-4 p-2">Triipkood</div>
             <div class="col-8 p-2">{{ getProduct().barcode }}</div>
         </div>
@@ -27,76 +27,84 @@
             <label class="col-4 p-2 control-label">Toote nimi</label>
             <input type="text" class="col-8" v-model="name"/>
         </div>
-        <div class="form-group">
-            <div class="row">
-                <label class="col-4 p-2 control-label">Triipkood</label>
-                <div class="col-8 p-2">
-                    <div class="input-group mb-3">
-                        <input v-model="barcode" type="text" class="form-control" aria-label="triipkood">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" @click="showScanner=!showScanner" type="button">
-                                <i class="bi bi-qr-code-scan"></i>
-                            </button>
-                        </div>
+        <div class="form-group row p-3">
+            <label class="col-4 p-2 control-label">Triipkood</label>
+            <div class="col-8 p-2">
+                <div class="input-group mb-3">
+                    <input v-model="barcode" type="text" class="form-control" aria-label="triipkood">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" @click="showScanner=!showScanner" type="button">
+                            <i class="bi bi-qr-code-scan"></i>
+                        </button>
                     </div>
-                    <div v-if="showScanner">
-                        <barcode-scanner :qrbox="100" :fps="10" @result="onScan"/>
-                    </div>
+                </div>
+                <div v-if="showScanner">
+                    <barcode-scanner :qrbox="100" :fps="10" @result="onScan"/>
                 </div>
             </div>
         </div>
+        <div class="form-group row p-3">
+            <div class="col-4 p-2 control-label">
+                <label>Toote pilt</label>
+            </div>
+            <div class="col-8 p-2">
+                <upload-image/>
+            </div>
+        </div>
         <div class="form-group">
-            <label class="col-4 p-2 control-label">Category</label>
+            <label class="col-4 p-2 control-label">Kategooria</label>
             <select class="col-8" v-model="categoryId">
                 <option v-for="option in getCategoryList()" v-bind:key="option.id" :value="option.id">
                     {{ option.name }}
                 </option>
             </select>
         </div>
-        <upload-image></upload-image>
     </div>
     <div class="form-group">
-        <label class="col-4 p-2 control-label">Shop</label>
+        <label class="col-4 p-2 control-label">Pood</label>
         <select class="col-8" v-model="shopId">
             <option v-for="option in getShopList()" v-bind:key="option.id" :value="option.id">
-                {{ option.name }} <span v-if="option.distance"> &nbsp; {{ distanceUtil.round(option.distance) }}km</span>
+                {{ option.name }} <span v-if="option.distance"> &nbsp; {{
+                    distanceUtil.round(option.distance)
+                }}km</span>
             </option>
         </select>
     </div>
     <div class="form-group">
-        <label class="col-4 p-2 control-label">Price</label>
+        <label class="col-4 p-2 control-label">Hind</label>
         <input type="text" class="col-8" v-model="price" style="width: 100px;"/>
     </div>
     <div>
         <div class="form-group">
-            <input @click="submitClicked()" type="submit" value="Add offer" class="btn btn-primary"/>
+            <input @click="submitClicked()" type="submit" value="Lisa pakkumine" class="btn btn-primary"/>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import HttpClient from '@/util/http-client'
-import Papa from 'papaparse'
 import { OfferService } from '@/bll/service/OfferService'
 import { useOfferStore } from '@/stores/offer'
-import Logger from '@/util/logger'
 import { IdentityService } from '@/bll/service/IdentityService'
-import Header from '@/components/Header.vue'
-import router from '@/router'
 import { IOffer } from '@/dal/domain/IOffer'
 import { IPrice } from '@/dal/domain/IPrice'
-import DistanceUtil from '@/util/distance-util'
 import { IShop } from '@/dal/domain/IShop'
 import { ShopService } from '@/bll/service/ShopService'
 import { useShopStore } from '@/stores/shop'
 import { useIdentityStore } from '@/stores/identity'
 import { useProductStore } from '@/stores/product'
 import { ProductService } from '@/bll/service/ProductService'
-import UploadImage from '@/components/UploadImage.vue'
 import { ICategory } from '@/dal/domain/ICategory'
 import { CategoryService } from '@/bll/service/CategoryService'
 import { useCategoryStore } from '@/stores/category'
+import HttpClient from '@/util/http-client'
+import Papa from 'papaparse'
+import Logger from '@/util/logger'
+import Header from '@/components/Header.vue'
+import router from '@/router'
+import DistanceUtil from '@/util/distance-util'
+import UploadImage from '@/components/UploadImage.vue'
+import BarcodeScanner from '@/components/BarcodeScanner.vue'
 
 /**
  * @author Ahto Jalak
@@ -104,6 +112,7 @@ import { useCategoryStore } from '@/stores/category'
  */
 @Options({
     components: {
+        BarcodeScanner,
         Header,
         UploadImage,
     },
@@ -111,8 +120,9 @@ import { useCategoryStore } from '@/stores/category'
         id: Number,
     },
     emits: [],
-    data() {
+    data () {
         return {
+            progress: 0,
         }
     },
     methods: {
@@ -164,9 +174,23 @@ export default class OfferCreate extends Vue {
             price: {
                 amount: this.price
             } as IPrice,
-            productImage: this.productImage,
         }
         this.logger.info(obj as string)
+
+        if (this.offerStore.$state.uploadedImage) {
+            fetch(this.offerStore.$state.uploadedImage)
+                .then(res => res.blob())
+                .then(blob => {
+                    this.offerService
+                        .upload(this.barcode ?? '', blob, 0)
+                        .then(r => {
+                            if (r.data) {
+                                this.logger.log(r.data)
+                            }
+                        })
+                })
+                .catch(err => console.log(err))
+        }
 
         await this.offerService.add(obj).then((item) => {
             if (item.errorMsg !== undefined) {
@@ -207,13 +231,13 @@ export default class OfferCreate extends Vue {
                             this.identityStore.getCoords().longitude ?? 24.753574,
                             uniqueNodes[i].latitude ?? 59.436962,
                             uniqueNodes[i].longitude ?? 24.753574,
-                            "K"
-                        );
+                            'K'
+                        )
                     }
 
-                    uniqueNodes.sort(function(a, b) {
-                        return (a.distance ?? 0) - (b.distance ?? 0);
-                    });
+                    uniqueNodes.sort(function (a, b) {
+                        return (a.distance ?? 0) - (b.distance ?? 0)
+                    })
 
                     this.shopStore.$state.shops = uniqueNodes
                 }
@@ -277,7 +301,7 @@ export default class OfferCreate extends Vue {
         return this.identityService.isAuthenticated()
     }
 
-    getProduct() {
+    getProduct () {
         return this.productStore.$state.product
     }
 
@@ -290,7 +314,7 @@ export default class OfferCreate extends Vue {
     }
 
     getProductImageByBarcode (id: string) {
-        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.png`
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.jpg`
     }
 }
 </script>

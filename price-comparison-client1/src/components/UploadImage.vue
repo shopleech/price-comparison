@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-8">
+        <div class="row border-1" v-if="!isCameraOpen && !pictureTaken">
+            <div class="col-12">
                 <label class="btn btn-default p-0">
                     <input
                         type="file"
@@ -11,37 +11,39 @@
                     />
                 </label>
             </div>
+        </div>
 
-            <div class="col-4">
-                <button
-                    class="btn btn-success btn-sm float-right"
-                    :disabled="!currentImage"
-                    @click="upload"
-                >
-                    Upload
+        <div class="row border-1" v-if="previewImage === ''">
+            <div class="col-12">
+                <div class="camera-button">
+                    <button type="button" @click="toggleCamera">
+                        <i class="bi bi-camera"></i>
+                    </button>
+                </div>
+                <div v-if="isCameraOpen">
+                    <video ref="camera" :width="canvasWidth" :height="canvasHeight" autoplay></video>
+                    <canvas v-show="false" id="photoTaken" ref="canvas" :width="canvasWidth"
+                            :height="canvasHeight"></canvas>
+                </div>
+                <button v-if="isCameraOpen" @click="capture">
+                    Pildista
                 </button>
+                <div v-if="pictureData">
+                    <div>
+                        <img :src="pictureData" alt="Product"/>
+                    </div>
+                    <button @click="clearImage">X</button>
+                </div>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row" v-if="pictureData === ''">
             <div class="col-12">
-                <div v-if="currentImage" class="progress">
-                    <div
-                        class="progress-bar progress-bar-info"
-                        role="progressbar"
-                        :aria-valuenow="progress"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        :style="{ width: progress + '%' }"
-                    >
-                        {{ progress }}%
-                    </div>
-                </div>
-
                 <div v-if="previewImage">
                     <div>
-                        <img class="preview my-3" style="max-width: 100%;" :src="previewImage" alt="" />
+                        <img class="preview my-3" style="max-width: 100%;" :src="previewImage" alt="Uploaded"/>
                     </div>
+                    <button @click="clearImage">X</button>
                 </div>
 
                 <div v-if="message" class="alert alert-secondary" role="alert">
@@ -55,6 +57,7 @@
 <script>
 import { Options, Vue } from 'vue-class-component'
 import { OfferService } from '@/bll/service/OfferService'
+import { useOfferStore } from '@/stores/offer'
 
 /**
  * @author Ahto Jalak
@@ -64,47 +67,104 @@ import { OfferService } from '@/bll/service/OfferService'
     components: {},
     props: {
         barcode: String,
+        msg: String,
     },
-    data() {
+    data () {
         return {
             currentImage: undefined,
-            previewImage: undefined,
-
+            previewImage: '',
+            pictureData: '',
             progress: 0,
-            message: "",
-
+            message: '',
             imageInfos: [],
-        };
+            isCameraOpen: false,
+            canvasHeight: 200,
+            canvasWidth: 190,
+            items: [],
+        }
     },
     methods: {
         selectImage () {
             this.currentImage = this.$refs.file.files.item(0)
             this.previewImage = URL.createObjectURL(this.currentImage)
+            this.offerStore.$state.uploadedImage = URL.createObjectURL(this.currentImage)
             this.progress = 0
             this.message = ''
         },
-        upload () {
-            this.progress = 0
-
-            this.offerService.upload(this.barcode, this.currentImage, (event) => {
-                this.progress = Math.round((100 * event.loaded) / event.total)
+        toggleCamera () {
+            if (this.isCameraOpen) {
+                this.isCameraOpen = false
+                this.stopCameraStream()
+            } else {
+                this.isCameraOpen = true
+                this.startCameraStream()
+            }
+        },
+        startCameraStream () {
+            const constraints = (this.$root.constraints = {
+                audio: false,
+                video: true
             })
-                .then((response) => {
-                    this.message = response.data.message
+            navigator.mediaDevices
+                .getUserMedia(constraints)
+                .then(stream => {
+                    this.$refs.camera.srcObject = stream
                 })
-                .then((images) => {
-                    this.imageInfos = images.data
-                })
-                .catch((err) => {
-                    this.progress = 0
-                    this.message = 'Could not upload the image! ' + err
-                    this.currentImage = undefined
+                .catch(error => {
+                    alert('Browser doesn\'t support or there is some errors.' + error)
                 })
         },
-    },
+        clearImage () {
+            this.pictureData = ''
+            this.previewImage = ''
+            this.offerStore.$state.uploadedImage = ''
+        },
+        stopCameraStream () {
+            const tracks = this.$refs.camera.srcObject.getTracks()
+            tracks.forEach((track) => {
+                track.stop()
+            })
+        },
+        capture () {
+            const context = this.$refs.canvas.getContext('2d')
+            context.drawImage(this.$refs.camera, 0, 0, this.canvasWidth, this.canvasHeight)
+            const dataUrl = this.$refs.canvas.toDataURL("image/jpeg", 0.5)
+                .replace('image/jpeg', 'image/octet-stream')
+            this.pictureData = dataUrl
+            this.offerStore.$state.uploadedImage = dataUrl
+            this.isCameraOpen = false
+            this.previewImage = ''
+            this.stopCameraStream()
+        },
+        dataURItoBlob(dataURI) {
+            // convert base64 to raw binary data held in a string
+            // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+            const byteString = atob(dataURI.split(',')[1]);
+
+            // separate out the mime component
+            const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+            // write the bytes of the string to an ArrayBuffer
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+
+            // Old Code
+            // write the ArrayBuffer to a blob, and you're done
+            // var bb = new BlobBuilder();
+            // bb.append(ab);
+            // return bb.getBlob(mimeString);
+
+            // New Code
+            return new Blob([ab], { type: mimeString });
+        }
+    }
 })
 export default class UploadImage extends Vue {
     offerService = new OfferService()
+    offerStore = useOfferStore()
 }
 </script>
 

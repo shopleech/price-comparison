@@ -322,7 +322,7 @@ export default class ProductDetails extends Vue {
     }
 
     getProductImageByBarcode (id: string) {
-        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.png`
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.jpg`
     }
 }
 </script>

@@ -407,7 +407,7 @@ export default class HomeView extends Vue {
     }
 
     getProductImageByBarcode (id: string) {
-        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.png`
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.jpg`
     }
 
     getWatchlistId (): number {

@@ -10,6 +10,7 @@ export const useOfferStore = defineStore({
     state: () => ({
         offer: {} as IOffer,
         offers: [] as IOffer[],
+        uploadedImage: '',
     }),
     getters: {
         offerCount: (state) => state.offers.length,
