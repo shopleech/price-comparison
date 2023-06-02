@@ -36,7 +36,7 @@ public class OfferService implements IOfferService {
     private String folderName;
 
     @Autowired
-    private AmazonS3 getAmazonS3Client;
+    private AmazonS3 s3;
     @Autowired
     protected OfferRepository offerRepository;
     @Autowired
@@ -106,9 +106,9 @@ public class OfferService implements IOfferService {
     }
 
     @Override
-    public Integer upload(MultipartFile multipartfile) {
+    public Integer upload(MultipartFile multipartfile, String barcode) {
         if (multipartfile != null && !multipartfile.isEmpty()) {
-            String filePathName = multipartfile.getOriginalFilename();
+            String filePathName = barcode + ".jpg";
             File file = new File(filePathName);
 
             try (FileOutputStream fos = new FileOutputStream(file)) {
@@ -119,8 +119,8 @@ public class OfferService implements IOfferService {
                 fos.write(multipartfile.getBytes());
                 fos.flush();
 
-                getAmazonS3Client.putObject(
-                        new PutObjectRequest(bucketName, folderName + "/" + file.getName(), file)
+                s3.putObject(
+                        new PutObjectRequest(bucketName, folderName + file.getName(), file)
                         .withCannedAcl(CannedAccessControlList.PublicRead)
                 );
 

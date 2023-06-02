@@ -21,7 +21,8 @@ import java.util.Set;
 @Table(name = "product")
 public class Product {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_generator")
+    @SequenceGenerator(name = "product_generator", sequenceName = "product_seq", allocationSize = 1)
     private Integer id;
 
     @ManyToOne

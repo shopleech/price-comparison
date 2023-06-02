@@ -23,7 +23,8 @@ import java.util.Set;
 @Table(name = "category")
 public class Category {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_generator")
+    @SequenceGenerator(name = "category_generator", sequenceName = "category_seq", allocationSize = 1)
     private Integer id;
 
     @ManyToOne

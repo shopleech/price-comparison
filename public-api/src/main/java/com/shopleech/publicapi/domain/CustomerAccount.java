@@ -17,7 +17,8 @@ import java.sql.Timestamp;
 @Table(name = "customer_account")
 public class CustomerAccount {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_account_generator")
+    @SequenceGenerator(name = "customer_account_generator", sequenceName = "customer_account_seq", allocationSize = 1)
     private Integer id;
 
     @ManyToOne

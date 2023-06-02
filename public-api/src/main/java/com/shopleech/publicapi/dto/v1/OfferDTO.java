@@ -28,4 +28,5 @@ public class OfferDTO {
     private String url;
     private PriceDTO price;
     private String addedBy;
+    private String productImage;
 }

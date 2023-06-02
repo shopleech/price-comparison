@@ -20,7 +20,8 @@ import java.util.Set;
 @Table(name = "offer")
 public class Offer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "offer_generator")
+    @SequenceGenerator(name = "offer_generator", sequenceName = "offer_seq", allocationSize = 1)
     private Integer id;
 
     @ManyToOne

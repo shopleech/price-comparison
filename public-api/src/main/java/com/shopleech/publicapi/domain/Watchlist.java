@@ -18,7 +18,8 @@ import java.sql.Timestamp;
 @Table(name = "watchlist")
 public class Watchlist {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "watchlist_generator")
+    @SequenceGenerator(name = "watchlist_generator", sequenceName = "watchlist_seq", allocationSize = 1)
     private Integer id;
 
     @ManyToOne

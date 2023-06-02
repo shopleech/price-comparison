@@ -19,7 +19,8 @@ import java.util.Set;
 @Table(name = "_user")
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
+    @SequenceGenerator(name = "user_generator", sequenceName = "user_seq", allocationSize = 1)
     private Integer id;
 
     @ManyToOne

@@ -18,7 +18,8 @@ import java.sql.Timestamp;
 @Table(name = "review")
 public class Review {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_generator")
+    @SequenceGenerator(name = "review_generator", sequenceName = "review_seq", allocationSize = 1)
     private Integer id;
 
     @ManyToOne

@@ -22,5 +22,5 @@ public interface IOfferService {
 
     List<Offer> getAllByProductId(Integer id);
 
-    Integer upload(MultipartFile file);
+    Integer upload(MultipartFile file, String barcode);
 }

@@ -21,7 +21,8 @@ import java.util.Set;
 @Table(name = "account")
 public class Account extends BaseDomainEntityMetaId {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_generator")
+    @SequenceGenerator(name = "account_generator", sequenceName = "account_seq", allocationSize = 1)
     private Integer id;
 
     private StatusTypeCode status;

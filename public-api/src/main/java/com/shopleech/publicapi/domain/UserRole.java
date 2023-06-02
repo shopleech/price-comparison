@@ -17,7 +17,8 @@ import java.sql.Timestamp;
 @Table(name = "user_role")
 public class UserRole {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_role_generator")
+    @SequenceGenerator(name = "user_role_generator", sequenceName = "user_role_seq", allocationSize = 1)
     private Integer id;
 
     @ManyToOne

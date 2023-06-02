@@ -3,7 +3,10 @@ package com.shopleech.publicapi.domain;
 import com.shopleech.base.config.type.CurrencyTypeCode;
 import com.shopleech.base.config.type.PriceTypeCode;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
@@ -19,7 +22,8 @@ import java.sql.Timestamp;
 @Table(name = "price")
 public class Price {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "price_generator")
+    @SequenceGenerator(name = "price_generator", sequenceName = "price_seq", allocationSize = 1)
     private Integer id;
 
     @ManyToOne

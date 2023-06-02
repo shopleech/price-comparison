@@ -22,7 +22,8 @@ import java.util.Set;
 @Table(name = "shop")
 public class Shop {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shop_generator")
+    @SequenceGenerator(name = "shop_generator", sequenceName = "shop_seq", allocationSize = 1)
     private Integer id;
 
     private String name;

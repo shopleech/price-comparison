@@ -16,7 +16,6 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
  */
 @Configuration
 public class AwsConfig {
-
     @Value("${aws.access-key}")
     private String awsAccessKey;
     @Value("${aws.access-secret-key}")
@@ -37,10 +36,11 @@ public class AwsConfig {
 
     @Bean
     public AmazonS3 getAmazonS3Client() {
+        BasicAWSCredentials awsCred = new BasicAWSCredentials(awsAccessKey, awsAccessSecretKey);
         return AmazonS3ClientBuilder
                 .standard()
                 .withRegion(awsRegion)
-                .withCredentials(amazonAWSCredentialsProvider())
+                .withCredentials(new AWSStaticCredentialsProvider(awsCred))
                 .build();
     }
 }

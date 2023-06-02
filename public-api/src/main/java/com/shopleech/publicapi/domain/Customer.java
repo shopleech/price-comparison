@@ -20,7 +20,8 @@ import java.util.Set;
 @Table(name = "customer")
 public class Customer {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_generator")
+    @SequenceGenerator(name = "customer_generator", sequenceName = "customer_seq", allocationSize = 1)
     private Integer id;
 
     private String personalCode;

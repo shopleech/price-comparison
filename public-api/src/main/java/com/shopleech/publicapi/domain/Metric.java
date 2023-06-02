@@ -20,7 +20,8 @@ import java.sql.Timestamp;
 @Table(name = "metric")
 public class Metric extends BaseDomainEntityMetaId {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "metric_generator")
+    @SequenceGenerator(name = "metric_generator", sequenceName = "metric_seq", allocationSize = 1)
     private Integer id;
 
     @ManyToOne
