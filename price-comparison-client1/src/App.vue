@@ -11,6 +11,8 @@ import { Options, Vue } from 'vue-class-component'
 import router from '@/router/index'
 import { useIdentityStore } from '@/stores/identity'
 import Logger from '@/util/logger'
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 /**
  * @author Ahto Jalak
@@ -40,6 +42,55 @@ export default class App extends Vue {
             }
         })
         router.push('/')
+    }
+
+    mounted() {
+        const firebaseConfig = {
+            apiKey: "AIzaSyCWPyQ_47Nqn7hsLsNzlR21C6lbB7yr3RQ",
+            authDomain: "price-comparison-vue.firebaseapp.com",
+            projectId: "price-comparison-vue",
+            storageBucket: "price-comparison-vue.appspot.com",
+            messagingSenderId: "431621825092",
+            appId: "1:431621825092:web:336da9fb3f431fe0a61211",
+            measurementId: "G-B9GLLY4ZV6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+
+        const messaging = getMessaging();
+        onMessage(messaging, (payload) => {
+            console.log('Message received. ', payload);
+            // ...
+
+            console.log(
+                '[firebase-messaging-sw.js] Received background message ',
+                payload
+            );
+            Notification.requestPermission((result) => {
+                if (result === "granted") {
+                    navigator.serviceWorker.ready.then((registration) => {
+                        const notificationTitle = payload.notification?.title ?? 'untitled';
+                        const notificationOptions = {
+                            body: payload.notification?.body ?? 'unknown',
+                            icon: '/bell.png'
+                        };
+                        registration.showNotification(notificationTitle, notificationOptions);
+                    });
+                }
+            });
+        });
+        getToken(messaging, { vapidKey: 'BBAFnqen9fnu1BttZ5RGr7FcIvwrVvJGe-lUwwyJPUbsKwP44AFcm9rVUqJArYxCskU9dBHw2zq0X5PRj6rYF00' }).then((currentToken) => {
+            if (currentToken) {
+                console.log("token success", currentToken)
+            } else {
+                // Show permission request UI
+                console.log('No registration token available. Request permission to generate one.');
+                // ...
+            }
+        }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+            // ...
+        });
     }
 }
 </script>
