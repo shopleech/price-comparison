@@ -103,7 +103,11 @@ import { useOfferStore } from '@/stores/offer'
         startCameraStream () {
             const constraints = (this.$root.constraints = {
                 audio: false,
-                video: true
+                video: {
+                    facingMode: {
+                        exact: 'environment'
+                    }
+                }
             })
             navigator.mediaDevices
                 .getUserMedia(constraints)

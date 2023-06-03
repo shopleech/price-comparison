@@ -22,6 +22,14 @@
                     <label className="control-label" htmlFor="firstname">Url</label>
                     <input v-model="url" className="form-control" type="text"/>
                 </div>
+                <div class="form-group row p-3">
+                    <div class="col-4 p-2 control-label">
+                        <label>Müügikoha pilt</label>
+                    </div>
+                    <div class="col-8 p-2">
+                        <upload-image/>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label className="control-label" htmlFor="firstname">Latitude</label>
                     <input v-model="latitude" className="form-control" type="text" style="width: 100px;"/>
@@ -57,6 +65,7 @@ import { IShop } from '@/dal/domain/IShop'
 import { useShopStore } from '@/stores/shop'
 import Header from '@/components/Header.vue'
 import { IdentityService } from '@/bll/service/IdentityService'
+import UploadImage from '@/components/UploadImage.vue'
 
 /**
  * @author Ahto Jalak
@@ -65,6 +74,7 @@ import { IdentityService } from '@/bll/service/IdentityService'
 @Options({
     components: {
         Header,
+        UploadImage,
     },
     props: {},
     emits: [],

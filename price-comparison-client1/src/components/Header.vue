@@ -22,17 +22,20 @@
                         <a class="dropdown-item" href="#" @click="clickWatchlist">
                             <i class="bi bi-bookmark-plus"></i> Jälgimisnimekiri
                         </a>
-                        <a class="dropdown-item" href="#" @click="clickReviews">
-                            <i class="bi bi-star"></i> Arvustused
-                        </a>
                         <a class="dropdown-item" href="#" @click="clickAlarms">
                             <i class="bi bi-bell"></i> Hinnateavitused
                         </a>
+                        <a class="dropdown-item" href="#" @click="clickReviews">
+                            <i class="bi bi-star"></i> Hinnangud
+                        </a>
                         <a class="dropdown-item" href="#" @click="clickNewOffer">
-                            <i class="bi bi-database-add"></i> Uus pakkumine
+                            <i class="bi bi-database-add"></i> Impordi pakkumine
                         </a>
                         <a class="dropdown-item" href="#" @click="clickNewShop">
-                            <i class="bi bi-shop-window"></i> Uus pood
+                            <i class="bi bi-shop-window"></i> Uus müügikoht
+                        </a>
+                        <a class="dropdown-item" href="#" @click="clickNewShop">
+                            <i class="bi bi-shop-window"></i> Uus kategooria
                         </a>
                         <a class="dropdown-item" href="#" @click="logoutClicked">
                             <i class="bi bi-power"></i> Logi välja

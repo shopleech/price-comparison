@@ -10,9 +10,17 @@
                 </ul>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Store</label>
+                <label class="col-sm-2 control-label">Müügikoht</label>
                 <select class="col-sm-2" v-model="storeId">
                     <option v-for="option in getShopList()" v-bind:key="option.id" :value="option.id">
+                        {{ option.name }}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="col-4 p-2 control-label">Kategooria</label>
+                <select class="col-8" v-model="categoryId">
+                    <option v-for="option in getCategoryList()" v-bind:key="option.id" :value="option.id">
                         {{ option.name }}
                     </option>
                 </select>
@@ -43,6 +51,9 @@ import DistanceUtil from '@/util/distance-util'
 import { useIdentityStore } from '@/stores/identity'
 import { IdentityService } from '@/bll/service/IdentityService'
 import Header from '@/components/Header.vue'
+import { CategoryService } from '@/bll/service/CategoryService'
+import { useCategoryStore } from '@/stores/category'
+import { ICategory } from '@/dal/domain/ICategory'
 
 /**
  * @author Ahto Jalak
@@ -64,6 +75,8 @@ export default class ProductImport extends Vue {
     private shopStore = useShopStore()
     private identityStore = useIdentityStore()
     private identityService = new IdentityService()
+    private categoryService = new CategoryService()
+    private categoryStore = useCategoryStore()
 
     listDataString = 'barcode;name;description;url;price'
     storeId = 0
@@ -117,10 +130,24 @@ export default class ProductImport extends Vue {
                 }
             }
         })
+
+        this.categoryService.getAll().then((item) => {
+            if (item.errorMsg !== undefined) {
+                this.errorMsg = item.errorMsg
+            } else {
+                if (item.data) {
+                    this.categoryStore.$state.categories = item.data
+                }
+            }
+        })
     }
 
     getShopList (): IShop[] {
         return this.shopStore.$state.shops
+    }
+
+    getCategoryList (): ICategory[] {
+        return this.categoryStore.$state.categories
     }
 
     convertToJson (input: string) {

@@ -17,8 +17,16 @@
                     </option>
                 </select>
                 <div class="form-group">
-                    <label>Category name</label>
+                    <label>Kategooria nimi</label>
                     <input type="text" v-model="categoryName"/>
+                </div>
+                <div class="form-group row p-3">
+                    <div class="col-4 p-2 control-label">
+                        <label>Kategooria pilt</label>
+                    </div>
+                    <div class="col-8 p-2">
+                        <upload-image/>
+                    </div>
                 </div>
                 <div class="form-group">
                     <input @click="submitClicked()" type="submit" value="Create" class="btn btn-primary"/>
@@ -39,13 +47,16 @@ import { Options, Vue } from 'vue-class-component'
 import { ICategory } from '@/dal/domain/ICategory'
 import router from '@/router'
 import Logger from '@/util/logger'
+import UploadImage from '@/components/UploadImage.vue'
 
 /**
  * @author Ahto Jalak
  * @since 06.02.2023
  */
 @Options({
-    components: {},
+    components: {
+        UploadImage,
+    },
     props: {},
     emits: [],
 })

@@ -41,6 +41,8 @@ public class Offer {
     private String name;
     private String description;
     private String url;
+    @Transient
+    private Integer categoryId;
 
     private Timestamp validFrom;
     private Timestamp validTo;

@@ -68,7 +68,7 @@ public class OfferService implements IOfferService {
                 var item = new Product();
                 item.setBarcode(entity.getBarcode());
                 item.setName(entity.getName());
-                var category = categoryRepository.findById(10);
+                var category = categoryRepository.findById(entity.getCategoryId());
                 if (category.isPresent()) {
                     item.setCategory(category.get());
                 }

@@ -84,6 +84,9 @@ public class OfferMapper {
             if (entity.getProductId() != null) {
                 c.setProduct(productService.get(entity.getProductId()));
             }
+            if (entity.getCategoryId() != null) {
+                c.setCategoryId(entity.getCategoryId());
+            }
             c.setShop(shopService.get(entity.getShopId()));
         } catch (Exception e) {
             logger.error("offer mapper failed");

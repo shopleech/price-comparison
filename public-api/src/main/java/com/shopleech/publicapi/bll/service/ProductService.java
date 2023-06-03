@@ -88,7 +88,9 @@ public class ProductService implements IProductService {
                     var newProduct = new Product();
                     newProduct.setBarcode(productImportItem.getBarcode());
                     newProduct.setName(productImportItem.getName());
-                    newProduct.setCategory(categoryRepository.findById(10).get());
+                    newProduct.setCategory(
+                            categoryRepository.findById(
+                                    productImportItems.getCategoryId()).get());
                     product = productRepository.save(newProduct);
                 }
 
