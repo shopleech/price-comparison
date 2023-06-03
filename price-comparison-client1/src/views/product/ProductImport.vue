@@ -26,7 +26,11 @@
                 </select>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Import as plain text</label>
+                <label class="col-sm-2 control-label">URL (json,csv,xml)</label>
+                <input type="text" class="form-control" v-model="url">
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Kopeeri/kleebi vabatekstina</label>
                 <textarea v-model="listDataString" class="form-control" style="min-width: 100%"></textarea>
             </div>
             <div>
@@ -80,6 +84,8 @@ export default class ProductImport extends Vue {
 
     listDataString = 'barcode;name;description;url;price'
     storeId = 0
+    categoryId = 0
+    url = ''
     errorMsg: string | null = null
 
     async submitClicked (): Promise<void> {

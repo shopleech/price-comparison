@@ -56,6 +56,7 @@ export default class App extends Vue {
         };
 
         const app = initializeApp(firebaseConfig);
+        this.logger.info(app.name)
 
         const messaging = getMessaging();
         onMessage(messaging, (payload) => {

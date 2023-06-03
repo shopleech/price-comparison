@@ -22,7 +22,7 @@
             </div>
             <div v-for="item of products" :key="item.id" class="border p-2 mb-4 row">
                 <div class="col-3">
-                    <img src="https://via.placeholder.com/50x50.png?text=product" alt="product"/>
+                    <img :src="getProductImageByBarcode(item.barcode)" alt="product"/>
                 </div>
                 <div class="col-6">
                     <h3>
@@ -90,6 +90,10 @@ export default class ProductIndex extends Vue {
         // const items = await this.productService.getAllByKeyword({ keyword: this.keyword } as ISearchItem)
         // this.products = items.data as IProduct[]
         // this.productCount = this.productService.size()
+    }
+
+    getProductImageByBarcode (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.jpg`
     }
 }
 

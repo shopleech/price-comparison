@@ -8,8 +8,8 @@
             <div v-if="isAuthenticated">
                 <div v-for="item of ratings" :key="item.id" class="row p-2">
                     <div class="col-3">
-                        <a href="#" @click="clickToProduct(item.merchandiseId)">
-                            <img src="https://via.placeholder.com/200x50.png?text=product" alt="product"/>
+                        <a href="#" @click="clickToProduct(item.productId)">
+                            <img :src="getProductImageByBarcode(item.product.barcode)" alt="product"/>
                         </a>
                     </div>
                     <div class="col-6">
@@ -85,6 +85,10 @@ export default class ShopIndex extends Vue {
         //         this.logger.log('success')
         //         router.push('/ratings')
         //     })
+    }
+
+    getProductImageByBarcode (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.jpg`
     }
 }
 

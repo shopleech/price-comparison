@@ -8,7 +8,7 @@
         </ul>
     </div>
     <div v-if="id !== undefined">
-        <div class="row">
+        <div class="row p-3">
             <div class="col-12 text-center">
                 <img :src="getProductImageByBarcode(getProduct().barcode)" alt="" height="164"/>
             </div>
@@ -76,7 +76,11 @@
     </div>
     <div>
         <div class="form-group">
+            <div class="col-4 p-2 control-label"></div>
             <input @click="submitClicked()" type="submit" value="Lisa pakkumine" class="btn btn-primary"/>
+            <button @click="goToImports()">
+                <i class="bi bi-filetype-xml"></i>
+            </button>
         </div>
     </div>
 </template>
@@ -315,6 +319,12 @@ export default class OfferCreate extends Vue {
 
     getProductImageByBarcode (id: string) {
         return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.jpg`
+    }
+
+    goToImports () {
+        router.push({
+            name: 'product-import'
+        })
     }
 }
 </script>

@@ -29,13 +29,16 @@
                             <i class="bi bi-star"></i> Hinnangud
                         </a>
                         <a class="dropdown-item" href="#" @click="clickNewOffer">
-                            <i class="bi bi-database-add"></i> Impordi pakkumine
+                            <i class="bi bi-filetype-xml"></i> Impordi pakkumine
                         </a>
                         <a class="dropdown-item" href="#" @click="clickNewShop">
                             <i class="bi bi-shop-window"></i> Uus müügikoht
                         </a>
                         <a class="dropdown-item" href="#" @click="clickNewShop">
                             <i class="bi bi-shop-window"></i> Uus kategooria
+                        </a>
+                        <a class="dropdown-item" href="#" @click="clickGeolocation">
+                            <i class="bi bi-broadcast"></i> Uuenda koordinaate
                         </a>
                         <a class="dropdown-item" href="#" @click="logoutClicked">
                             <i class="bi bi-power"></i> Logi välja

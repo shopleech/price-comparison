@@ -41,7 +41,7 @@
 
     <h4>Pakkumised</h4>
     <div v-for="item of getOffersDetails()" :key="item.id" class="border" @click="setItemDetails(item.id)">
-        <div class="row">
+        <div class="row border-1">
             <div class="col-3 p-2">
                 <img :src="getShopImageByType(item.url)" alt="" width="32" height="32" v-if="item.url"/>
             </div>
@@ -60,8 +60,8 @@
                 €{{ item.offers.sort((a, b) => a.price.amount - b.price.amount)[0].price.amount }}
             </div>
         </div>
-        <div v-if="showItemDetails(item.id)">
-            <div class="row" v-for="subItem of item.offers" :key="subItem.id">
+        <div v-if="showItemDetails(item.id)" style="background-color: lightgrey;">
+            <div class="row border-bottom-1" v-for="subItem of item.offers" :key="subItem.id">
                 <div class="col-8">
                     <div>Toote nimi: {{ subItem.name }}</div>
                     <div>Lisatud: {{ subItem.addedBy }}</div>
@@ -97,6 +97,21 @@
             </l-marker>
         </l-map>
     </div>
+
+    <h4>Toote detailid</h4>
+    <div class="border-1">
+        <h6>Kirjeldus</h6>
+        <div class="p-2" style="background-color: lightgrey;">{{ getProduct().description }}</div>
+        <h6>Sektsioon</h6>
+        <div class="row" style="background-color: lightgrey;">
+            <div class="col-4">värv</div>
+            <div class="col-8">valge</div>
+        </div>
+        <div class="row">
+            <div class="col-4">materjal</div>
+            <div class="col-8">puit</div>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -131,6 +146,7 @@ import {
     LPolygon,
     LRectangle,
 } from '@vue-leaflet/vue-leaflet'
+import { IProduct } from '@/dal/domain/IProduct'
 
 /**
  * @author Ahto Jalak
@@ -253,11 +269,11 @@ export default class ProductDetails extends Vue {
         return this.shopStore.$state.shops
     }
 
-    getProduct () {
+    getProduct (): IProduct {
         return this.productStore.$state.product
     }
 
-    getOffers () {
+    getOffers (): IOffer[] {
         return this.productStore.$state.offers
     }
 

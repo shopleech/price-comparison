@@ -9,7 +9,7 @@
     </div>
     <div v-for="item of getAlarm()" :key="item.id" class="border p-2 mb-4 row">
         <div class="col-2">
-            <img src="https://placehold.co/50x50/EEE/31343C?font=playfair-display&text=Product" alt="product"/>
+            <img :src="getProductImageByBarcode(item.product.barcode)" alt="product"/>
             <button class="small" @click="clickRemove(item.id)">x</button>
         </div>
         <div class="col-6">
@@ -87,6 +87,10 @@ export default class AlarmIndex extends Vue {
                 }
             }
         })
+    }
+
+    getProductImageByBarcode (id: string) {
+        return `https://price-comparison-images.s3.eu-west-1.amazonaws.com/product/${id}.jpg`
     }
 }
 

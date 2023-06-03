@@ -17,13 +17,21 @@
                 <div class="col-4">Triipkood</div>
                 <div class="col-8">{{ getProduct().barcode }}</div>
             </div>
+            <div class="row">
+                <div class="col-4">Hetke hind</div>
+                <div class="col-8">{{ getProduct().minPrice }}</div>
+            </div>
             <div class="form-group">
-                <label class="col-4 control-label">Hinna alumine piir</label>
+                <label class="col-4 control-label">Hinna muutuse samm</label>
+                <input type="text" class="col-8" v-model="minStep"/>
+            </div>
+            <div class="form-group">
+                <label class="col-4 control-label">Hinna alumine limiit</label>
                 <input type="text" class="col-8" v-model="minValue"/>
             </div>
             <div>
                 <div class="form-group">
-                    <input @click="submitClicked()" type="submit" value="Lisa teavitus" class="btn btn-primary"/>
+                    <input @click="submitClicked()" type="submit" value="Lisa hinnateavitus" class="btn btn-primary"/>
                 </div>
             </div>
         </div>
@@ -65,6 +73,7 @@ export default class AlarmCreate extends Vue {
     private identityService = new IdentityService()
 
     minValue: number | undefined = undefined
+    minStep: number | undefined = undefined
     errorMsg: string | null = null
 
     mounted () {

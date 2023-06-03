@@ -20,7 +20,16 @@
             <div v-if="getReview().id === undefined">
                 <div class="form-group">
                     <label class="col-4 control-label">Hinne</label>
-                    <input type="text" class="col-8" v-model="score"/>
+                    <Vue3StarRatings
+                        v-model="score"
+                        starSize="16"
+                        starColor="#ff9800"
+                        inactiveColor="#333333"
+                        :numberOfStars="5"
+                        :step="1"
+                        :showControl="false"
+                        :disableClick="false"
+                    />
                 </div>
                 <div class="form-group">
                     <label class="col-4 control-label">Tekst</label>
@@ -48,6 +57,7 @@ import router from '@/router'
 import { IReview } from '@/dal/domain/IReview'
 import { useProductStore } from '@/stores/product'
 import { ProductService } from '@/bll/service/ProductService'
+import Vue3StarRatings from 'vue3-star-ratings'
 
 /**
  * @author Ahto Jalak
@@ -55,7 +65,8 @@ import { ProductService } from '@/bll/service/ProductService'
  */
 @Options({
     components: {
-        Header
+        Header,
+        Vue3StarRatings,
     },
     props: {
         id: Number,
