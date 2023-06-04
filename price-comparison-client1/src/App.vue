@@ -64,7 +64,6 @@ export default class App extends Vue {
         getToken(messaging, { vapidKey: 'BBAFnqen9fnu1BttZ5RGr7FcIvwrVvJGe-lUwwyJPUbsKwP44AFcm9rVUqJArYxCskU9dBHw2zq0X5PRj6rYF00' }).then((currentToken) => {
             if (currentToken) {
                 console.log("token success", currentToken)
-                this.token = currentToken
             } else {
                 // Show permission request UI
                 console.log('No registration token available. Request permission to generate one.');
