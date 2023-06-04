@@ -21,28 +21,24 @@
             </button>
         </div>
     </div>
-    <div class="row">
+    <div class="row p-2">
         <div class="col-12 text-center">
             <img :src="getProductImageByBarcode(getProduct().barcode)" alt="" height="164"/>
         </div>
     </div>
-    <div class="row">
+    <div class="row p-2">
         <div class="col-3 p-2">Nimi</div>
         <div class="col-9 p-2">{{ getProduct().name }}</div>
     </div>
-    <div class="row">
+    <div class="row p-2">
         <div class="col-3 p-2">Triipkood</div>
         <div class="col-9 p-2">{{ getProduct().barcode }}</div>
-    </div>
-    <div class="row" v-if="getProduct().description">
-        <div class="col-3 p-2">Kirjeldus</div>
-        <div class="col-9 p-2">{{ getProduct().description }}</div>
     </div>
 
     <h4>Pakkumised</h4>
     <div v-for="item of getOffersDetails()" :key="item.id" class="border" @click="setItemDetails(item.id)">
         <div class="row border-1">
-            <div class="col-3 p-2">
+            <div class="col-3 p-2 text-center">
                 <img :src="getShopImageByType(item.url)" alt="" width="32" height="32" v-if="item.url"/>
             </div>
             <div class="col-7 p-2">

@@ -3,7 +3,7 @@
         <i class="bi bi-backspace"></i>
     </RouterLink>
 
-    <h2>Login</h2>
+    <h2>Logi sisse</h2>
     <div className="row">
         <div className="col-sm">
             <div v-if="errorMsg != null" className="text-danger validation-summary-errors" data-valmsg-summary="true">
@@ -12,17 +12,17 @@
                 </ul>
             </div>
             <div class="form-group">
-                <label className="control-label" htmlFor="firstname">email</label>
+                <label className="control-label" htmlFor="firstname">e-mail</label>
                 <input v-model="email" className="form-control" type="text"/>
             </div>
             <div className="form-group">
-                <label className="control-label" htmlFor="lastname">password</label>
+                <label className="control-label" htmlFor="lastname">parool</label>
                 <input v-model="password" className="form-control" type="password"/>
             </div>
             <div class="row">
                 <div class="col-6">
                     <button @click="loginClicked" class="btn btn-primary w-100">
-                        Login
+                        Logi sisse
                     </button>
                 </div>
             </div>

@@ -3,7 +3,7 @@
         <i class="bi bi-backspace"></i>
     </RouterLink>
 
-    <h2>Register</h2>
+    <h2>Registreeri</h2>
     <div className="row">
         <div className="col-md-12">
 
@@ -18,32 +18,31 @@
                 <input v-model="email" className="form-control" type="text"/>
             </div>
             <div className="form-group">
-                <label className="control-label" htmlFor="firstname">First name</label>
+                <label className="control-label" htmlFor="firstname">Eesnimi</label>
                 <input v-model="firstname" className="form-control" type="text"/>
             </div>
             <div className="form-group">
-                <label className="control-label" htmlFor="lastname">Last name</label>
+                <label className="control-label" htmlFor="lastname">Perenimi</label>
                 <input v-model="lastname" className="form-control" type="text"/>
             </div>
             <div className="form-group">
-                <label className="control-label" htmlFor="password">Password</label>
+                <label className="control-label" htmlFor="password">Parool</label>
                 <input v-model="password" className="form-control" type="password"/>
             </div>
             <div className="form-group">
-                <label className="control-label" htmlFor="passwordRepeat">Password repeat</label>
+                <label className="control-label" htmlFor="passwordRepeat">Parool 2x</label>
                 <input v-model="passwordRepeat" className="form-control" type="password"/>
             </div>
             <div className="form-group">
                 <div class="form-check form-switch">
                     <input v-model="consent" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                    <label class="form-check-label" for="flexSwitchCheckDefault">I agree with terms and
-                        conditions</label>
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Nõustun tingimustega</label>
                 </div>
             </div>
             <div class="row">
                 <div className="col-6">
                     <button @click="registerClicked()" class="btn btn-primary w-100">
-                        Register
+                        Registreeri
                     </button>
                 </div>
             </div>

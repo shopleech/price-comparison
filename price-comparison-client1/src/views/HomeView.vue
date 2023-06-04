@@ -16,10 +16,10 @@
                 </div>
                 <small>Leitud tooteid: {{ getProductList().length }}</small>
                 <div v-for="item of getProductList()" :key="item.id" class="row">
-                    <div class="col-2 p-2">
+                    <div class="col-3 p-2">
                         <img :src="getProductImageByBarcode(item.barcode)" alt="" height="86"/>
                     </div>
-                    <div class="col-6 p-2">
+                    <div class="col-5 p-2">
                         <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
                             {{ item.name }}
                         </RouterLink>
@@ -99,10 +99,10 @@
     </div>
     <div class="row" v-if="!isAuthenticated">
         <div class="col-12 bg-light custom-home-size">
-            <h1 class="custom-home-head">Location-based Product Price Comparison Web Application</h1>
+            <h1 class="custom-home-head">Asukohapõhine tarbekaupade hinnavõrdluse veebirakendus</h1>
             <div class="row">
                 <div class="col-6">
-                    Users
+                    Kasutajad
                 </div>
                 <div class="col-6">
                     {{ getStats().numOfUsers }}
@@ -110,7 +110,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    Products
+                    Tooted
                 </div>
                 <div class="col-6">
                     {{ getStats().numOfProducts }}
@@ -118,7 +118,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    Offers
+                    Pakkumised
                 </div>
                 <div class="col-6">
                     {{ getStats().numOfPriceUpdates }}
@@ -133,12 +133,12 @@
         <div class="row fixed-bottom p-3 col-xl-4 col-lg-5 col-md-6 col-sm-7">
             <div class="col-6">
                 <RouterLink :to="{ name: 'identity-login'}" class="btn btn-secondary btn-lg w-100">
-                    Login
+                    Logi sisse
                 </RouterLink>
             </div>
             <div class="col-6">
                 <RouterLink :to="{ name: 'identity-register'}" class="btn btn-primary btn-lg w-100">
-                    Get started
+                    Registreeri
                 </RouterLink>
             </div>
         </div>

@@ -75,12 +75,16 @@
         <input type="text" class="col-8" v-model="price" style="width: 100px;"/>
     </div>
     <div>
-        <div class="form-group">
-            <div class="col-4 p-2 control-label"></div>
-            <input @click="submitClicked()" type="submit" value="Lisa pakkumine" class="btn btn-primary"/>
-            <button @click="goToImports()">
-                <i class="bi bi-filetype-xml"></i>
-            </button>
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4">
+                <input @click="submitClicked()" type="submit" value="Lisa pakkumine" class="btn btn-primary"/>
+            </div>
+            <div class="col-4">
+                <button @click="goToImports()">
+                    <i class="bi bi-filetype-xml"></i>
+                </button>
+            </div>
         </div>
     </div>
 </template>
