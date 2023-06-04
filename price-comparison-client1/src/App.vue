@@ -4,6 +4,7 @@
             <router-view/>
         </main>
     </div>
+    <div>{{ token }}</div>
 </template>
 
 <script lang="ts">
@@ -12,7 +13,7 @@ import router from '@/router/index'
 import { useIdentityStore } from '@/stores/identity'
 import Logger from '@/util/logger'
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging, getToken } from "firebase/messaging";
 
 /**
  * @author Ahto Jalak
@@ -25,6 +26,7 @@ import { getMessaging, getToken, onMessage } from "firebase/messaging";
 export default class App extends Vue {
     private logger = new Logger(App.name)
     private identityStore = useIdentityStore()
+    token = ''
 
     get isAuthenticated (): boolean {
         return this.identityStore.getJwt() !== null
@@ -62,7 +64,7 @@ export default class App extends Vue {
         getToken(messaging, { vapidKey: 'BBAFnqen9fnu1BttZ5RGr7FcIvwrVvJGe-lUwwyJPUbsKwP44AFcm9rVUqJArYxCskU9dBHw2zq0X5PRj6rYF00' }).then((currentToken) => {
             if (currentToken) {
                 console.log("token success", currentToken)
-                alert(currentToken)
+                this.token = currentToken
             } else {
                 // Show permission request UI
                 console.log('No registration token available. Request permission to generate one.');
