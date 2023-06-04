@@ -18,7 +18,7 @@
     </div>
 
     <div>
-        <RouterLink :to="{ name: 'wishes' }">Back to Pricees</RouterLink>
+        <RouterLink :to="{ name: 'wishes' }">Back to Prices</RouterLink>
     </div>
 </template>
 

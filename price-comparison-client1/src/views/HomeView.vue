@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-2 p-2 text-right">
                         <RouterLink :to="{ name: 'product-details', params: { id: item.id } }" class="text-dark">
-                            {{ item.minPrice }}
+                            €{{ item.minPrice }}
                         </RouterLink>
                     </div>
                     <div class="col-2 p-2 text-right">

@@ -22,7 +22,7 @@
                     <label class="col-4 control-label">Hinne</label>
                     <Vue3StarRatings
                         v-model="score"
-                        starSize="16"
+                        starSize="24"
                         starColor="#ff9800"
                         inactiveColor="#333333"
                         :numberOfStars="5"

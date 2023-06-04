@@ -19,7 +19,7 @@
             </div>
             <div class="row">
                 <div class="col-4">Hetke hind</div>
-                <div class="col-8">{{ getProduct().minPrice }}</div>
+                <div class="col-8">€{{ getProduct().minPrice }}</div>
             </div>
             <div class="form-group">
                 <label class="col-4 control-label">Hinna muutuse samm</label>

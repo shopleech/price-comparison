@@ -59,30 +59,10 @@ export default class App extends Vue {
         this.logger.info(app.name)
 
         const messaging = getMessaging();
-        onMessage(messaging, (payload) => {
-            console.log('Message received. ', payload);
-            // ...
-
-            console.log(
-                '[firebase-messaging-sw.js] Received background message ',
-                payload
-            );
-            Notification.requestPermission((result) => {
-                if (result === "granted") {
-                    navigator.serviceWorker.ready.then((registration) => {
-                        const notificationTitle = payload.notification?.title ?? 'untitled';
-                        const notificationOptions = {
-                            body: payload.notification?.body ?? 'unknown',
-                            icon: '/bell.png'
-                        };
-                        registration.showNotification(notificationTitle, notificationOptions);
-                    });
-                }
-            });
-        });
         getToken(messaging, { vapidKey: 'BBAFnqen9fnu1BttZ5RGr7FcIvwrVvJGe-lUwwyJPUbsKwP44AFcm9rVUqJArYxCskU9dBHw2zq0X5PRj6rYF00' }).then((currentToken) => {
             if (currentToken) {
                 console.log("token success", currentToken)
+                alert(currentToken)
             } else {
                 // Show permission request UI
                 console.log('No registration token available. Request permission to generate one.');
