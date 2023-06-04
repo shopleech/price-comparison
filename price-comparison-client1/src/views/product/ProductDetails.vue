@@ -84,16 +84,10 @@
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             ></l-tile-layer>
 
-            <l-marker :lat-lng="[59.436962, 24.753574]" draggable @moveend="log('moveend')">
+            <l-marker :lat-lng="[item.latitude, item.longitude]" v-for="item of getOffersDetails()" :key="item.id">
                 <l-tooltip>
-                    lol
+                    €{{ item.name }}
                 </l-tooltip>
-            </l-marker>
-
-            <l-marker :lat-lng="[59.436962, 23.753574]" draggable @moveend="log('moveend')">
-                <l-popup>
-                    lol
-                </l-popup>
             </l-marker>
         </l-map>
     </div>
@@ -102,15 +96,15 @@
     <div class="border-1">
         <h6>Kirjeldus</h6>
         <div class="p-2" style="background-color: lightgrey;">{{ getProduct().description }}</div>
-        <h6>Sektsioon</h6>
-        <div class="row" style="background-color: lightgrey;">
-            <div class="col-4">värv</div>
-            <div class="col-8">valge</div>
-        </div>
-        <div class="row">
-            <div class="col-4">materjal</div>
-            <div class="col-8">puit</div>
-        </div>
+<!--        <h6>Sektsioon</h6>-->
+<!--        <div class="row" style="background-color: lightgrey;">-->
+<!--            <div class="col-4">värv</div>-->
+<!--            <div class="col-8">valge</div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col-4">materjal</div>-->
+<!--            <div class="col-8">puit</div>-->
+<!--        </div>-->
     </div>
 </template>
 
