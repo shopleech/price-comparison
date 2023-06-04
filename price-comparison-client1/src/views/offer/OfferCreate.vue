@@ -77,10 +77,10 @@
     <div>
         <div class="row">
             <div class="col-4"></div>
-            <div class="col-4">
+            <div class="col-6">
                 <input @click="submitClicked()" type="submit" value="Lisa pakkumine" class="btn btn-primary"/>
             </div>
-            <div class="col-4">
+            <div class="col-2">
                 <button @click="goToImports()">
                     <i class="bi bi-filetype-xml"></i>
                 </button>

@@ -23,11 +23,11 @@
             </div>
             <div class="form-group">
                 <label class="col-4 control-label">Hinna muutuse samm</label>
-                <input type="text" class="col-8" v-model="minStep"/>
+                <input type="text" class="col-8" v-model="minStep" style="width: 100px;"/>
             </div>
             <div class="form-group">
                 <label class="col-4 control-label">Hinna alumine limiit</label>
-                <input type="text" class="col-8" v-model="minValue"/>
+                <input type="text" class="col-8" v-model="minValue" style="width: 100px;"/>
             </div>
             <div>
                 <div class="form-group">
