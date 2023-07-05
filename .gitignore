@@ -29,3 +29,7 @@ typings/
 
 # Other
 /platforms/android/key.jks
+/cdk-python/app-config.properties
+/public-api/src/main/resources/application.properties
+/public-api/build.gradle
+

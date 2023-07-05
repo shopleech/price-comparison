@@ -1,12 +1,17 @@
+#!/usr/bin/python3
+# @Date:    05.03.2023
+# @Author:  Ahto Jalak
 from aws_cdk import (
     # Duration,
     Stack,
     aws_ec2 as ec2,
     aws_iam as iam,
+    aws_certificatemanager as acm,
 )
 from constructs import Construct
 
 from cdk_python.ecs_stack import ContainerServiceStack
+from cdk_python.website_stack import WebsiteStack
 
 
 class CdkPythonStack(Stack):
@@ -46,5 +51,16 @@ class CdkPythonStack(Stack):
                 'region': env_vars['region'],
                 'account': env_vars['account'],
                 'file_system_id': env_vars['file_system_id'],
+            },
+        )
+
+        self.website = WebsiteStack(
+            self, "price-comparison-web",
+            vpcId=env_vars['vpc_name'],
+            cert=acm.Certificate.from_certificate_arn(
+                self, 'default-cert-us', f'{env_vars["cert_arn"]}'),
+            user={
+                'name': env_vars["user_name"],
+                'arn': env_vars["user_arn"],
             },
         )
