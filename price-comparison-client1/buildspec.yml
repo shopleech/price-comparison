@@ -13,4 +13,3 @@ artifacts:
   files:
     - 'price-comparison-client1/dist/**/*'
     - 'dist/**/*'
-  s3-prefix: ''
