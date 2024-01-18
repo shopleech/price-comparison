@@ -13,6 +13,8 @@ artifacts:
   files:
     - '**/*'
   base-directory: 'dist'
+  on-failure: CONTINUE
+  s3-prefix: ''
   secondary-artifacts:
     artifact1:
       files:
