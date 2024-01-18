@@ -11,12 +11,6 @@ phases:
       - npm run build
 artifacts:
   files:
-    - '**/*'
-  base-directory: 'dist'
-  on-failure: CONTINUE
+    - 'price-comparison-client1/dist/**/*'
+    - 'dist/**/*'
   s3-prefix: ''
-  secondary-artifacts:
-    artifact1:
-      files:
-        - '**/*'
-      base-directory: 'price-comparison-client1/dist'
