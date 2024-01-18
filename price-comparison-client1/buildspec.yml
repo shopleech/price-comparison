@@ -3,11 +3,19 @@ version: 0.2
 phases:
   install:
     commands:
+      - if [ -d price-comparison-client1 ]; then cd price-comparison-client1/; fi
       - npm install
   build:
     commands:
+      - if [ -d price-comparison-client1 ]; then cd price-comparison-client1/; fi
       - npm run build
 artifacts:
-  files:
-    - '**/*'
-  base-directory: 'dist'
+  secondary-artifacts:
+    artifact1:
+      files:
+        - '**/*'
+      base-directory: 'price-comparison-client1/dist'
+    artifact2:
+      files:
+        - '**/*'
+      base-directory: 'dist'

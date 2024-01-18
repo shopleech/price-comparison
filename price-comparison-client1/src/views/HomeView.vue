@@ -99,33 +99,36 @@
     </div>
     <div class="row" v-if="!isAuthenticated">
         <div class="col-12 bg-light custom-home-size">
-            <h1 class="custom-home-head">Asukohapõhine tarbekaupade hinnavõrdluse veebirakendus</h1>
+            <h1 class="custom-home-head">shopleech</h1>
             <div class="row">
-                <div class="col-6">
-                    Kasutajad
+                <div class="col-sm-6 col-lg-4">
+                    <div class="row">
+                        <div class="col-6">
+                            Products
+                        </div>
+                        <div class="col-6 text-right">
+                            {{ getStats().numOfProducts }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            Contributions
+                        </div>
+                        <div class="col-6 text-right">
+                            {{ getStats().numOfPriceUpdates }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            Accounts
+                        </div>
+                        <div class="col-6 text-right">
+                            {{ getStats().numOfUsers }}
+                        </div>
+                    </div>
                 </div>
-                <div class="col-6">
-                    {{ getStats().numOfUsers }}
+                <div class="col-sm-6 col-lg-4">
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    Tooted
-                </div>
-                <div class="col-6">
-                    {{ getStats().numOfProducts }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    Pakkumised
-                </div>
-                <div class="col-6">
-                    {{ getStats().numOfPriceUpdates }}
-                </div>
-            </div>
-            <div class="row custom-home-head">
-                <div class="col-6"></div>
             </div>
         </div>
     </div>
@@ -133,12 +136,12 @@
         <div class="row fixed-bottom p-3 col-xl-4 col-lg-5 col-md-6 col-sm-7">
             <div class="col-6">
                 <RouterLink :to="{ name: 'identity-login'}" class="btn btn-secondary btn-lg w-100">
-                    Logi sisse
+                    Login
                 </RouterLink>
             </div>
             <div class="col-6">
                 <RouterLink :to="{ name: 'identity-register'}" class="btn btn-primary btn-lg w-100">
-                    Registreeri
+                    Register
                 </RouterLink>
             </div>
         </div>
