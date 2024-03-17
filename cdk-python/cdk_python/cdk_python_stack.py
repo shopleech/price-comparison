@@ -56,11 +56,11 @@ class CdkPythonStack(Stack):
 
         self.website = WebsiteStack(
             self, "price-comparison-web",
-            vpcId=env_vars['vpc_name'],
             cert=acm.Certificate.from_certificate_arn(
                 self, 'default-cert-us', f'{env_vars["cert_arn"]}'),
-            user={
-                'name': env_vars["user_name"],
-                'arn': env_vars["user_arn"],
+            env={
+                'region': env_vars['region'],
+                'account': env_vars['account'],
             },
+            domain_name=env_vars['domain_name'],
         )

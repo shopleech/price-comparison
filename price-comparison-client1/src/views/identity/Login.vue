@@ -2,8 +2,10 @@
     <RouterLink :to="{ name: 'home' }">
         <i class="bi bi-backspace"></i>
     </RouterLink>
+    <script src="https://accounts.google.com/gsi/client" async></script>
 
     <h2>Logi sisse</h2>
+    <GoogleAuthButton/>
     <div className="row">
         <div className="col-sm">
             <div v-if="errorMsg != null" className="text-danger validation-summary-errors" data-valmsg-summary="true">
@@ -38,16 +40,33 @@ import { ILoginInfo } from '@/dal/domain/ILoginInfo'
 import router from '@/router'
 import { IResponseMessage } from '@/dal/domain/IResponseMessage'
 import Logger from '@/util/logger'
+import axios from 'axios'
 
 /**
  * @author Ahto Jalak
  * @since 06.02.2023
  */
 @Options({
-    components: {},
+    components: {
+        GoogleAuthButton
+    },
     data () {
         return {
             asd: 'asd',
+        }
+    },
+    computed: {
+        gapi() {
+            return window.gapi;
+        }
+    },
+    methods: {
+        GoogleAuthSuccess(user : any) {
+            var auth = user.getAuthResonse();
+            axios.post("http://localhost:5056/auth/token/"+ auth.id_token).then(() => (console.log('success'))).catch(err => console.log(err));
+        },
+        GoogleAuthFail(err: any) {
+            console.log(err);
         }
     },
     props: {},
@@ -96,6 +115,10 @@ export default class Login extends Vue {
 
     mounted (): void {
         this.logger.info('mounted')
+        this.gapi.load("auth2", () => {
+           var auth2 = this.gapi.auth2.init({client_id: "431621825092-e2pah2n24bubb2qk5asti0p5dnc66t7l.apps.googleusercontent.com"});
+           auth2.attachClickHandler(document.getElementById('google-auth-button'), {}, this.GoogleAuthSuccess, this.GoogleAuthFail);
+        });
     }
 
     beforeUpdate (): void {
