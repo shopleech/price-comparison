@@ -17,11 +17,7 @@ on:
 env:
   WORK_DIR: price-comparison-client1
   AWS_REGION: eu-west-1
-  ECR_REPOSITORY: sl-client
-  ECS_SERVICE: sl-ecs-dev_client-service
-  ECS_CLUSTER: sl-ecs-dev
-  ECS_TASK_DEFINITION: sl-ecs-dev_client
-  CONTAINER_NAME: sl-ecs-dev_task_container3
+  DIST_LOCATION_CODE: ./dist
 
 jobs:
   deploy:
@@ -63,40 +59,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
-        working-directory: ${{ env.WORK_DIR }}
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-      - name: Download task definition
-        working-directory: ${{ env.WORK_DIR }}
-        env:
-          TASK_DEF: ${{ env.ECS_TASK_DEFINITION }}
-        run: |
-          aws ecs describe-task-definition --task-definition $TASK_DEF --query taskDefinition > task-definition.json
-
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
+      - name: Deploying application to Amazon S3
+        uses: dvelasquez/deploy-s3-action@main
         with:
-          task-definition: "${{ env.WORK_DIR }}/task-definition.json"
-          container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.image }}
-
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1.4.10
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+          # BUCKET_PATH: "/pr/${{github.event.number}}"
+          BUCKET_PATH: ""
+          DIST_LOCATION_CODE: ./dist
