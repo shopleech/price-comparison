@@ -24,9 +24,8 @@ docker build -t sl-client .
 
 docker run -it -p 8888:80 --rm sl-client
 
-docker tag sl-client:latest XXXXX.dkr.ecr.eu-west-1.amazonaws.com/sl-client:latest-prod
-aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin XXXXX.dkr.ecr.eu-west-1.amazonaws.com
-docker push XXXXX.dkr.ecr.eu-west-1.amazonaws.com/sl-client:latest-prod
+cd dist/
+aws s3 async ./ s3://my-bucket
 ```
 
 ### Run your unit tests
