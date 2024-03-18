@@ -105,6 +105,11 @@ class WebsiteStack(Stack):
                         protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY,
                         http_port=8080,
                     ),
+                    function_associations=[cloudfront.FunctionAssociation(
+                        event_type=cloudfront.FunctionEventType.VIEWER_REQUEST,
+                        function=rewrite)],
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    response_headers_policy=my_response_headers_policy,
                 )
             },
             domain_names=domain_names,
