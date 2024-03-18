@@ -38,11 +38,9 @@ class CdkPythonStack(Stack):
         )
 
         self.ecs_cluster = ContainerServiceStack(
-            self, "sl-ecs-dev",
+            self, "sl-ecs-prod",
             vpc=self.vpc_dev,
             subnets=self.public_subnets,
-            sg=ec2.SecurityGroup.from_security_group_id(
-                self, f"default-ecs-cluster-sg", env_vars['cluster_sg_name'], mutable=False),
             main_tag="latest-prod",
             key_pair="slkey",
             env={

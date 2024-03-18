@@ -4,6 +4,7 @@
 import aws_cdk as cdk
 from aws_cdk import (
     Duration,
+    RemovalPolicy,
     Stack,
     aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
@@ -12,6 +13,7 @@ from aws_cdk import (
     aws_ecr as ecr,
     aws_iam as iam,
     aws_certificatemanager as acm,
+    aws_logs as logs,
     aws_servicediscovery as sd,
 )
 from constructs import Construct
@@ -20,7 +22,7 @@ from constructs import Construct
 class ContainerServiceStack(Stack):
 
     def __init__(self, scope: Construct, id: str, vpc: object, subnets: ec2.SubnetSelection,
-                 sg: ec2.SecurityGroup, key_pair: str, main_tag: str, env: dict, **kwargs) -> None:
+                 key_pair: str, main_tag: str, env: dict, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         cluster = ecs.Cluster(
@@ -38,11 +40,11 @@ class ContainerServiceStack(Stack):
             ),
         )
 
-        namespace = sd.PrivateDnsNamespace(
-            self, f"{id}_examplePrivateDnsNamespace",
-            name=f"{id}.sldev",
-            description=f"{id}.sldev",
-            vpc=vpc,
+        # Service discovery
+        namespace = sd.PublicDnsNamespace(
+            self, f"{id}_PublicDnsNamespace",
+            name=f"{id}.sl",
+            description=f"{id}.sl",
         )
 
         service = namespace.create_service(
@@ -50,12 +52,19 @@ class ContainerServiceStack(Stack):
             name=f"{id}-namespace-service",
             dns_record_type=sd.DnsRecordType.A,
             dns_ttl=Duration.seconds(30),
-            # health_check=cdk.aws_servicediscovery.HealthCheckConfig(
-            #   type=sd.HealthCheckType.HTTP,
-            #   resource_path="/health",
-            #   failure_threshold=2,
-            # )
+            health_check=cdk.aws_servicediscovery.HealthCheckConfig(
+                type=sd.HealthCheckType.HTTP,
+                resource_path="/",
+                failure_threshold=5,
+            )
         )
+
+# TODO
+#        service.register_ip_instance(
+#            f"{id}_IpInstance",
+#            ipv4="",
+#            port=8080,
+#        )
 
         task_role = iam.Role(
             self, f"{id}_ecsTaskExecutionRole", assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"))
@@ -64,6 +73,21 @@ class ContainerServiceStack(Stack):
             iam.ManagedPolicy.from_aws_managed_policy_name(
                 "service-role/AmazonECSTaskExecutionRolePolicy"
             )
+        )
+
+        service_log_group = logs.LogGroup(
+            self, f"{id}_LogGroup",
+            log_group_name=f"{id}-service-log",
+            removal_policy=RemovalPolicy.RETAIN,
+        )
+
+        service_log_driver = ecs.AwsLogDriver(log_group=service_log_group, stream_prefix=f"{id}-log-stream")
+
+        service_sg = ec2.SecurityGroup(
+            self, f"{id}-sg",
+            allow_all_outbound=True,
+            security_group_name=f"{id}-sg",
+            vpc=vpc,
         )
 
         # BACKEND
@@ -90,7 +114,7 @@ class ContainerServiceStack(Stack):
                 ),
                 tag=main_tag,
             ),
-            logging=ecs.LogDrivers.aws_logs(stream_prefix=id),
+            logging=service_log_driver,
             memory_limit_mib=446,
             cpu=2048,
             environment={},
@@ -119,12 +143,6 @@ class ContainerServiceStack(Stack):
             task_definition=task_definition,
             min_healthy_percent=0,  # TODO: should be at least 50 for ZDT
             max_healthy_percent=200,
-            # assign_public_ip=True,
-            # vpc_subnets=subnets,
-            # desired_count=1,
-            # security_groups=[sg],
-            # cloud_map_options=ecs.CloudMapOptions(
-            #   name="sl", cloud_map_namespace=example_private_dns_namespace, dns_record_type=sd.DnsRecordType.A)
         )
 
         ecs_service.connections.allow_from_any_ipv4(port_range=ec2.Port.tcp(22))

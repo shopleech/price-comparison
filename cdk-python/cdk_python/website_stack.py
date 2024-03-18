@@ -57,7 +57,7 @@ class WebsiteStack(Stack):
             comment="Security headers response header policy",
             security_headers_behavior=cloudfront.ResponseSecurityHeadersBehavior(
                 content_security_policy=cloudfront.ResponseHeadersContentSecurityPolicy(
-                    content_security_policy="default-src 'self'",
+                    content_security_policy="default-src * gap:; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src *; img-src * data: blob: android-webview-video-poster:; style-src * 'unsafe-inline';",
                     override=True),
                 content_type_options=cloudfront.ResponseHeadersContentTypeOptions(
                     override=True),
@@ -92,7 +92,20 @@ class WebsiteStack(Stack):
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 response_headers_policy=my_response_headers_policy,
             ),
-            domain_names=[domain_name, f"www.{domain_name}"],
+            additional_behaviors={
+                "/v1/*": cloudfront.BehaviorOptions(
+                    origin=cf_origins.HttpOrigin(
+                        domain_name="sl-ecs-prod.sl",
+                        protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY,
+                        http_port=8080,
+                    ),
+                )
+            },
+            domain_names=[
+                domain_name,
+                f"www.{domain_name}",
+                f"api.{domain_name}",
+            ],
             price_class=cloudfront.PriceClass.PRICE_CLASS_100,
             certificate=cert,
         )
