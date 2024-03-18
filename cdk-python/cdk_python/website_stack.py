@@ -21,6 +21,12 @@ class WebsiteStack(Stack):
                  domain_name: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+        domain_names = [
+            f"www.{domain_name}",
+            f"api.{domain_name}",
+            domain_name
+        ]
+
         bucket = s3.Bucket(
             self, f"price-comparison-web-bucket",
             public_read_access=False,
@@ -101,18 +107,15 @@ class WebsiteStack(Stack):
                     ),
                 )
             },
-            domain_names=[
-                domain_name,
-                f"www.{domain_name}",
-                f"api.{domain_name}",
-            ],
+            domain_names=domain_names,
             price_class=cloudfront.PriceClass.PRICE_CLASS_100,
             certificate=cert,
         )
 
-        record = route53.ARecord(
-            self, f"price-comparison-record",
-            zone=zone,
-            target=route53.RecordTarget.from_alias(r53_targers.CloudFrontTarget(distribution)),
-            record_name=domain_name,
-        )
+        for domain_name in domain_names:
+            record = route53.ARecord(
+                self, f"price-comparison-record-{domain_name}",
+                zone=zone,
+                target=route53.RecordTarget.from_alias(r53_targers.CloudFrontTarget(distribution)),
+                record_name=domain_name,
+            )
