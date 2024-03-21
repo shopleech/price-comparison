@@ -101,7 +101,7 @@ class WebsiteStack(Stack):
             additional_behaviors={
                 "/v1/*": cloudfront.BehaviorOptions(
                     origin=cf_origins.HttpOrigin(
-                        domain_name="sl-ecs-prod.sl",
+                        domain_name="backend.sl-public3.local",
                         protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY,
                         http_port=8080,
                     ),

@@ -38,7 +38,7 @@ class CdkPythonStack(Stack):
         )
 
         self.ecs_cluster = ContainerServiceStack(
-            self, "sl-ecs-prod",
+            self, "sl-public3",
             vpc=self.vpc_dev,
             subnets=self.public_subnets,
             main_tag="latest-prod",
