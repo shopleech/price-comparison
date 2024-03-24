@@ -43,13 +43,13 @@ class CdkPythonStack(Stack):
             subnets=self.public_subnets,
             main_tag="latest-prod",
             key_pair="slkey",
+            cert=acm.Certificate.from_certificate_arn(
+                self, 'default-cert-eu', f'{env_vars["cert_arn_eu"]}'),
             env={
-                'name': 'prod',
-                'service_desired_count': 1,
                 'region': env_vars['region'],
                 'account': env_vars['account'],
-                'file_system_id': env_vars['file_system_id'],
             },
+            domain_name=env_vars['domain_name'],
         )
 
         self.website = WebsiteStack(
