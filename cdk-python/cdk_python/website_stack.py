@@ -26,8 +26,9 @@ class WebsiteStack(Stack):
             domain_name
         ]
 
+        oin = cloudfront.OriginAccessIdentity(self, f'{id}-cf-origin-access-identity')
         bucket = s3.Bucket(
-            self, f"price-comparison-web-bucket",
+            self, f"{id}-web-bucket",
             public_read_access=False,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
             removal_policy=RemovalPolicy.RETAIN,
@@ -35,10 +36,7 @@ class WebsiteStack(Stack):
             object_ownership=s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
             encryption=s3.BucketEncryption.S3_MANAGED,
         )
-
-        oin = cloudfront.OriginAccessIdentity(self, 'price-comparison-cf-origin-access-identity')
-
-        result = bucket.add_to_resource_policy(
+        bucket.add_to_resource_policy(
             iam.PolicyStatement(
                 actions=["s3:GetObject"],
                 resources=[bucket.arn_for_objects("*")],
@@ -47,18 +45,30 @@ class WebsiteStack(Stack):
                 )]
             ))
 
+        oin2 = cloudfront.OriginAccessIdentity(self, f'{id}-cf-origin-access-identity2')
+        bucket_images = s3.Bucket.from_bucket_arn(
+            self, f"{id}-web-bucket2", f"arn:aws:s3:::{id}-images")
+        bucket_images.add_to_resource_policy(
+            iam.PolicyStatement(
+                actions=["s3:GetObject"],
+                resources=[bucket_images.arn_for_objects("*")],
+                principals=[iam.CanonicalUserPrincipal(
+                    oin2.cloud_front_origin_access_identity_s3_canonical_user_id
+                )]
+            ))
+
         zone = route53.HostedZone.from_lookup(
-            self, 'price-comparison-hosted-zone',
+            self, f'{id}-hosted-zone',
             domain_name=domain_name,
         )
 
         rewrite = cloudfront.Function(
-            self, 'price-comparison-rewrite-function',
+            self, f'{id}-rewrite-function',
             code=cloudfront.FunctionCode.from_file(file_path='functions/url-rewrite.js'),
         )
 
         my_response_headers_policy = cloudfront.ResponseHeadersPolicy(
-            self, "price-comparison-response-headers-policy",
+            self, f"{id}-response-headers-policy",
             comment="Security headers response header policy",
             security_headers_behavior=cloudfront.ResponseSecurityHeadersBehavior(
                 content_security_policy=cloudfront.ResponseHeadersContentSecurityPolicy(
@@ -86,17 +96,33 @@ class WebsiteStack(Stack):
             server_timing_sampling_rate=50
         )
 
+        behavior_images = cloudfront.BehaviorOptions(
+            origin=cf_origins.S3Origin(
+                bucket=bucket_images, origin_access_identity=oin2),
+            function_associations=[cloudfront.FunctionAssociation(
+                event_type=cloudfront.FunctionEventType.VIEWER_REQUEST,
+                function=rewrite)],
+            viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+            response_headers_policy=my_response_headers_policy,
+        )
+
         distribution = cloudfront.Distribution(
-            self, f"price-comparison-website-assets3",
+            self, f"{id}-website-dist",
             default_root_object='index.html',
             default_behavior=cloudfront.BehaviorOptions(
-                origin=cf_origins.S3Origin(bucket=bucket, origin_access_identity=oin),
+                origin=cf_origins.S3Origin(
+                    bucket=bucket, origin_access_identity=oin),
                 function_associations=[cloudfront.FunctionAssociation(
                     event_type=cloudfront.FunctionEventType.VIEWER_REQUEST,
                     function=rewrite)],
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 response_headers_policy=my_response_headers_policy,
             ),
+            additional_behaviors={
+                "/product/*": behavior_images,
+                "/category/*": behavior_images,
+                "/shop/*": behavior_images
+            },
             domain_names=domain_names,
             price_class=cloudfront.PriceClass.PRICE_CLASS_100,
             certificate=cert,
@@ -104,7 +130,7 @@ class WebsiteStack(Stack):
 
         for domain_name in domain_names:
             record = route53.ARecord(
-                self, f"price-comparison-record-{domain_name}",
+                self, f"{id}-record-{domain_name}",
                 zone=zone,
                 target=route53.RecordTarget.from_alias(r53_targers.CloudFrontTarget(distribution)),
                 record_name=domain_name,
