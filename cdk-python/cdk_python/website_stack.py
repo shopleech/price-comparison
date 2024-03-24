@@ -23,7 +23,6 @@ class WebsiteStack(Stack):
 
         domain_names = [
             f"www.{domain_name}",
-            f"api.{domain_name}",
             domain_name
         ]
 
@@ -98,20 +97,6 @@ class WebsiteStack(Stack):
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 response_headers_policy=my_response_headers_policy,
             ),
-            additional_behaviors={
-                "/v1/*": cloudfront.BehaviorOptions(
-                    origin=cf_origins.HttpOrigin(
-                        domain_name="backend.sl-public3.local",
-                        protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY,
-                        http_port=8080,
-                    ),
-                    function_associations=[cloudfront.FunctionAssociation(
-                        event_type=cloudfront.FunctionEventType.VIEWER_REQUEST,
-                        function=rewrite)],
-                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-                    response_headers_policy=my_response_headers_policy,
-                )
-            },
             domain_names=domain_names,
             price_class=cloudfront.PriceClass.PRICE_CLASS_100,
             certificate=cert,
