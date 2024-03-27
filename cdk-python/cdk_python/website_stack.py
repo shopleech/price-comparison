@@ -29,6 +29,7 @@ class WebsiteStack(Stack):
         oin = cloudfront.OriginAccessIdentity(self, f'{id}-cf-origin-access-identity')
         bucket = s3.Bucket(
             self, f"{id}-web-bucket",
+            bucket_name=f"{id}-web",
             public_read_access=False,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
             removal_policy=RemovalPolicy.RETAIN,
@@ -36,26 +37,19 @@ class WebsiteStack(Stack):
             object_ownership=s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
             encryption=s3.BucketEncryption.S3_MANAGED,
         )
-        bucket.add_to_resource_policy(
-            iam.PolicyStatement(
-                actions=["s3:GetObject"],
-                resources=[bucket.arn_for_objects("*")],
-                principals=[iam.CanonicalUserPrincipal(
-                    oin.cloud_front_origin_access_identity_s3_canonical_user_id
-                )]
-            ))
+        bucket_images = s3.Bucket(
+            self, f"{id}-web-bucket2",
+            bucket_name=f"{id}-images",
+            public_read_access=False,
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
+            removal_policy=RemovalPolicy.RETAIN,
+            access_control=s3.BucketAccessControl.PRIVATE,
+            object_ownership=s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
+            encryption=s3.BucketEncryption.S3_MANAGED,
+        )
 
-        oin2 = cloudfront.OriginAccessIdentity(self, f'{id}-cf-origin-access-identity2')
-        bucket_images = s3.Bucket.from_bucket_arn(
-            self, f"{id}-web-bucket2", f"arn:aws:s3:::{id}-images")
-        bucket_images.add_to_resource_policy(
-            iam.PolicyStatement(
-                actions=["s3:GetObject"],
-                resources=[bucket_images.arn_for_objects("*")],
-                principals=[iam.CanonicalUserPrincipal(
-                    oin2.cloud_front_origin_access_identity_s3_canonical_user_id
-                )]
-            ))
+        bucket.grant_read(oin)
+        bucket_images.grant_read(oin)
 
         zone = route53.HostedZone.from_lookup(
             self, f'{id}-hosted-zone',
@@ -96,32 +90,34 @@ class WebsiteStack(Stack):
             server_timing_sampling_rate=50
         )
 
-        behavior_images = cloudfront.BehaviorOptions(
-            origin=cf_origins.S3Origin(
-                bucket=bucket_images, origin_access_identity=oin2),
-            function_associations=[cloudfront.FunctionAssociation(
-                event_type=cloudfront.FunctionEventType.VIEWER_REQUEST,
-                function=rewrite)],
-            viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-            response_headers_policy=my_response_headers_policy,
-        )
-
         distribution = cloudfront.Distribution(
             self, f"{id}-website-dist",
             default_root_object='index.html',
             default_behavior=cloudfront.BehaviorOptions(
+                compress=True,
                 origin=cf_origins.S3Origin(
                     bucket=bucket, origin_access_identity=oin),
                 function_associations=[cloudfront.FunctionAssociation(
                     event_type=cloudfront.FunctionEventType.VIEWER_REQUEST,
                     function=rewrite)],
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
                 response_headers_policy=my_response_headers_policy,
+                allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
+                cache_policy=cloudfront.CachePolicy.CACHING_OPTIMIZED,
+
             ),
             additional_behaviors={
-                "/product/*": behavior_images,
-                "/category/*": behavior_images,
-                "/shop/*": behavior_images
+                "/images/*": cloudfront.BehaviorOptions(
+                    compress=True,
+                    origin=cf_origins.S3Origin(
+                        bucket=bucket_images, origin_access_identity=oin),
+                    viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                    origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+                    response_headers_policy=my_response_headers_policy,
+                    allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
+                    cache_policy=cloudfront.CachePolicy.CACHING_OPTIMIZED,
+                ),
             },
             domain_names=domain_names,
             price_class=cloudfront.PriceClass.PRICE_CLASS_100,

@@ -42,7 +42,7 @@ class ContainerServiceStack(Stack):
             cluster_name=id,
             vpc=vpc,
             enable_fargate_capacity_providers=True,
-            container_insights=True,
+            container_insights=False,
         )
 
         # Role for task definition
@@ -150,6 +150,16 @@ class ContainerServiceStack(Stack):
             # https://${dn.domainName}/foo goes to prodApi $default stage
             # default_domain_mapping=apigwv2.DomainMappingOptions(domain_name=dn, mapping_key="foo"),
             default_domain_mapping=apigwv2.DomainMappingOptions(domain_name=dn),
+            cors_preflight=apigwv2.CorsPreflightOptions(
+                allow_headers=["*"],
+                allow_methods=[
+                    apigwv2.CorsHttpMethod.GET,
+                    apigwv2.CorsHttpMethod.POST,
+                    apigwv2.CorsHttpMethod.HEAD,
+                    apigwv2.CorsHttpMethod.OPTIONS,
+                ],
+                allow_origins=["*"],
+            ),
         )
 
         result = route53.ARecord(
