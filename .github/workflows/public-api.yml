@@ -24,6 +24,14 @@ jobs:
     environment: test
 
     steps:
+      - name: Early exit
+        if: github.ref != 'refs/heads/main'
+        run: |
+          gh run cancel ${{ github.run_id }}
+          gh run watch ${{ github.run_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -35,7 +43,7 @@ jobs:
               - "${{ env.WORK_DIR }}/**"
 
       - name: Early exit
-        if: steps.changes.outputs.src != 'true' || github.ref != 'refs/heads/main'
+        if: steps.changes.outputs.src != 'true'
         run: |
           gh run cancel ${{ github.run_id }}
           gh run watch ${{ github.run_id }}
