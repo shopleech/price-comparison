@@ -14,12 +14,11 @@ on:
 
 env:
   WORK_DIR: price-comparison-client1
-  DIST_LOCATION_CODE: ./dist
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: test
+    environment: prod
 
     steps:
       - uses: actions/checkout@v4
@@ -42,12 +41,12 @@ jobs:
         run: npm run build
     
       - name: Deploying application to Amazon S3
+        working-directory: ${{ env.WORK_DIR }}
         uses: dvelasquez/deploy-s3-action@main
         with:
           AWS_ACCESS_KEY_ID: "${{ vars.AWS_ACCESS_KEY_ID }}"
           AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
           AWS_DEFAULT_REGION: "${{ vars.AWS_REGION }}"
           AWS_BUCKET_NAME: "${{ vars.AWS_BUCKET_NAME }}"
-          # BUCKET_PATH: "/pr/${{github.event.number}}"
-          BUCKET_PATH: ""
+          BUCKET_PATH: "/pr/${{github.event.number}}"
           DIST_LOCATION_CODE: ./dist
