@@ -12,6 +12,9 @@ name: Deploy client application to Amazon S3
 on:
   workflow_dispatch:
 
+env:
+  WORK_DIR: price-comparison-client1
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,9 +33,11 @@ jobs:
           ENV_VITE_PAYPAL_CLIENT_ID: ${{ secrets.VITE_PAYPAL_CLIENT_ID }}
 
       - name: Run install
+        working-directory: ${{ env.WORK_DIR }}
         run: npm install
 
       - name: Run build
+        working-directory: ${{ env.WORK_DIR }}
         run: npm run build
     
       - name: Deploying application to Amazon S3
@@ -43,4 +48,4 @@ jobs:
           AWS_DEFAULT_REGION: "${{ vars.AWS_REGION }}"
           AWS_BUCKET_NAME: "${{ vars.AWS_BUCKET_NAME }}"
           BUCKET_PATH: "/pr/${{github.event.number}}"
-          DIST_LOCATION_CODE: ./dist
+          DIST_LOCATION_CODE: ${{ env.WORK_DIR }}/dist
