@@ -12,9 +12,6 @@ name: Deploy backend application
 on:
   workflow_dispatch:
 
-env:
-  WORK_DIR: public-api
-
 jobs:
   deploy:
     name: Deploy
@@ -49,23 +46,26 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+          IMAGE_URI: "${ECR_REGISTRY}/${ECR_REPOSITORY}:latest-prod"
           LAMBDA_FUNCTION_NAME: ${{ vars.LAMBDA_FUNCTION_NAME }}
           AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
-        working-directory: ${{ env.WORK_DIR }}
         run: |
           aws lambda create-function \
             --function-name "$LAMBDA_FUNCTION_NAME" \
             --package-type Image \
-            --code ImageUri="$ECR_REGISTRY/$ECR_REPOSITORY:latest-prod" \
+            --code ImageUri="$IMAGE_URI" \
             --role "$AWS_ROLE_ARN" \
             --timeout 900 \
             --memory-size 1024
 
       - name: Update Lambda function to use new image
+        if: steps.check_lambda.outcome != 'failure'
         env:
-          IMAGE_URI: ${{ vars.IMAGE_URI }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+          IMAGE_URI: "${ECR_REGISTRY}/${ECR_REPOSITORY}:latest-prod"
           LAMBDA_FUNCTION_NAME: ${{ vars.LAMBDA_FUNCTION_NAME }}
         run: |
           aws lambda update-function-code \
             --function-name "$LAMBDA_FUNCTION_NAME" \
-            --image-uri "$ECR_REGISTRY/$ECR_REPOSITORY:latest-prod"
+            --image-uri "$IMAGE_URI"
