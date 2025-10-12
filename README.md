@@ -1,6 +1,6 @@
 # price comparison public api
 
-Research project website: https://shopleech.com/
+Research project website: https://pcw.shopleech.com/
 
 ## Project setup
 
