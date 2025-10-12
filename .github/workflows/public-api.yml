@@ -10,9 +10,7 @@
 name: Deploy backend application to Amazon ECS
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 env:
   WORK_DIR: public-api
@@ -34,21 +32,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-
-      - uses: dorny/paths-filter@v3
-        id: changes
-        with:
-          filters: |
-            src:
-              - "${{ env.WORK_DIR }}/**"
-
-      - name: Early exit
-        if: steps.changes.outputs.src != 'true'
-        run: |
-          gh run cancel ${{ github.run_id }}
-          gh run watch ${{ github.run_id }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-java@v4
         with:

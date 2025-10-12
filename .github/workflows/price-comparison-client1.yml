@@ -10,9 +10,7 @@
 name: Deploy client application to Amazon S3
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 env:
   WORK_DIR: price-comparison-client1
@@ -34,21 +32,6 @@ jobs:
           ENV_VITE_GOOGLE_MAP_API_KEY: ${{ secrets.VITE_GOOGLE_MAP_API_KEY }}
           ENV_VITE_GOOGLE_RECAPTCHA_V3_SITE_KEY: ${{ secrets.VITE_GOOGLE_RECAPTCHA_V3_SITE_KEY }}
           ENV_VITE_PAYPAL_CLIENT_ID: ${{ secrets.VITE_PAYPAL_CLIENT_ID }}
-
-      - uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            src:
-              - "${{ env.WORK_DIR }}/**"
-
-      - name: Early exit
-        if: steps.changes.outputs.src != 'true' || github.ref != 'refs/heads/main'
-        run: |
-          gh run cancel ${{ github.run_id }}
-          gh run watch ${{ github.run_id }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run install
         working-directory: ${{ env.WORK_DIR }}
