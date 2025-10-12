@@ -44,7 +44,7 @@ jobs:
       - name: Create Lambda if missing
         if: steps.check_lambda.outcome == 'failure'
         env:
-          IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:latest-prod"
+          IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:latest-prod
           LAMBDA_FUNCTION_NAME: ${{ vars.LAMBDA_FUNCTION_NAME }}
           AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
         run: |
@@ -59,8 +59,9 @@ jobs:
       - name: Update Lambda function to use new image
         if: steps.check_lambda.outcome != 'failure'
         env:
-          IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:latest-prod"
+          IMAGE_URI: ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:latest-prod
           LAMBDA_FUNCTION_NAME: ${{ vars.LAMBDA_FUNCTION_NAME }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           aws lambda update-function-code \
             --function-name "$LAMBDA_FUNCTION_NAME" \
