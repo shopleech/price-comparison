@@ -7,7 +7,7 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Deploy backend application to Amazon ECS
+name: Build backend application
 
 on:
   workflow_dispatch:
@@ -22,14 +22,6 @@ jobs:
     environment: test
 
     steps:
-      - name: Early exit
-        if: github.ref != 'refs/heads/main'
-        run: |
-          gh run cancel ${{ github.run_id }}
-          gh run watch ${{ github.run_id }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -127,37 +119,8 @@ jobs:
         working-directory: ${{ env.WORK_DIR }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-      - name: Check if Lambda exists
-        id: check_lambda
-        continue-on-error: true
-        env:
-          LAMBDA_FUNCTION_NAME: ${{ vars.LAMBDA_FUNCTION_NAME }}
-        run: |
-          aws lambda get-function --function-name "$LAMBDA_FUNCTION_NAME"
-
-      - name: Create Lambda if missing
-        if: steps.check_lambda.outcome == 'failure'
-        env:
-          IMAGE_URI: ${{ steps.build-image.outputs.image }}
-          LAMBDA_FUNCTION_NAME: ${{ vars.LAMBDA_FUNCTION_NAME }}
-          AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
-        run: |
-          aws lambda create-function \
-            --function-name "$LAMBDA_FUNCTION_NAME" \
-            --package-type Image \
-            --code ImageUri="$IMAGE_URI" \
-            --role "$AWS_ROLE_ARN" \
-            --timeout 900 \
-            --memory-size 1024
-
-      - name: Update Lambda function to use new image
-        env:
-          IMAGE_URI: ${{ steps.build-image.outputs.image }}
-          LAMBDA_FUNCTION_NAME: ${{ vars.LAMBDA_FUNCTION_NAME }}
-        run: |
-          aws lambda update-function-code \
-            --function-name "$LAMBDA_FUNCTION_NAME" \
-            --image-uri "$IMAGE_URI"
+          echo "image_latest=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >> $GITHUB_OUTPUT
