@@ -34,7 +34,7 @@ dependencies {
     implementation "org.eclipse.jetty:jetty-servlet:11.0.13"
     implementation "org.eclipse.jetty:jetty-server:11.0.13"
 
-    compileOnly 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
@@ -46,7 +46,7 @@ dependencies {
     // runtimeOnly 'mysql:mysql-connector-java:6.0.5'
     runtimeOnly 'org.postgresql:postgresql'
 
-    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }
