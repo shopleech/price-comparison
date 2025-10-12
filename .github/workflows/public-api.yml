@@ -146,25 +146,34 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: Download task definition
-        working-directory: ${{ env.WORK_DIR }}
+      - name: Check if Lambda exists
+        id: check_lambda
+        continue-on-error: true
         env:
-          TASK_DEF: ${{ vars.ECS_TASK_DEFINITION }}
+          LAMBDA_FUNCTION_NAME: ${{ vars.LAMBDA_FUNCTION_NAME }}
         run: |
-          aws ecs describe-task-definition --task-definition $TASK_DEF --query taskDefinition > task-definition.json
+          aws lambda get-function --function-name "$LAMBDA_FUNCTION_NAME"
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: "${{ env.WORK_DIR }}/task-definition.json"
-          container-name: ${{ vars.CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.image }}
+      - name: Create Lambda if missing
+        if: steps.check_lambda.outcome == 'failure'
+        env:
+          IMAGE_URI: ${{ steps.build-image.outputs.image }}
+          LAMBDA_FUNCTION_NAME: ${{ vars.LAMBDA_FUNCTION_NAME }}
+          AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+        run: |
+          aws lambda create-function \
+            --function-name "$LAMBDA_FUNCTION_NAME" \
+            --package-type Image \
+            --code ImageUri="$IMAGE_URI" \
+            --role "$AWS_ROLE_ARN" \
+            --timeout 900 \
+            --memory-size 1024
 
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ vars.ECS_SERVICE }}
-          cluster: ${{ vars.ECS_CLUSTER }}
-          wait-for-service-stability: true
+      - name: Update Lambda function to use new image
+        env:
+          IMAGE_URI: ${{ steps.build-image.outputs.image }}
+          LAMBDA_FUNCTION_NAME: ${{ vars.LAMBDA_FUNCTION_NAME }}
+        run: |
+          aws lambda update-function-code \
+            --function-name "$LAMBDA_FUNCTION_NAME" \
+            --image-uri "$IMAGE_URI"
